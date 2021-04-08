@@ -15,24 +15,3 @@ Frontend/quest-for-health/e2e/
 
 Backend/target/
 
-Frontend/quest-for-health/.browserslistrc
-
-Frontend/quest-for-health/.editorconfig
-
-Frontend/quest-for-health/angular.json
-
-Frontend/quest-for-health/karma.conf.js
-
-Frontend/quest-for-health/package-lock.json
-
-Frontend/quest-for-health/package.json
-
-Frontend/quest-for-health/README.md
-
-Frontend/quest-for-health/tsconfig.app.json
-
-Frontend/quest-for-health/tsconfig.json
-
-Frontend/quest-for-health/tsconfig.spec.json
-
-Frontend/quest-for-health/tslint.json
