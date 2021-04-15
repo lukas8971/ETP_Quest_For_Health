@@ -32,6 +32,13 @@ public class QuestEndpoint {
         this.questMapper = questMapper;
     }
 
+    /**
+     * Returns a QuestDto of the with the given id.
+     * The id must be greater than 0.
+     * The repetition_cycle is in ISO-8601 format.
+     * @param id the id of the quest to return
+     * @return a QuestDto if the Quest exists
+     */
     @GetMapping(value="/{id}")
     public QuestDto getOneById(@PathVariable("id") int id){
         LOGGER.info("GET " + BASE_URL + "/{}",id);

@@ -22,6 +22,7 @@ public class QuestJdbcDao implements QuestDao {
 
     @Override
     public Quest getOneById(int id) throws NotFoundException {
+        LOGGER.trace("getOneById({})",id);
         makeJDBCConnection();
         try {
             String query = "SELECT * FROM quest WHERE id = ?;";
@@ -61,6 +62,7 @@ public class QuestJdbcDao implements QuestDao {
      * @return a java.time.Duration Object with the period
      */
     private Duration parseRepetitionCycle(String sqlTime) throws DateTimeParseException {
+        LOGGER.trace("parseRepetitionCycle({})",sqlTime);
         int index1 = sqlTime.indexOf(':');
         int index2 = sqlTime.lastIndexOf(':');
         String hours = sqlTime.substring(0, index1);
