@@ -31,7 +31,6 @@ public class QuestJdbcDao implements QuestDao {
             ResultSet rs = pstmnt.executeQuery();
             if (rs == null || !rs.next()) throw new NotFoundException("Could not find quest with id " + id);
             return mapRow(rs);
-
         } catch (SQLException e) {
             System.out.println("MySQL Connection Failed!");
             e.printStackTrace();

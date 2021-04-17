@@ -3,8 +3,11 @@ package com.etp.questforhealth.persistence.impl;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.persistence.DBConfigProperties;
 import com.etp.questforhealth.persistence.UserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +15,12 @@ import java.util.List;
 @Repository
 public class UserJdbcDao implements UserDao {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     static Connection questForHealthConn = null;
 
     @Override
     public List<User> getAll() {
+        LOGGER.trace("getAll()");
         makeJDBCConnection();
         List<User> users = new ArrayList<>();
         try{

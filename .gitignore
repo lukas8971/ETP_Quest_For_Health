@@ -15,3 +15,11 @@ Frontend/quest-for-health/e2e/
 
 Backend/target/
 
+### macOS ###
+.DS_Store
+.AppleDouble
+
+### IntelliJ IDEA ###
+*.iws
+*.iml
+*.ipr
