@@ -1,6 +1,10 @@
 package com.etp.questforhealth.unit.service;
 
+import com.etp.questforhealth.base.TestData;
+import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +27,28 @@ public class UserServiceTest {
     @Autowired
     UserService userService;
 
+    @AfterEach
+    public void tearDownDBData(){
+        userService.rollbackChanges();
+    }
+
     @Test
     @DisplayName("Requesting an empty user list should return null")
     public void requestingEmptyUserList_shouldReturnNull() {
         assertEquals(new ArrayList<>(),userService.getAll());
     }
+
+    @Test
+    @DisplayName("Creating a valid user should work")
+    public void createUser_shouldWork(){
+        User u = userService.createUser(TestData.getNewWorkingUser());
+        assert(u.getId()!=0);
+    }
+
+    @Test
+    @DisplayName("Creating an invalid user should not work")
+    public void createUser_shouldThrowValidationException(){
+        assertThrows(ValidationException.class, () -> userService.createUser(TestData.getNewUser()));
+    }
+
 }

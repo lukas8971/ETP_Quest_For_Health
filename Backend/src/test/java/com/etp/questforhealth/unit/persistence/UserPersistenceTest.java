@@ -2,6 +2,7 @@ package com.etp.questforhealth.unit.persistence;
 
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.UserDao;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +15,11 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -43,5 +46,11 @@ public class UserPersistenceTest {
     public void createUser_shouldWork(){
         User u = userDao.createUser(TestData.getNewWorkingUser());
         assert(u.getId()!= 0);
+    }
+
+    @Test
+    @DisplayName("Creating an invalid user should not work")
+    public void createUser_shouldThrowPersistenceException(){
+        assertThrows(PersistenceException.class, () -> userDao.createUser(TestData.getNewUser()));
     }
 }
