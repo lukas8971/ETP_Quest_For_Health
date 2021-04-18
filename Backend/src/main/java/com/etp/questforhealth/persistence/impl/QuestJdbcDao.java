@@ -2,7 +2,6 @@ package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
-import com.etp.questforhealth.persistence.DBConfigProperties;
 import com.etp.questforhealth.persistence.QuestDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
