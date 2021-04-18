@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `character_level` (
                                                  `level` INT NOT NULL,
                                                  `rank` VARCHAR(255) NOT NULL,
                                                  PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
+    AUTO_INCREMENT = 1,ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -55,8 +55,7 @@ CREATE TABLE IF NOT EXISTS `story_chapter` (
                                                        REFERENCES `story_chapter` (`id`)
                                                        ON DELETE NO ACTION
                                                        ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
-
+    AUTO_INCREMENT = 1,ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `user`
@@ -87,8 +86,7 @@ CREATE TABLE IF NOT EXISTS `user` (
                                               REFERENCES `story_chapter` (`id`)
                                               ON DELETE NO ACTION
                                               ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
-
+    AUTO_INCREMENT = 1,ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `doctor`
@@ -102,8 +100,7 @@ CREATE TABLE IF NOT EXISTS `doctor` (
                                         `password` VARCHAR(255) NOT NULL,
                                         `email` VARCHAR(512) NULL,
                                         PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
+    AUTO_INCREMENT = 1,ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `doctor_has_patients`
@@ -142,8 +139,7 @@ CREATE TABLE IF NOT EXISTS `quest` (
                                        `gold_reward` INT NOT NULL,
                                        `repetition_cycle` TIME NULL,
                                        PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
+    AUTO_INCREMENT = 1,ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `doctor_quest`
@@ -218,8 +214,7 @@ CREATE TABLE IF NOT EXISTS `user_completed_quest` (
                                                               REFERENCES `quest` (`id`)
                                                               ON DELETE NO ACTION
                                                               ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
-
+    AUTO_INCREMENT = 1,ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `equipment`
@@ -234,8 +229,7 @@ CREATE TABLE IF NOT EXISTS `equipment` (
                                            `strength` INT NOT NULL,
                                            `type` ENUM('Head', 'Arms', 'Torso', 'Legs', 'Right hand', 'Left hand') NOT NULL,
                                            PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
+    AUTO_INCREMENT = 1,ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `user_has_equipment`
