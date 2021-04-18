@@ -3,13 +3,15 @@ package com.etp.questforhealth.endpoint;
 import com.etp.questforhealth.endpoint.dto.UserDto;
 import com.etp.questforhealth.endpoint.mapper.UserMapper;
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.ServiceException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
@@ -40,5 +42,23 @@ public class UserEndpoint {
             userDtos.add(userMapper.entityToDto(u));
         }
         return userDtos;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto createUser(@RequestBody User user){
+        LOGGER.info("POST " + BASE_URL);
+        try{
+            return userMapper.entityToDto(userService.createUser(user));
+        } catch(ValidationException e){
+            LOGGER.warn(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(),e);
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
+        }
+    }
+
+    public void rollbackChanges(){
+        userService.rollbackChanges();;
     }
 }

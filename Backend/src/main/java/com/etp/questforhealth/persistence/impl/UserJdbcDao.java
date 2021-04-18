@@ -1,6 +1,7 @@
 package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,17 +48,23 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User createUser(User user) {
+    public User createUser(User user) throws PersistenceException {
+        LOGGER.trace("createUser({})", user.toString());
         makeJDBCConnection();
         try {
             String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp)" +
-                    " values (?,?,?,?,?,1,1,0,0)";
+                    " values (?,?,?,?,?,?,?,?,?)";
             PreparedStatement pstmtnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmtnt.setString(1, user.getFirstname());
             pstmtnt.setString(2, user.getLastname());
             pstmtnt.setString(3, user.getCharacterName());
             pstmtnt.setString(4, user.getPassword());
             pstmtnt.setString(5, user.getEmail());
+            pstmtnt.setInt(6, user.getStoryChapter());
+            pstmtnt.setInt(7, user.getCharacterLevel());
+            pstmtnt.setInt(8, user.getCharacterStrength());
+            pstmtnt.setInt(9, user.getCharacterExp());
+
 
             pstmtnt.executeUpdate();
             ResultSet rs = pstmtnt.getGeneratedKeys();
@@ -65,14 +72,14 @@ public class UserJdbcDao implements UserDao {
             user.setId(rs.getInt(1));
         }
         catch (SQLException e){
-            System.out.println("MySQL Connection Failed!");
-            e.printStackTrace();
+            throw new PersistenceException("Error while inserting user in Database", e);
         }
         return user;
     }
 
     @Override
     public void rollbackChanges() {
+        LOGGER.trace("rollbackChanges()");
         try {
             questForHealthConn.rollback();
         } catch (SQLException e) {
@@ -83,6 +90,7 @@ public class UserJdbcDao implements UserDao {
 
 
     public void makeJDBCConnection() {
+        LOGGER.trace("makeJDBCConnection()");
         if (questForHealthConn == null) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
