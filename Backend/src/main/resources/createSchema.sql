@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `user_completed_quest` (
                                                           FOREIGN KEY (`quest`)
                                                               REFERENCES `quest` (`id`)
                                                               ON DELETE NO ACTION
-                                                              ON UPDATE NO ACTION)
+                                                              ON UPDATE NO ACTION)AUTO_INCREMENT=1,
     ENGINE = InnoDB;
 
 
