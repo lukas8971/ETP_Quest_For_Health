@@ -1,40 +1,30 @@
 package com.etp.questforhealth.unit.endpoint;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.etp.questforhealth.endpoint.UserEndpoint;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
+@Profile("test")
 @ActiveProfiles("test")
-public class UserEndointTest extends UserEndpointTestBase {
+public class UserEndointTest {
+
 
     @Autowired
-    PlatformTransactionManager txm;
+    UserEndpoint userEndpoint;
 
-    TransactionStatus txstatus;
-
-    @BeforeEach
-    public void setupDBTransaction() {
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        txstatus = txm.getTransaction(def);
-        assumeTrue(txstatus.isNewTransaction());
-        txstatus.setRollbackOnly();
-    }
-
-    @AfterEach
-    public void tearDownDBData() {
-        txm.rollback(txstatus);
+    @Test
+    @DisplayName("Requesting an empty user list should return null")
+    public void requestingEmptyUserList_shouldReturnNull() {
+        assertNull(userEndpoint.getAll());
     }
 }
