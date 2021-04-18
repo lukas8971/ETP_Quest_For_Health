@@ -46,6 +46,15 @@ public class UserJdbcDao implements UserDao {
     }
 
     private void makeJDBCConnection() {
+    @Override
+    public void rollbackChanges() {
+        try {
+            questForHealthConn.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
