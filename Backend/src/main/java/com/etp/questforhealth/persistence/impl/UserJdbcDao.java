@@ -46,7 +46,31 @@ public class UserJdbcDao implements UserDao {
         return users;
     }
 
-    private void makeJDBCConnection() {
+    @Override
+    public User createUser(User user) {
+        makeJDBCConnection();
+        try {
+            String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp)" +
+                    " values (?,?,?,?,?,1,1,0,0)";
+            PreparedStatement pstmtnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmtnt.setString(1, user.getFirstname());
+            pstmtnt.setString(2, user.getLastname());
+            pstmtnt.setString(3, user.getCharacterName());
+            pstmtnt.setString(4, user.getPassword());
+            pstmtnt.setString(5, user.getEmail());
+
+            pstmtnt.executeUpdate();
+            ResultSet rs = pstmtnt.getGeneratedKeys();
+            rs.next();
+            user.setId(rs.getInt(1));
+        }
+        catch (SQLException e){
+            System.out.println("MySQL Connection Failed!");
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     @Override
     public void rollbackChanges() {
         try {
