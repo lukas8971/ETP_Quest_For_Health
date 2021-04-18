@@ -18,12 +18,27 @@ public class Quest {
 
     public Quest(){}
 
-    public Quest(int id, String name, String description, int exp_reward, int gold_reward, Duration repetition_cycle, int exp_penalty, int gold_penalty, int doctor) {
+    /**
+     * Minimum requirements for a new standard quest
+     */
+    public Quest(int id, String name, int exp_reward, int gold_reward) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.exp_reward = exp_reward;
         this.gold_reward = gold_reward;
+    }
+
+    /**
+     * Minimum requirements for a new doctor quest
+     */
+    public Quest(int id, String name, int exp_reward, int gold_reward, int doctor) {
+        this(id, name, exp_reward, gold_reward);
+        this.doctor = doctor;
+    }
+
+    public Quest(int id, String name, String description, int exp_reward, int gold_reward, Duration repetition_cycle, int exp_penalty, int gold_penalty, int doctor) {
+        this(id, name, exp_reward, gold_reward, doctor);
+        this.description = description;
         this.repetition_cycle = repetition_cycle;
         this.exp_penalty = exp_penalty;
         this.gold_penalty = gold_penalty;

@@ -6,6 +6,7 @@ import com.etp.questforhealth.persistence.DBConfigProperties;
 import com.etp.questforhealth.persistence.QuestDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
@@ -18,6 +19,12 @@ public class QuestJdbcDao implements QuestDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     static Connection questForHealthConn = null;
+    @Value("${spring.datasource.url}")
+    String URL;
+    @Value("${spring.datasource.username}")
+    String USERNAME;
+    @Value("${spring.datasource.password}")
+    String PASSWORD;
 
 
     @Override
@@ -31,7 +38,6 @@ public class QuestJdbcDao implements QuestDao {
             ResultSet rs = pstmnt.executeQuery();
             if (rs == null || !rs.next()) throw new NotFoundException("Could not find quest with id " + id);
             return mapRow(rs);
-
         } catch (SQLException e) {
             System.out.println("MySQL Connection Failed!");
             e.printStackTrace();
@@ -74,7 +80,7 @@ public class QuestJdbcDao implements QuestDao {
     }
 
 
-    private static void makeJDBCConnection() {
+    private void makeJDBCConnection() {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -87,7 +93,7 @@ public class QuestJdbcDao implements QuestDao {
 
         try {
             // DriverManager: The basic service for managing a set of JDBC drivers.
-            questForHealthConn = DriverManager.getConnection(DBConfigProperties.URL, DBConfigProperties.USERNAME, DBConfigProperties.PASSWORD);
+            questForHealthConn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             if (questForHealthConn != null) {
                 System.out.println("Connection Successful! Enjoy. Now it's time to push data");
             } else {
