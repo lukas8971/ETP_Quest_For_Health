@@ -33,5 +33,5 @@ public interface TestData {
 
     static User getNewUserWithName(int id) { return new User(id, "Andrew", "Adams"); }
 
-    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,3,400,"SuperSecretPassword", null,3); }
+    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,1,0,"SuperSecretPassword", null,1); }
 }
