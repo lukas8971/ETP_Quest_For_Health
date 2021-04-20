@@ -1,0 +1,50 @@
+
+<br>
+<h2 *ngIf="patientReady">Choose quests for {{patient.firstname}} {{patient.lastname}}.</h2>
+
+<table>
+  <tr>
+    <th>Active patient quests</th>
+    <th>Available patient quests</th>
+  </tr>
+  <tr>
+    <td>
+      <table mat-table *ngIf="showAssigned" [dataSource]="assignedQuests">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let quest"> {{quest.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let quest"> {{quest.description}} </td>
+        </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Remove </th>
+          <td mat-cell *matCellDef="let quest"><button mat-stroked-button (click)="removeQuest(quest.id)">Remove</button></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['name', 'description', 'id']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'description', 'id']"></tr>
+      </table>
+    </td>
+    <td>
+      <table mat-table *ngIf="showAvailable" [dataSource]="availableQuests">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let quest"> {{quest.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let quest"> {{quest.description}} </td>
+        </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Remove </th>
+          <td mat-cell *matCellDef="let quest"><button mat-stroked-button (click)="addQuest(quest.id)">Add</button></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['name', 'description', 'id']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'description', 'id']"></tr>
+        <!-- All quests from doctor -- except the quests that are already in the patient list-->
+      </table>
+    </td>
+  </tr>
+</table>
+

@@ -3,19 +3,18 @@ package com.etp.questforhealth.endpoint;
 
 import com.etp.questforhealth.endpoint.dto.QuestDto;
 import com.etp.questforhealth.endpoint.mapper.QuestMapper;
+import com.etp.questforhealth.entity.AcceptedQuest;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.service.QuestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 
 @RestController
@@ -50,4 +49,54 @@ public class QuestEndpoint {
         }
     }
 
+    /**
+     * Gets all the quests available for a doctor to a user
+     * @param user to assigned quests to
+     * @param doctor who is assigning quests to a user
+     * @return a list of all available doctor quests for a user
+     */
+    @GetMapping(value="/available")
+    @ResponseBody
+    public List<QuestDto> getAllUserAvailableDoctorQuests(@RequestParam int user, @RequestParam int doctor){
+        LOGGER.info("GET " + BASE_URL + "/available?user={}&doctor={}", user, doctor);
+        return questMapper.entityToDto(questService.getAllUserAvailableDoctorQuests(user, doctor));
+    }
+
+    /**
+     * Gets all the quests assigned from a doctor to a user
+     * @param user to assigned quests to
+     * @param doctor who is assigning quests to a user
+     * @return a list of all assigned doctor quests for a user
+     */
+    @GetMapping(value="/assigned")
+    @ResponseBody
+    public List<QuestDto> getAllUserAssignedDoctorQuests(@RequestParam int user, @RequestParam int doctor){
+        LOGGER.info("GET " + BASE_URL + "/assigned?user={}&doctor={}", user, doctor);
+        return questMapper.entityToDto(questService.getAllUserAssignedDoctorQuests(user, doctor));
+    }
+
+    /**
+     * Delete an already assigned quest from a user
+     * @param quest the quest that should be unnassigned
+     * @param user patient the quest is assigned to
+     * @return true if delete was successful.
+     */
+    @DeleteMapping(value = "/assigned/{quest}/{user}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean deleteAssignedDoctorQuestForUser(@PathVariable("quest") int quest, @PathVariable("user") int user) {
+        LOGGER.info("DELETE " + BASE_URL + "/assigned/{}/{}", quest, user);
+        return questService.deleteAssignedDoctorQuestForUser(quest, user);
+    }
+
+    /**
+     * Adds a new assigned quest from a user
+     * @param acceptedQuest the quest that should be added
+     * @return true if successfully assigned to user
+     */
+    @PostMapping(value = "/assigned")
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean addAssignedDoctorQuestForUser(@RequestBody AcceptedQuest acceptedQuest) {
+        LOGGER.info("POST " + BASE_URL + "/assigned");
+        return questService.addAssignedDoctorQuestForUser(acceptedQuest);
+    }
 }

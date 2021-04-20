@@ -1,0 +1,25 @@
+<div *ngIf="doctorLoaded">
+  <br>
+  <h3>Welcome back {{doctor.firstname}} {{doctor.lastname}}!</h3>
+  <br>
+</div>
+
+<button mat-stroked-button (click)="getAllPatients(doctor.id)">Show all patients</button>
+<div *ngIf="success">
+  <table mat-table [dataSource]="patients">
+    <ng-container matColumnDef="firstname">
+      <th mat-header-cell *matHeaderCellDef> Firstname </th>
+      <td mat-cell *matCellDef="let pat"> {{pat.firstname}} </td>
+    </ng-container>
+    <ng-container matColumnDef="lastname">
+      <th mat-header-cell *matHeaderCellDef> Lastname </th>
+      <td mat-cell *matCellDef="let pat"> {{pat.lastname}} </td>
+    </ng-container>
+    <ng-container matColumnDef="quests">
+      <th mat-header-cell *matHeaderCellDef> Quests </th>
+      <td mat-cell *matCellDef="let pat"><button mat-stroked-button (click)="showPatientQuests(pat.id)">Quests</button></td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['firstname', 'lastname', 'quests']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['firstname', 'lastname', 'quests']"></tr>
+  </table>
+</div>

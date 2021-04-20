@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class DoctorMapper {
@@ -17,6 +19,16 @@ public class DoctorMapper {
         LOGGER.trace("entityToDto({})",doctor);
         if(doctor == null) return null;
         return new DoctorDto(doctor.getId(), doctor.getFirstname(), doctor.getLastname(), doctor.getEmail());
+    }
+
+    public List<DoctorDto> entityToDto (List<Doctor> doctors){
+        LOGGER.trace("entityToDto({})", doctors);
+        if(doctors == null) return null;
+        List<DoctorDto> doctorsDto = new ArrayList<>();
+        for (Doctor doc: doctors) {
+            doctorsDto.add(new DoctorDto(doc.getId(), doc.getFirstname(), doc.getLastname(), doc.getEmail()));
+        }
+        return doctorsDto;
     }
 
     public Doctor dtoToEntity (DoctorDto doctorDto){

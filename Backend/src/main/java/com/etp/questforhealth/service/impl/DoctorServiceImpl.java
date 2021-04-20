@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -26,6 +27,22 @@ public class DoctorServiceImpl implements DoctorService {
         try {
             return doctorDao.checkLogin(email, password);
         } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Doctor> getAllDoctors() {
+        LOGGER.trace("getAllDoctors()");
+        return doctorDao.getAllDoctors();
+    }
+
+    @Override
+    public Doctor getOneById(int id){
+        LOGGER.trace("getOneById({})", id);
+        try {
+            return doctorDao.getOneById(id);
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
