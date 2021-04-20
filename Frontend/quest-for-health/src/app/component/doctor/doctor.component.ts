@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthenticationDoctorService} from '../../service/authentication-doctor.service';
+import {Credentials} from '../../dto/credentials';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-doctor',
@@ -7,20 +11,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DoctorComponent implements OnInit {
 
-  isAuthenticated = false;
+  fg = new FormGroup({
+    email: new FormControl(),
+    password: new FormControl()
+  });
 
-  constructor(public authService: AuthService) {
-    this.authService.isAuthenticated.subscribe(
-      (isAuthenticated: boolean) => this.isAuthenticated = isAuthenticated
-    );
+  email = '';
+  password = '';
+
+  constructor(private router: Router, private loginDoctor: AuthenticationDoctorService) {
   }
 
-  async ngOnInit(): Promise<void> {
-    this.isAuthenticated = await this.authService.checkAuthenticated();
+  public ngOnInit(): void {
   }
 
-  async logout(): Promise<void> {
-    await this.authService.logout('/');
+  /**
+   * Login of a doctor
+   */
+  checkLogin(): void {
+    this.loginDoctor.authenticate(new Credentials(this.email, this.password));
   }
-
 }

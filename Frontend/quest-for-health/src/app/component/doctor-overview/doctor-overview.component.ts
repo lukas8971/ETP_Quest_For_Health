@@ -3,9 +3,10 @@ import {DoctorService} from '../../service/doctor.service';
 import {Doctor} from '../../dto/doctor';
 import {UserService} from '../../service/user.service';
 import {User} from '../../dto/user';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
 import {Router} from '@angular/router';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-doctor-overview',
@@ -21,17 +22,22 @@ export class DoctorOverviewComponent implements OnInit {
   patients: any[] = [];
   doctorLoaded = false;
   doctor: any;
+  patientColumns: string[] = ['firstname', 'lastname', 'quests'];
+
+  dataSource = new MatTableDataSource(this.patients);
 
   ngOnInit(): void {
-    this.getDoctorById(2);
+    this.getDoctorById(Number(sessionStorage.getItem('id')));
+    this.getAllPatients(Number(sessionStorage.getItem('id')));
   }
 
   /**
-   * Resets the "successful-box"
+   * Filter for the patients table
+   * @param event the given filter
    */
-  public resetMessage(): void {
-    console.log('Reset successful message');
-    this.success = false;
+  public applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   /**
@@ -41,7 +47,7 @@ export class DoctorOverviewComponent implements OnInit {
     console.log('Get all patients of doctor');
     this.userService.getAllUsersFromDoctor(doctor).subscribe(
       (u: User[]) => {
-        this.patients = u;
+        this.dataSource = new MatTableDataSource(u);
         this.success = true;
       },
       error => {
@@ -56,7 +62,7 @@ export class DoctorOverviewComponent implements OnInit {
    */
   public showPatientQuests(patient: number): void {
     console.log('Get patient doctor quests');
-    this.router.navigate(['doctors/patientquest'], {queryParams: {doctor: this.doctor.id, user: patient}, replaceUrl: true});
+    this.router.navigate(['doctors/patientquest'], {queryParams: {/*doctor: this.doctor.id, */user: patient}, replaceUrl: true});
   }
 
   /**

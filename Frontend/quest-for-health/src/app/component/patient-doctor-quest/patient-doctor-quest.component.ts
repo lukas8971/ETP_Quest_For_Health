@@ -9,6 +9,7 @@ import {User} from '../../dto/user';
 import {QuestService} from '../../service/quest.service';
 import {Quest} from '../../dto/quest';
 import {AcceptedQuest} from '../../dto/accepted-quest';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-patient-doctor-quest',
@@ -20,20 +21,25 @@ export class PatientDoctorQuestComponent implements OnInit {
   patient: any;
   patientReady = false;
   doctor: any;
-  assignedQuests: any;
-  availableQuests: any;
+  assignedQuests: any[] = [];
+  availableQuests: any[] = [];
   showAvailable = false;
   showAssigned = false;
+
+  dataSourceAssigned = new MatTableDataSource(this.assignedQuests);
+  dataSourceAvailable = new MatTableDataSource(this.availableQuests);
+
+  questHeader = ['name', 'description', 'id'];
 
   constructor(private doctorService: DoctorService, private userService: UserService,
               private dialog: MatDialog, private questService: QuestService, private route: ActivatedRoute) {
     this.route.queryParams.subscribe(queryParams => {
-      if (queryParams.doctor !== undefined && queryParams.user !== undefined){
-        console.log('queryParams: ' + queryParams.doctor + ',' + queryParams.user);
-        if (!isNaN(Number(queryParams.doctor)) && !isNaN(Number(queryParams.user))){
-          this.getUserById(Number(queryParams.user), Number(queryParams.doctor));
-          this.getAssignedPatientDoctorQuests(Number(queryParams.doctor), Number(queryParams.user));
-          this.getAvailablePatientDoctorQuests(Number(queryParams.doctor), Number(queryParams.user));
+      if (queryParams.user !== undefined){
+        console.log('queryParams: ' + queryParams.user);
+        if (!isNaN(Number(sessionStorage.getItem('id'))) && !isNaN(Number(queryParams.user))){
+          this.getUserById(Number(queryParams.user), Number(sessionStorage.getItem('id')));
+          this.getAssignedPatientDoctorQuests(Number(sessionStorage.getItem('id')), Number(queryParams.user));
+          this.getAvailablePatientDoctorQuests(Number(sessionStorage.getItem('id')), Number(queryParams.user));
         }
       }
     });
@@ -42,6 +48,28 @@ export class PatientDoctorQuestComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Filter for the assigned quests
+   * @param event the given filter
+   */
+  public applyFilterAssign(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceAssigned.filter = filterValue.trim().toLowerCase();
+  }
+
+  /**
+   * Filter for the available quests
+   * @param event the given filter
+   */
+  public applyFilterAvailable(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceAvailable.filter = filterValue.trim().toLowerCase();
+  }
+
+  /**
+   * Remove a doctor assigned quest from a patient
+   * @param id of the quest that should be removed from the patient
+   */
   public removeQuest(id: number): void{
     console.log('Remove quest ' + id + ' from user ' + this.patient.firstname + ' ' + this.patient.lastname);
     this.questService.deleteAssignedDoctorQuestForUser(id, this.patient.id).subscribe(
@@ -63,6 +91,10 @@ export class PatientDoctorQuestComponent implements OnInit {
     );
   }
 
+  /**
+   * Add a doctor assigned quest to a patient
+   * @param id of the quest that should be assigned to a patient
+   */
   public addQuest(id: number): void{
     console.log('Add quest ' + id + ' to user ' + this.patient.firstname + ' ' + this.patient.lastname);
     const accQuest = new AcceptedQuest(id, this.patient.id, new Date());
@@ -89,9 +121,11 @@ export class PatientDoctorQuestComponent implements OnInit {
    * Resets all values for the UI
    */
   private resetValues(): void{
-    this.availableQuests = null;
+    this.availableQuests = [];
+    this.dataSourceAvailable = new MatTableDataSource(this.availableQuests);
     this.showAvailable = false;
-    this.assignedQuests = null;
+    this.assignedQuests = [];
+    this.dataSourceAssigned = new MatTableDataSource(this.assignedQuests);
     this.showAssigned = false;
   }
 
@@ -141,6 +175,7 @@ export class PatientDoctorQuestComponent implements OnInit {
     this.questService.getAvailableDoctorQuestsForUser(doctor, patient).subscribe(
       (q: Quest[]) => {
         this.availableQuests = q;
+        this.dataSourceAvailable = new MatTableDataSource(this.availableQuests);
         this.showAvailable = true;
       },
       error => {
@@ -159,6 +194,7 @@ export class PatientDoctorQuestComponent implements OnInit {
     this.questService.getAssignedDoctorQuestsForUser(doctor, patient).subscribe(
       (q: Quest[]) => {
         this.assignedQuests = q;
+        this.dataSourceAssigned = new MatTableDataSource(this.assignedQuests);
         this.showAssigned = true;
       },
       error => {

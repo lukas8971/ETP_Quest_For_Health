@@ -16,6 +16,12 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { PatientDoctorQuestComponent } from './component/patient-doctor-quest/patient-doctor-quest.component';
 import { DoctorComponent } from './component/doctor/doctor.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { DoctorLogoutComponent } from './component/doctor-logout/doctor-logout.component';
+import {CommonModule} from '@angular/common';
+import {MatCommonModule} from '@angular/material/core';
+import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -24,7 +30,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     HeaderComponent,
     ErrorDialogComponent,
     PatientDoctorQuestComponent,
-    DoctorComponent
+    DoctorComponent,
+    DoctorLogoutComponent
   ],
   imports: [
     BrowserModule,
@@ -37,9 +44,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatButtonModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    MatCommonModule,
+    MatCardModule,
+    MatInputModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule { }

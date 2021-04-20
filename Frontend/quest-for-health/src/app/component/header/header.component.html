@@ -3,5 +3,16 @@
     <mat-icon>menu</mat-icon>
   </button>
   <span>Quest For Health</span>
-  <span class="example-spacer"></span>
+  <div style="width: 5px"></div>
+  <span *ngIf="doctorLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors/overview">Patient Overview</button>
+  </span>
+  <div style="width: 5px"></div>
+  <span *ngIf="doctorLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors/logout">Logout</button>
+  </span>
+  <div style="width: 5px"></div>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors">Doctor Login</button>
+  </span>
 </mat-toolbar>

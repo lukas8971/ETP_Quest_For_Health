@@ -1,6 +1,8 @@
 package com.etp.questforhealth.endpoint;
 
+import com.etp.questforhealth.endpoint.dto.CredentialsDto;
 import com.etp.questforhealth.endpoint.dto.DoctorDto;
+import com.etp.questforhealth.endpoint.mapper.CredentialsMapper;
 import com.etp.questforhealth.endpoint.mapper.DoctorMapper;
 import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -22,24 +24,25 @@ public class DoctorEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final DoctorService doctorService;
     private final DoctorMapper doctorMapper;
+    private final CredentialsMapper credentialsMapper;
 
     @Autowired
-    public DoctorEndpoint(DoctorService doctorService, DoctorMapper doctorMapper){
+    public DoctorEndpoint(DoctorService doctorService, DoctorMapper doctorMapper, CredentialsMapper credentialsMapper){
         this.doctorService = doctorService;
         this.doctorMapper = doctorMapper;
+        this.credentialsMapper = credentialsMapper;
     }
 
     /**
      * Checks if the given email and password are correct.
-     * @param email of the doctor to login.
-     * @param password of the doctor to login.
+     * @param credentialsDto for the login.
      * @return a DoctorDto object if the login is valid
      */
-    @PostMapping(value="/session")
-    public DoctorDto checkLogin(@PathVariable("email") String email, @PathVariable("password") String password){
-        LOGGER.info("GET " + BASE_URL + "/session");
+    @PostMapping(value="/login")
+    public DoctorDto checkLogin(@RequestBody CredentialsDto credentialsDto){
+        LOGGER.info("POST " + BASE_URL + "/login");
         try{
-            return doctorMapper.entityToDto(doctorService.checkLogin(email, password));
+            return doctorMapper.entityToDto(doctorService.checkLogin(credentialsMapper.dtoToEntitiy(credentialsDto)));
         } catch (InvalidLoginException e){
             LOGGER.error("Wrong email or password!");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password!", e);

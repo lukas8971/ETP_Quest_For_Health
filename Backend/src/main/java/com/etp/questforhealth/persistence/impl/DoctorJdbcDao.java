@@ -1,5 +1,6 @@
 package com.etp.questforhealth.persistence.impl;
 
+import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -28,17 +29,17 @@ public class DoctorJdbcDao implements DoctorDao {
     String PASSWORD;
 
     @Override
-    public Doctor checkLogin(String email, String password) {
-        LOGGER.trace("checkLogin({}, {})", email, password);
+    public Doctor checkLogin(Credentials credentials) {
+        LOGGER.trace("checkLogin({})", credentials.getEmail());
         makeJDBCConnection();
         try {
-            String query = "SELECT * FROM doctor WHERE email = ? AND password = ?;";
+            String query = "SELECT * FROM doctor WHERE email = ? AND password = BINARY ?;";
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
-            pstmnt.setString(1, email);
-            pstmnt.setString(2, password);
+            pstmnt.setString(1, credentials.getEmail());
+            pstmnt.setString(2, credentials.getPassword());
             ResultSet rs = pstmnt.executeQuery();
-            if (rs == null) throw new InvalidLoginException("Wrong email or password!");
-            return mapRow(rs);
+            if (rs != null && rs.next()) return mapRow(rs);
+            else throw new InvalidLoginException("Wrong email or password!");
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }

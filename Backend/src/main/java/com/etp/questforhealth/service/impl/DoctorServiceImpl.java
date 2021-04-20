@@ -1,5 +1,6 @@
 package com.etp.questforhealth.service.impl;
 
+import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
@@ -22,10 +23,10 @@ public class DoctorServiceImpl implements DoctorService {
     public DoctorServiceImpl(DoctorDao doctorDao){this.doctorDao = doctorDao;}
 
     @Override
-    public Doctor checkLogin(String email, String password) {
-        LOGGER.trace("checkLogin({}, {})", email, password);
+    public Doctor checkLogin(Credentials credentials) {
+        LOGGER.trace("checkLogin({})", credentials.getEmail());
         try {
-            return doctorDao.checkLogin(email, password);
+            return doctorDao.checkLogin(credentials);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);
         }
