@@ -1,6 +1,5 @@
 package com.etp.questforhealth.endpoint.dto;
 
-import com.etp.questforhealth.entity.User;
 
 import java.util.Objects;
 
@@ -20,10 +19,14 @@ public class UserDto {
 
     }
 
-    public UserDto(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, String password, String email, int storyChapter) {
+    public UserDto(int id, String firstname, String lastname){
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
+    }
+
+    public UserDto(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, String password, String email, int storyChapter) {
+        this(id, firstname, lastname);
         this.characterName = characterName;
         this.characterStrength = characterStrength;
         this.characterLevel = characterLevel;

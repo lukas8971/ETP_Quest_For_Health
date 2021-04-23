@@ -1,10 +1,5 @@
-<table>
-  <tr *ngFor="let user of users">
-    <td>
-      {{user.firstname}}
-    </td>
-    <td>
-      {{user.lastname}}
-    </td>
-  </tr>
-</table>
+<app-header></app-header>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

@@ -1,17 +1,8 @@
 package com.etp.questforhealth.exception;
 
-public class PersistenceException extends RuntimeException {
-    private static final long serialVersionUID = -5762187655103128692L;
+public class PersistenceException extends RuntimeException{
 
-    public PersistenceException(String message) {
-        super(message);
-    }
+    public PersistenceException(String message){ super(message); }
 
-    public PersistenceException(Throwable cause) {
-        super(cause);
-    }
-
-    public PersistenceException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    public PersistenceException(String message, Throwable cause) { super(message, cause); }
 }

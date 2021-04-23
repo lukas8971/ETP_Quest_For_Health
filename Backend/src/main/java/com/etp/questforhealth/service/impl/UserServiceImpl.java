@@ -37,6 +37,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllUsersFromDoctor(int doctor){
+        LOGGER.trace("getAllUsersFromDoctor({})", doctor);
+        return userDao.getAllUsersFromDoctor(doctor);
+    }
+
+    @Override
+    public User getOneById(int id){
+        LOGGER.trace("getOneById({})", id);
+        try {
+            return userDao.getOneById(id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
     public User createUser(User user) throws ServiceException {
         LOGGER.trace("createUser()");
         validator.validateNewUser(user);

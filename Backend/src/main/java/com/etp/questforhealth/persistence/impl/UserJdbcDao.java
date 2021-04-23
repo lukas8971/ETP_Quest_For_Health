@@ -1,6 +1,7 @@
 package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.UserDao;
 import org.slf4j.Logger;
@@ -85,9 +86,52 @@ public class UserJdbcDao implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
+    @Override
+    public List<User> getAllUsersFromDoctor(int doctor){
+        LOGGER.trace("getAllUsersFromDoctor()");
+        makeJDBCConnection();
+        try {
+            String query = "SELECT u.id AS u_id,u.firstname AS u_firstname,u.lastname AS u_lastname FROM doctor_has_patients dhp JOIN user u ON(dhp.user = u.id) WHERE dhp.doctor=?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, doctor);
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs == null) return null;
+            List<User> users = new ArrayList<>();
+            while(rs.next()){
+                users.add(mapUsersInTreatment(rs));
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
+
+    private User mapUsersInTreatment(ResultSet rs) throws SQLException {
+        LOGGER.trace("mapUsersInTreatment({})", rs);
+        final User user = new User();
+        user.setId(rs.getInt("u_id"));
+        user.setFirstname(rs.getString("u_firstname"));
+        user.setLastname(rs.getString("u_lastname"));
+        return user;
+    }
+
+    @Override
+    public User getOneById(int id) {
+        LOGGER.trace("getOneById({})",id);
+        makeJDBCConnection();
+        try {
+            String query = "SELECT * FROM user WHERE id = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, id);
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) return new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"));
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+        throw new NotFoundException("Could not find user with id " + id);
+    }
 
     public void makeJDBCConnection() {
         LOGGER.trace("makeJDBCConnection()");
