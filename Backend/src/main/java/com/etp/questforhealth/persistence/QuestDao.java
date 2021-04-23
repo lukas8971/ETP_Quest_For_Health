@@ -55,4 +55,12 @@ public interface QuestDao {
     * @throws PersistenceException if something went wrong.
     */
    boolean addAssignedDoctorQuestForUser(AcceptedQuest acceptedQuest);
+
+   /**
+    * Checks if an accepted quest is already accepted by a user.
+    * @param acceptedQuest AcceptedQuest object that should be checked.
+    * @return FALSE if either: no entry in the persistent data store, quest has no repetition cycle AND is already completed, else
+    * TRUE if either: quest is already accepted by the user AND not completed, quest is completed AND has a repetition cycle AND the repetition cycle is not already met
+    */
+   boolean checkIfQuestAlreadyAccepted(AcceptedQuest acceptedQuest);
 }
