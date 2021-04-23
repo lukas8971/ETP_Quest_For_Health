@@ -1,0 +1,5 @@
+.center{
+  display: flex;
+  justify-content: center;
+  min-width: 400px;
+}

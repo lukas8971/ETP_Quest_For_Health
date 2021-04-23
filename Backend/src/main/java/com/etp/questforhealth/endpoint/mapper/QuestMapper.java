@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class QuestMapper {
@@ -25,4 +27,13 @@ public class QuestMapper {
         return new Quest(questDto.getId(), questDto.getName(), questDto.getDescription(), questDto.getExp_reward(), questDto.getGold_reward(), questDto.getRepetition_cycle(), questDto.getExp_penalty(), questDto.getGold_penalty(), questDto.getDoctor());
     }
 
+    public List<QuestDto> entityToDto (List<Quest> quests){
+        LOGGER.trace("entityToDto({})", quests);
+        if(quests == null) return null;
+        List<QuestDto> questsDto = new ArrayList<>();
+        for (Quest q: quests) {
+            questsDto.add(new QuestDto(q.getId(), q.getName(), q.getDescription()));
+        }
+        return questsDto;
+    }
 }
