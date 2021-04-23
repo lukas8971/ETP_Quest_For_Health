@@ -23,3 +23,7 @@ Backend/target/
 *.iws
 *.iml
 *.ipr
+
+Frontend/quest-for-health/dist/
+
+Frontend/quest-for-health/package-lock.json

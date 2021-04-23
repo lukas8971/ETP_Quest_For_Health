@@ -100,7 +100,7 @@ public class QuestJdbcDao implements QuestDao {
             if (rs == null) return null;
             List<Quest> quests = new ArrayList<>();
             while(rs.next()){
-                quests.add(mapRowDoctorAssigned(rs));
+                quests.add(mapRowDoctorUserQuest(rs));
             }
             return quests;
         } catch (SQLException e) {
@@ -126,7 +126,7 @@ public class QuestJdbcDao implements QuestDao {
             if (rs == null) return null;
             List<Quest> quests = new ArrayList<>();
             while(rs.next()){
-                quests.add(mapRowDoctorAssigned(rs));
+                quests.add(mapRowDoctorUserQuest(rs));
             }
             return quests;
         } catch (SQLException e) {
@@ -135,13 +135,13 @@ public class QuestJdbcDao implements QuestDao {
     }
 
     /**
-     * A mapping for all already accepted doctor quests for a user
+     * A mapping for all doctor user quests (assigned and available)
      * @param rs resultset from the query
      * @return a quest object with id, name and description
      * @throws SQLException if something is wrong
      */
-    private Quest mapRowDoctorAssigned(ResultSet rs) throws SQLException {
-        LOGGER.trace("mapRowDoctorAssigned({})", rs);
+    private Quest mapRowDoctorUserQuest(ResultSet rs) throws SQLException {
+        LOGGER.trace("mapRowDoctorUserQuest({})", rs);
         final Quest quest = new Quest();
         quest.setId(rs.getInt("id"));
         quest.setName(rs.getString("name"));
