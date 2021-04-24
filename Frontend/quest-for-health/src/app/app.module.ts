@@ -22,6 +22,7 @@ import {CommonModule} from '@angular/common';
 import {MatCommonModule} from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
+import { CreateCharacterComponent } from './component/create-character/create-character.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {MatInputModule} from '@angular/material/input';
     ErrorDialogComponent,
     PatientDoctorQuestComponent,
     DoctorComponent,
-    DoctorLogoutComponent
+    DoctorLogoutComponent,
+    CreateCharacterComponent
   ],
   imports: [
     BrowserModule,

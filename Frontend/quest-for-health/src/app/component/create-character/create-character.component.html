@@ -1,0 +1,48 @@
+<form class="form" [formGroup]="form">
+<mat-card class="mat-card">
+    <mat-card-header>
+    <mat-card-title>Create new Character</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+  <p>
+  <mat-form-field appearance="standard">
+    <mat-label>Firstname</mat-label>
+    <input name="firstNameInput" matInput [(ngModel)]="user.firstname" formControlName="firstname">
+    <mat-hint *ngIf="form.controls['firstname'].touched && form.controls['firstname'].errors && form.controls['firstname'].errors.required">Firstname is required. </mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="standard">
+    <mat-label>Lastname</mat-label>
+    <input matInput [(ngModel)]="user.lastname" formControlName="lastname">
+    <mat-hint *ngIf="form.controls['lastname'].touched && form.controls['lastname'].errors && form.controls['lastname'].errors.required">Lastname is required. </mat-hint>
+  </mat-form-field>
+  </p>
+  <p>
+  <mat-form-field appearance="standard">
+    <mat-label>Character name</mat-label>
+    <input matInput [(ngModel)]="user.characterName" formControlName="characterName">
+    <mat-hint *ngIf="form.controls['characterName'].touched && form.controls['characterName'].errors && form.controls['characterName'].errors.required">Character name is required. </mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="standard">
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="user.email" formControlName="email">
+    <mat-hint *ngIf="form.controls['email'].touched && form.controls['email'].errors && form.controls['email'].errors.email">Email has to be in format 'abc.def@xyz.com' </mat-hint>
+  </mat-form-field>
+  </p>
+  <p>
+  <mat-form-field appearance="standard">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" [(ngModel)]="user.password" formControlName="password">
+    <mat-hint *ngIf="form.controls['password'].touched && form.controls['password'].errors && form.controls['password'].errors.required">Password is required. </mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="standard">
+    <mat-label>Repeat Password</mat-label>
+    <input matInput type="password" [(ngModel)]="passwordRepeat" formControlName="passwordRepeat">
+    <mat-hint *ngIf="form.controls['passwordRepeat'].touched && ((form.controls['passwordRepeat'].errors && form.controls['passwordRepeat'].errors.required) || passwordRepeat != user.password)">Passwords must match. </mat-hint>
+  </mat-form-field>
+  </p>
+      <p>
+        <button [disabled]="user.password == '' || passwordRepeat ==  '' ||passwordRepeat != user.password" type="submit" mat-raised-button color="primary" style="margin-left: 10%" (click)=createCharacter()>Create</button>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</form>

@@ -30,4 +30,9 @@ export class UserService {
     console.log('getUserById');
     return this.httpClient.get<User>(baseUri + '/' + id);
   }
+
+  createUser(user: User): Observable<User>{
+  console.log('createUser');
+  return this.httpClient.post<User>(baseUri, user);
+  }
 }
