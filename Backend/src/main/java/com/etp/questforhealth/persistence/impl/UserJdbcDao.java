@@ -1,6 +1,8 @@
 package com.etp.questforhealth.persistence.impl;
 
+import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.UserDao;
@@ -131,6 +133,39 @@ public class UserJdbcDao implements UserDao {
             throw new PersistenceException(e.getMessage(), e);
         }
         throw new NotFoundException("Could not find user with id " + id);
+    }
+
+    @Override
+    public User checkLogin(Credentials cred) {
+        LOGGER.trace("checkLogin({})",cred.toString());
+        makeJDBCConnection();
+        try {
+            String query = "SELECT * FROM user WHERE character_name = ? AND password = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setString(1, cred.getEmail() );
+            pstmnt.setString(2, cred.getPassword());
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) return new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("character_name"), rs.getInt("character_strength"), rs.getInt("character_level"), rs.getInt("character_exp"), rs.getString("password"), rs.getString("email"), rs.getInt("story_chapter"));
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+        throw new InvalidLoginException("Wrong username or password");
+    }
+
+    @Override
+    public boolean checkUserNameExists(String userName) {
+        LOGGER.trace("checkUserNameExists({})",userName);
+        makeJDBCConnection();
+        try {
+            String query = "SELECT * FROM user WHERE character_name = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setString(1, userName );
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) return true;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+        return false;
     }
 
     public void makeJDBCConnection() {

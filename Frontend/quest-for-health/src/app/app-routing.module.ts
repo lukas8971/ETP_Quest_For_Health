@@ -6,13 +6,18 @@ import {DoctorComponent} from './component/doctor/doctor.component';
 import {DoctorLogoutComponent} from './component/doctor-logout/doctor-logout.component';
 import {AuthGuardDoctorService} from './service/auth-guard-doctor.service';
 import {CreateCharacterComponent} from "./component/create-character/create-character.component";
+import {UserLoginComponent} from "./component/user-login/user-login.component";
+import {UserOverviewComponent} from "./component/user-overview/user-overview.component";
+import {AuthGuardUserService} from "./service/auth-guard-user.service";
 
 const routes: Routes = [
   {path: 'doctors/overview', component: DoctorOverviewComponent, canActivate: [AuthGuardDoctorService]},
   {path: 'doctors/patientquest', component: PatientDoctorQuestComponent, canActivate: [AuthGuardDoctorService]},
   {path: 'doctors', component: DoctorComponent},
   {path: 'doctors/logout', component: DoctorLogoutComponent, canActivate: [AuthGuardDoctorService]},
-  {path: 'createCharacter', component: CreateCharacterComponent}
+  {path: 'createCharacter', component: CreateCharacterComponent},
+  {path: 'userLogin', component: UserLoginComponent},
+  {path: 'users/overview', component: UserOverviewComponent, canActivate: [AuthGuardUserService]}
 ];
 
 @NgModule({

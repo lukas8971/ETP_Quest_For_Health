@@ -1,8 +1,10 @@
 package com.etp.questforhealth.service.impl;
 
+import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.Validator;
@@ -53,6 +55,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User checkLogin(Credentials cred) {
+        LOGGER.trace("checkLogin({})", cred.toString());
+        cred.setPassword(get_SHA_512_SecurePassword(cred.getPassword()));
+        try{
+            return userDao.checkLogin(cred);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public User createUser(User user) throws ServiceException {
         LOGGER.trace("createUser()");
         validator.validateNewUser(user);
@@ -62,6 +75,7 @@ public class UserServiceImpl implements UserService {
         user.setStoryChapter(1);
         user.setPassword(get_SHA_512_SecurePassword(user.getPassword()));
         try {
+            if(userDao.checkUserNameExists(user.getCharacterName())) throw new ValidationException("Character-name is already in use!");
             return userDao.createUser(user);
         }
         catch (PersistenceException e){

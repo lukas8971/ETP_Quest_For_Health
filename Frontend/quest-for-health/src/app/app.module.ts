@@ -23,6 +23,8 @@ import {MatCommonModule} from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import { CreateCharacterComponent } from './component/create-character/create-character.component';
+import { UserLoginComponent } from './component/user-login/user-login.component';
+import { UserOverviewComponent } from './component/user-overview/user-overview.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { CreateCharacterComponent } from './component/create-character/create-ch
     PatientDoctorQuestComponent,
     DoctorComponent,
     DoctorLogoutComponent,
-    CreateCharacterComponent
+    CreateCharacterComponent,
+    UserLoginComponent,
+    UserOverviewComponent
   ],
   imports: [
     BrowserModule,

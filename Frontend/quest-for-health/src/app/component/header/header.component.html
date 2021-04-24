@@ -4,18 +4,21 @@
   </button>
   <span>Quest For Health</span>
   <div style="width: 5px"></div>
-  <span *ngIf="doctorLoginService.isUserLoggedIn()">
+  <span *ngIf="doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/doctors/overview">Patient Overview</button>
   </span>
   <div style="width: 5px"></div>
-  <span *ngIf="doctorLoginService.isUserLoggedIn()">
-    <button mat-button routerLink="/doctors/logout">Logout</button>
+  <span *ngIf="doctorLoginService.isUserLoggedIn() || userLoginService.isUserLoggedIn()">
+    <button mat-button (click)="logOut()" routerLink="/">Logout</button>
   </span>
   <div style="width: 5px"></div>
-  <span *ngIf="!doctorLoginService.isUserLoggedIn()">
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/doctors">Doctor Login</button>
   </span>
-  <span *ngIf="!doctorLoginService.isUserLoggedIn()">
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/userLogin">User Login</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/createCharacter">Create new character</button>
   </span>
 </mat-toolbar>

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../dto/user';
 import {environment} from '../../environments/environment';
+import {Credentials} from "../dto/credentials";
+import {Doctor} from "../dto/doctor";
 
 const baseUri = environment.backendUrl + '/users';
 
@@ -10,6 +12,8 @@ const baseUri = environment.backendUrl + '/users';
   providedIn: 'root'
 })
 export class UserService {
+
+  private httpOption = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
 
   constructor(private httpClient: HttpClient) { }
 
@@ -34,5 +38,14 @@ export class UserService {
   createUser(user: User): Observable<User>{
   console.log('createUser');
   return this.httpClient.post<User>(baseUri, user);
+  }
+
+  /**
+   * Checks the login data for a user is valid
+   * @param cred Credentials (character-name, password) for a user
+   */
+  checkLogin(cred: Credentials): Observable<User>{
+    console.log('Login');
+    return this.httpClient.post<User>(baseUri + '/login', JSON.stringify(cred), this.httpOption);
   }
 }

@@ -1,8 +1,12 @@
 package com.etp.questforhealth.endpoint;
 
+import com.etp.questforhealth.endpoint.dto.CredentialsDto;
+import com.etp.questforhealth.endpoint.dto.DoctorDto;
 import com.etp.questforhealth.endpoint.dto.UserDto;
+import com.etp.questforhealth.endpoint.mapper.CredentialsMapper;
 import com.etp.questforhealth.endpoint.mapper.UserMapper;
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
@@ -26,11 +30,14 @@ public class UserEndpoint {
     static final String BASE_URL="/users";
     private final UserService userService;
     private final UserMapper userMapper;
+    private final CredentialsMapper credentialsMapper;
+
 
     @Autowired
-    public UserEndpoint(UserService userService, UserMapper userMapper) {
+    public UserEndpoint(UserService userService, UserMapper userMapper, CredentialsMapper credentialsMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.credentialsMapper = credentialsMapper;
     }
 
     @GetMapping
@@ -78,6 +85,17 @@ public class UserEndpoint {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(),e);
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
+        }
+    }
+
+    @PostMapping(value="/login")
+    public UserDto checkLogin(@RequestBody CredentialsDto credentialsDto){
+        LOGGER.info("POST " + BASE_URL + "/login");
+        try{
+            return userMapper.entityToDto(userService.checkLogin(credentialsMapper.dtoToEntitiy(credentialsDto)));
+        } catch (InvalidLoginException e){
+            LOGGER.error("Wrong username or password!");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         }
     }
 

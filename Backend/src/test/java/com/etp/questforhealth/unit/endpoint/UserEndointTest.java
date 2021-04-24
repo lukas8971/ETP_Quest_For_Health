@@ -3,6 +3,7 @@ package com.etp.questforhealth.unit.endpoint;
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.endpoint.UserEndpoint;
 import com.etp.questforhealth.endpoint.dto.UserDto;
+import com.etp.questforhealth.entity.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,8 +43,8 @@ public class UserEndointTest {
     @Test
     @DisplayName("Requesting all users in the database should return a list with 5 users")
     public void requestUserList_shouldWork(){
-        for(int i = 0; i< 5; i++){
-            userEndpoint.createUser(TestData.getNewWorkingUser());
+        for (User u: TestData.getNWorkingUsers(5) ){
+            userEndpoint.createUser(u);
         }
         List<UserDto> userList = userEndpoint.getAll();
         assertEquals(5, userList.size());
