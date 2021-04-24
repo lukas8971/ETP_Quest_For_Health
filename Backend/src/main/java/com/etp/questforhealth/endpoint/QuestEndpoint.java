@@ -4,15 +4,13 @@ package com.etp.questforhealth.endpoint;
 import com.etp.questforhealth.endpoint.dto.QuestDto;
 import com.etp.questforhealth.endpoint.mapper.QuestMapper;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.QuestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.invoke.MethodHandles;
@@ -47,6 +45,23 @@ public class QuestEndpoint {
         } catch (NotFoundException e1){
             LOGGER.error("Could not find quest with id {} " + e1 + "\n", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quest not found",e1);
+        }
+    }
+
+    /**
+     * Saves the given Quest.
+     * @param questDto The quest to be saved.
+     * @return The quest with a new id.
+     */
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public QuestDto createQuest(@RequestBody QuestDto questDto){
+        LOGGER.info("POST "+BASE_URL, questDto);
+        try{
+            return questMapper.entityToDto(questService.createQuest(questMapper.dtoToEntity(questDto)));
+        } catch(ValidationException e1){
+            LOGGER.error("Validation exception while creating new Quest {} " + e1 + "\n",questDto);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage(), e1);
         }
     }
 

@@ -2,22 +2,33 @@ package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.QuestDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @Repository
 public class QuestJdbcDao implements QuestDao {
 
+    private static final String QUEST_TABLE_NAME = "quest";
+    private static final String DOCTOR_QUEST_TABLE_NAME = "doctor_quest";
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     static Connection questForHealthConn = null;
+
+
+
     @Value("${spring.datasource.url}")
     String URL;
     @Value("${spring.datasource.username}")
@@ -25,23 +36,66 @@ public class QuestJdbcDao implements QuestDao {
     @Value("${spring.datasource.password}")
     String PASSWORD;
 
+    public QuestJdbcDao() {
+
+    }
+
 
     @Override
     public Quest getOneById(int id) throws NotFoundException {
-        LOGGER.trace("getOneById({})",id);
+        LOGGER.trace("getOneById({})", id);
         makeJDBCConnection();
+
         try {
-            String query = "SELECT * FROM quest WHERE id = ?;";
-            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            final String sql = "SELECT * FROM " + QUEST_TABLE_NAME + " LEFT JOIN doctor_quest ON quest.id = doctor_quest.id WHERE quest.id = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql);
             pstmnt.setInt(1, id);
             ResultSet rs = pstmnt.executeQuery();
             if (rs == null || !rs.next()) throw new NotFoundException("Could not find quest with id " + id);
             return mapRow(rs);
+
         } catch (SQLException e) {
-            System.out.println("MySQL Connection Failed!");
-            e.printStackTrace();
+           throw new PersistenceException(e.getMessage(),e);
         }
-        return null;
+    }
+
+    @Override
+    public Quest createQuest(Quest quest) {
+        LOGGER.trace("createQuest({})", quest);
+        makeJDBCConnection();
+        try {
+            final String sql_quest = "INSERT INTO " + QUEST_TABLE_NAME + " (name, description, exp_reward, gold_reward, repetition_cycle) " +
+                    " VALUES (?,?,?,?,?);";
+            PreparedStatement stmt_quest = questForHealthConn.prepareStatement(sql_quest, Statement.RETURN_GENERATED_KEYS);
+            stmt_quest.setString(1, quest.getName());
+            stmt_quest.setString(2, quest.getDescription());
+            stmt_quest.setInt(3, quest.getExp_reward());
+            stmt_quest.setInt(4, quest.getGold_reward());
+            stmt_quest.setString(5, parseRepetitionCycle(quest.getRepetition_cycle()));
+            int added = stmt_quest.executeUpdate();
+            if (added == 0) throw new PersistenceException("Could not add new Quest");
+            ResultSet rs = stmt_quest.getGeneratedKeys();
+            rs.next();
+            quest.setId(rs.getInt(1));
+
+            final String query_doctor_quest = "INSERT INTO " + DOCTOR_QUEST_TABLE_NAME + " (id, doctor, exp_penalty, gold_penalty) " +
+                    " VALUES (?,?,?,?);";
+            PreparedStatement stmt_doctor_quest = questForHealthConn.prepareStatement(query_doctor_quest, Statement.RETURN_GENERATED_KEYS);
+            stmt_doctor_quest.setInt(1, quest.getId());
+            stmt_doctor_quest.setInt(2, quest.getDoctor());
+            stmt_doctor_quest.setInt(3, quest.getExp_penalty());
+            stmt_doctor_quest.setInt(4, quest.getGold_penalty());
+            added = stmt_doctor_quest.executeUpdate();
+            if (added == 0) throw new PersistenceException("Could not add new Quest");
+
+
+            return getOneById(quest.getId());
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new PersistenceException("Recently saved quest can't be accessed. \n");
+
+        }
     }
 
     private Quest mapRow(ResultSet rs) throws SQLException {
@@ -55,8 +109,12 @@ public class QuestJdbcDao implements QuestDao {
         String mysqlTime = rs.getString("repetition_cycle");
         if (mysqlTime == null) mysqlTime = "00:00:00";
         quest.setRepetition_cycle(parseRepetitionCycle(mysqlTime));
+        quest.setExp_penalty(rs.getInt("exp_penalty"));
+        quest.setGold_penalty(rs.getInt("gold_penalty"));
+        quest.setDoctor(rs.getInt("doctor"));
         return quest;
     }
+
 
     /**
      * All Java Libraries refuse to parse MySQL Time because it accepts
@@ -67,7 +125,7 @@ public class QuestJdbcDao implements QuestDao {
      * @return a java.time.Duration Object with the period
      */
     private Duration parseRepetitionCycle(String sqlTime) throws DateTimeParseException {
-        LOGGER.trace("parseRepetitionCycle({})",sqlTime);
+        LOGGER.trace("parseRepetitionCycle({})", sqlTime);
         int index1 = sqlTime.indexOf(':');
         int index2 = sqlTime.lastIndexOf(':');
         String hours = sqlTime.substring(0, index1);
@@ -76,6 +134,43 @@ public class QuestJdbcDao implements QuestDao {
         String parseString = "PT" + hours + "H" + minutes + "M" + seconds + "S";
         Duration d = Duration.parse(parseString);
         return d;
+    }
+
+
+    /**
+     * All Java Libraries refuse to parse MySQL Time because it accepts
+     * vales greater than 23:59:59 which is not a valid time.
+     * java.time.Duration only accepts time in ISO-8601 format.
+     *
+     * @param duration java.time.Duration Object with the period
+     * @return The String to parse in MySQL Time format
+     */
+    private String parseRepetitionCycle(Duration duration) throws DateTimeParseException {
+        LOGGER.trace("parseRepetitionCycle({})", duration);
+
+        String sqlTime  ="00:00:00";
+        long seconds = duration.getSeconds();
+        if(seconds != 0) {
+            sqlTime = String.format("%02d:%02d:%02d",
+                    seconds / 3600,
+                    (seconds % 3600) / seconds/60,
+                    seconds % 60);
+        }
+
+        return sqlTime;
+    }
+
+
+
+    // to rollback data after tests
+    @Override
+    public void rollbackChanges() {
+        try {
+            questForHealthConn.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
