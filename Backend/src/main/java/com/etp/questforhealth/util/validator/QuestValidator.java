@@ -30,6 +30,7 @@ public class QuestValidator {
         validateGoldReward(quest.getGold_reward());
         validateExpPenalty(quest.getExp_penalty());
         validateGoldPenalty(quest.getGold_penalty());
+        // TODO Validate Doctor
     }
 
     private void validateName(String name) {

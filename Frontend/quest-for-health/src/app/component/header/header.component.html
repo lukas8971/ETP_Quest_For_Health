@@ -1,0 +1,18 @@
+<mat-toolbar>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Quest For Health</span>
+  <div style="width: 5px"></div>
+  <span *ngIf="doctorLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors/overview">Patient Overview</button>
+  </span>
+  <div style="width: 5px"></div>
+  <span *ngIf="doctorLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors/logout">Logout</button>
+  </span>
+  <div style="width: 5px"></div>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors">Doctor Login</button>
+  </span>
+</mat-toolbar>

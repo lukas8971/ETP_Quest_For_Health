@@ -26,10 +26,11 @@ public class QuestPersistenceTest {
     @Autowired
     QuestDao questDao;
 
+    /*
     @AfterEach
     public void tearDownDBData(){
         questDao.rollbackChanges();
-    }
+    }*/
 
     @Test
     @DisplayName("Requesting a not existing quest should throw NotFoundException")

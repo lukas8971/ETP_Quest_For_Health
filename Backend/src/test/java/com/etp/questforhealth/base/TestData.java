@@ -1,7 +1,7 @@
 package com.etp.questforhealth.base;
 
-import com.etp.questforhealth.entity.Quest;
-import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.endpoint.dto.*;
+import com.etp.questforhealth.entity.*;
 
 import java.time.Duration;
 
@@ -18,6 +18,40 @@ public interface TestData {
     String USER_URL = "/users";
 
     /**
+     * CredentialsDto Data
+     */
+
+    static CredentialsDto getNewCredentialsDto(){return new CredentialsDto("e.m@il.com","QWERT1234");}
+
+    /**
+    * Credentials Data
+    */
+
+    static Credentials getNewCredentials(){return new Credentials("e.m@il.com","QWERT1234");}
+
+
+
+    /**
+     * CreateQuestDto Data
+     */
+
+    static CreateDoctorQuestDto getNewCreateDoctorQuestDto(){return new CreateDoctorQuestDto(getNewCredentialsDto(), getNewQuestDto());}
+
+    /**
+     *  CreateDoctorQuest Data
+     */
+
+    static CreateDoctorQuest getNewCreateDoctorQuest(){return new CreateDoctorQuest(getNewCredentials(),getNewDoctorQuest());}
+
+    /**
+     * QuestDto Data
+     */
+
+    static QuestDto getNewQuestDto(){return new QuestDto(0,"UnitQuest","This Quest was created by a Unit Test", 100,10, Duration.parse("PT0S"),0,0,1);}
+
+
+
+    /**
      * Quest Data
      */
     static Quest getNewQuest() { return new Quest(); }
@@ -26,6 +60,12 @@ public interface TestData {
 
     static Quest getNewDoctorQuest(int id, int doctor) { return new Quest(id, "Doctor Test Quest", 20, 4, doctor); }
 
+    static Quest getNewDoctorQuest() {return new Quest(0,"UnitQuest","This Quest was created by a Unit Test", 100,10, Duration.parse("PT0S"),0,0,1);}
+
+
+
+
+
     /**
      * User Data
      */
@@ -33,5 +73,5 @@ public interface TestData {
 
     static User getNewUserWithName(int id) { return new User(id, "Andrew", "Adams"); }
 
-    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,3,400,"SuperSecretPassword", null,3); }
+    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,3,400,"SuperSecretPassword", null,1); }
 }

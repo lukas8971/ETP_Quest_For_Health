@@ -1,6 +1,8 @@
 package com.etp.questforhealth.service.impl;
 
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.PersistenceException;
+import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.UserService;
 import org.slf4j.Logger;
@@ -26,5 +28,21 @@ public class UserServiceImpl implements UserService {
     public List<User> getAll() {
         LOGGER.trace("getAll()");
         return userDao.getAll();
+    }
+
+    @Override
+    public List<User> getAllUsersFromDoctor(int doctor){
+        LOGGER.trace("getAllUsersFromDoctor({})", doctor);
+        return userDao.getAllUsersFromDoctor(doctor);
+    }
+
+    @Override
+    public User getOneById(int id){
+        LOGGER.trace("getOneById({})", id);
+        try {
+            return userDao.getOneById(id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
     }
 }

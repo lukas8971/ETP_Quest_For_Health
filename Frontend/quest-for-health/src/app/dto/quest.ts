@@ -1,0 +1,13 @@
+import {Time} from '@angular/common';
+
+export interface Quest {
+  id: number;
+  name: string;
+  description: string;
+  exp_reward: number;
+  gold_reward: number;
+  repetition_cycle: string;
+  exp_penalty: number;
+  gold_penalty: number;
+  doctor: number;
+}

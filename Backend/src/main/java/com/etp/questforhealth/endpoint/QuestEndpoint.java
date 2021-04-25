@@ -1,8 +1,12 @@
 package com.etp.questforhealth.endpoint;
 
 
+import com.etp.questforhealth.endpoint.dto.CreateDoctorQuestDto;
 import com.etp.questforhealth.endpoint.dto.QuestDto;
+import com.etp.questforhealth.endpoint.mapper.CreateDoctorQuestMapper;
 import com.etp.questforhealth.endpoint.mapper.QuestMapper;
+import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.QuestService;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 
 @RestController
@@ -23,11 +28,13 @@ public class QuestEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final QuestService questService;
     private final QuestMapper questMapper;
+    private final CreateDoctorQuestMapper createDoctorQuestMapper;
 
     @Autowired
-    public QuestEndpoint(QuestService questService, QuestMapper questMapper){
+    public QuestEndpoint(QuestService questService, QuestMapper questMapper, CreateDoctorQuestMapper createDoctorQuestMapper){
         this.questService = questService;
         this.questMapper = questMapper;
+        this.createDoctorQuestMapper = createDoctorQuestMapper;
     }
 
     /**
@@ -50,19 +57,73 @@ public class QuestEndpoint {
 
     /**
      * Saves the given Quest.
-     * @param questDto The quest to be saved.
+     * @param createDoctorQuestDto The quest to be saved.
      * @return The quest with a new id.
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public QuestDto createQuest(@RequestBody QuestDto questDto){
-        LOGGER.info("POST "+BASE_URL, questDto);
+    public QuestDto createQuest(@RequestBody CreateDoctorQuestDto createDoctorQuestDto){
+        LOGGER.info("POST "+BASE_URL, createDoctorQuestDto);
         try{
-            return questMapper.entityToDto(questService.createQuest(questMapper.dtoToEntity(questDto)));
+            return questMapper.entityToDto(questService.createQuest(createDoctorQuestMapper.dtoToEntity(createDoctorQuestDto)));
         } catch(ValidationException e1){
-            LOGGER.error("Validation exception while creating new Quest {} " + e1 + "\n",questDto);
+            LOGGER.error("Validation exception while creating new Quest {} " + e1 + "\n",createDoctorQuestDto);
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage(), e1);
+        } catch(InvalidLoginException e2){
+            LOGGER.error("InvalidLoginException while creating new Quest {} " + e2 + "\n", createDoctorQuestDto);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password!", e2);
         }
     }
 
+
+    /**
+     * Gets all the quests available for a doctor to a user
+     * @param user to assigned quests to
+     * @param doctor who is assigning quests to a user
+     * @return a list of all available doctor quests for a user
+     */
+    @GetMapping(value="/available")
+    @ResponseBody
+    public List<QuestDto> getAllUserAvailableDoctorQuests(@RequestParam int user, @RequestParam int doctor){
+        LOGGER.info("GET " + BASE_URL + "/available?user={}&doctor={}", user, doctor);
+        return questMapper.entityToDto(questService.getAllUserAvailableDoctorQuests(user, doctor));
+    }
+
+    /**
+     * Gets all the quests assigned from a doctor to a user
+     * @param user to assigned quests to
+     * @param doctor who is assigning quests to a user
+     * @return a list of all assigned doctor quests for a user
+     */
+    @GetMapping(value="/assigned")
+    @ResponseBody
+    public List<QuestDto> getAllUserAssignedDoctorQuests(@RequestParam int user, @RequestParam int doctor){
+        LOGGER.info("GET " + BASE_URL + "/assigned?user={}&doctor={}", user, doctor);
+        return questMapper.entityToDto(questService.getAllUserAssignedDoctorQuests(user, doctor));
+    }
+
+    /**
+     * Delete an already assigned quest from a user
+     * @param quest the quest that should be unnassigned
+     * @param user patient the quest is assigned to
+     * @return true if delete was successful.
+     */
+    @DeleteMapping(value = "/assigned/{quest}/{user}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean deleteAssignedDoctorQuestForUser(@PathVariable("quest") int quest, @PathVariable("user") int user) {
+        LOGGER.info("DELETE " + BASE_URL + "/assigned/{}/{}", quest, user);
+        return questService.deleteAssignedDoctorQuestForUser(quest, user);
+    }
+
+    /**
+     * Adds a new assigned quest from a user
+     * @param acceptedQuest the quest that should be added
+     * @return true if successfully assigned to user
+     */
+    @PostMapping(value = "/assigned")
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean addAssignedDoctorQuestForUser(@RequestBody AcceptedQuest acceptedQuest) {
+        LOGGER.info("POST " + BASE_URL + "/assigned");
+        return questService.addAssignedDoctorQuestForUser(acceptedQuest);
+    }
 }

@@ -17,10 +17,14 @@ public class QuestDto {
 
     private QuestDto(){}
 
-    public QuestDto(int id, String name, String description, int exp_reward, int gold_reward, Duration repetition_cycle, int exp_penalty, int gold_penalty, int doctor) {
+    public QuestDto(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public QuestDto(int id, String name, String description, int exp_reward, int gold_reward, Duration repetition_cycle, int exp_penalty, int gold_penalty, int doctor) {
+        this(id, name, description);
         this.exp_reward = exp_reward;
         this.gold_reward = gold_reward;
         this.repetition_cycle = repetition_cycle;
