@@ -39,11 +39,11 @@ public class QuestMapper {
     }
 
     /**
-     * For some reason the frontend adds 1 day and 1 hour to the duration, so that accounts for it
+     * For some reason the frontend adds 1 day to the duration, so that accounts for it
      * TODO: Find better solution
      * @return
      */
     private long calculateOffset(){
-        return Duration.ofDays(1).toMillis() + Duration.ofHours(1).toMillis();
+        return Duration.ofDays(1).toMillis();
     }
 }
