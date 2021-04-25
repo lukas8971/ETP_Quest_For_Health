@@ -28,6 +28,7 @@ import { UserOverviewComponent } from './component/user-overview/user-overview.c
 import { UserProfileComponent } from './component/user-profile/user-profile.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-browse-quests.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     CreateCharacterComponent,
     UserLoginComponent,
     UserOverviewComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    UserBrowseQuestsComponent
   ],
   imports: [
     BrowserModule,

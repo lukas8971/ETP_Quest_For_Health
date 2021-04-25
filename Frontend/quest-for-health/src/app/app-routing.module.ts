@@ -10,6 +10,7 @@ import {UserLoginComponent} from "./component/user-login/user-login.component";
 import {UserOverviewComponent} from "./component/user-overview/user-overview.component";
 import {AuthGuardUserService} from "./service/auth-guard-user.service";
 import {UserProfileComponent} from "./component/user-profile/user-profile.component";
+import {UserBrowseQuestsComponent} from "./component/user-browse-quests/user-browse-quests.component";
 
 const routes: Routes = [
   {path: 'doctors/overview', component: DoctorOverviewComponent, canActivate: [AuthGuardDoctorService]},
@@ -19,7 +20,8 @@ const routes: Routes = [
   {path: 'createCharacter', component: CreateCharacterComponent},
   {path: 'userLogin', component: UserLoginComponent},
   {path: 'users/overview', component: UserOverviewComponent, canActivate: [AuthGuardUserService]},
-  {path: 'users/profile', component: UserProfileComponent, canActivate: [AuthGuardUserService]}
+  {path: 'users/profile', component: UserProfileComponent, canActivate: [AuthGuardUserService]},
+  {path: 'users/browseQuests', component: UserBrowseQuestsComponent, canActivate: [AuthGuardUserService]}
 ];
 
 @NgModule({
