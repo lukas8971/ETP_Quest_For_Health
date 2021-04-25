@@ -48,6 +48,50 @@ public class QuestJdbcDao implements QuestDao {
         return null;
     }
 
+    @Override
+    public boolean acceptQuest(int userId, int questId) {
+        LOGGER.trace("acceptQuest({},{})", userId,questId);
+        makeJDBCConnection();
+        try{
+            String query = "INSERT INTO user_accepted_quest (user, quest, accepted_on) " +
+                    "values (?,?,CURRENT_DATE);";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, userId);
+            pstmnt.setInt(2, questId);
+            int val = pstmnt.executeUpdate();
+            return val >0;
+        } catch (SQLException e){
+            throw new PersistenceException("Could not assign Quest to user: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Quest> getNewQuestsForUserId(int userId) {
+        LOGGER.trace("getNewQuestsForUserId({})", userId);
+        makeJDBCConnection();
+        List<Quest> questList = new ArrayList<>();
+        try{
+            String query = "select * from quest q " +
+                    "where q.id not in ( " +
+                    "  select d.id  " +
+                    "  from doctor_quest d) " +
+                    "  and q.id not in ( " +
+                    "    select u.quest " +
+                    "    from user_accepted_quest u " +
+                    "    where u.user = ? " +
+                    "    );";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, userId);
+            ResultSet rs = pstmnt.executeQuery();
+            while (rs.next()){
+                questList.add(mapRow(rs));
+            }
+            return questList;
+        } catch (SQLException e){
+            throw new PersistenceException("Could not fetch new quests for user " + userId, e);
+        }
+    }
+
     private Quest mapRow(ResultSet rs) throws SQLException {
         LOGGER.trace("mapRow({})", rs);
         final Quest quest = new Quest();

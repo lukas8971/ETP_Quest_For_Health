@@ -5,6 +5,7 @@ import com.etp.questforhealth.endpoint.dto.QuestDto;
 import com.etp.questforhealth.endpoint.mapper.QuestMapper;
 import com.etp.questforhealth.entity.AcceptedQuest;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.service.QuestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,35 @@ public class QuestEndpoint {
     public List<QuestDto> getAllUserAvailableDoctorQuests(@RequestParam int user, @RequestParam int doctor){
         LOGGER.info("GET " + BASE_URL + "/available?user={}&doctor={}", user, doctor);
         return questMapper.entityToDto(questService.getAllUserAvailableDoctorQuests(user, doctor));
+    }
+
+    /**
+     * Accepts a quest for a user
+     * @param user the user who accepts the quest
+     * @param quest the quest to accept
+     */
+    @GetMapping(value="/accept")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public boolean acceptQuest (@RequestParam int user, @RequestParam int quest){
+        LOGGER.info("PUT " + BASE_URL + "accept/?user={}&quest={}", user,quest);
+        try{
+             return questService.acceptQuest(user,quest);
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept quest", e);
+        }
+    }
+
+    /**
+     * Gets all new normal quests for a user
+     * @param user to get new quests for
+     * @return a list of all new normal quests for the user
+     */
+    @GetMapping(value="/newQuests")
+    @ResponseBody
+    public List<QuestDto> getNewQuestsForUserId(@RequestParam int user){
+        LOGGER.info("GET " + BASE_URL + "/newQuests?user={}", user);
+        return questMapper.entityToDto(questService.getNewQuestsForUserId(user));
     }
 
     /**

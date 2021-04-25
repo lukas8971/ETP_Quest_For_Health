@@ -19,7 +19,21 @@ public interface QuestDao {
     * @return a Quest entity with the given id
     * @throws NotFoundException if the id was not found in the persistence
     */
-   public Quest getOneById(int id) throws NotFoundException;
+    Quest getOneById(int id) throws NotFoundException;
+
+   /**
+    * User accepts a quest
+    * @param userId id of the user
+    * @param questId id of the quest
+    */
+     boolean acceptQuest(int userId, int questId);
+
+   /**
+    * Returns all normal quests the user has not yet accepted
+    * @param userId the id of the user for which to find new quests
+    * @return a List of new quests for the user
+    */
+    List<Quest> getNewQuestsForUserId (int userId);
 
    /**
     * Returns all the available doctor quests for a user

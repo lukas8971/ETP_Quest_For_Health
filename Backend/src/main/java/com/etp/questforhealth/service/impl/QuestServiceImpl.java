@@ -32,6 +32,26 @@ public class QuestServiceImpl implements QuestService {
     }
 
     @Override
+    public List<Quest> getNewQuestsForUserId(int userId) {
+        LOGGER.trace("getNewQuestsForUserId({})", userId);
+        try{
+            return questDao.getNewQuestsForUserId(userId);
+        }catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public boolean acceptQuest(int userId, int questId) {
+        LOGGER.trace("acceptQuest({},{})", userId,questId);
+        try{
+            return questDao.acceptQuest(userId,questId);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public List<Quest> getAllUserAvailableDoctorQuests(int user, int doctor){
         LOGGER.trace("getAllUserAvailableDoctorQuests({}, {})", user, doctor);
         try {
