@@ -1,6 +1,7 @@
 package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.Credentials;
+import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -128,7 +129,7 @@ public class UserJdbcDao implements UserDao {
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
             pstmnt.setInt(1, id);
             ResultSet rs = pstmnt.executeQuery();
-            if (rs != null && rs.next()) return new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"));
+            if (rs != null && rs.next()) return mapRow(rs);
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }
@@ -145,7 +146,7 @@ public class UserJdbcDao implements UserDao {
             pstmnt.setString(1, cred.getEmail() );
             pstmnt.setString(2, cred.getPassword());
             ResultSet rs = pstmnt.executeQuery();
-            if (rs != null && rs.next()) return new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("character_name"), rs.getInt("character_strength"), rs.getInt("character_level"), rs.getInt("character_exp"), rs.getString("password"), rs.getString("email"), rs.getInt("story_chapter"));
+            if (rs != null && rs.next()) return mapRow(rs);
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }
@@ -167,6 +168,21 @@ public class UserJdbcDao implements UserDao {
         }
         return false;
     }
+    private User mapRow(ResultSet rs) throws SQLException {
+        LOGGER.trace("mapRow({})", rs);
+        return new User(rs.getInt("id"),
+                rs.getString("firstname"),
+                rs.getString("lastname"),
+                rs.getString("character_name"),
+                rs.getInt("character_strength"),
+                rs.getInt("character_level"),
+                rs.getInt("character_exp"),
+                rs.getString("password"),
+                rs.getString("email"),
+                rs.getInt("story_chapter")
+        );
+    }
+
 
     public void makeJDBCConnection() {
         LOGGER.trace("makeJDBCConnection()");

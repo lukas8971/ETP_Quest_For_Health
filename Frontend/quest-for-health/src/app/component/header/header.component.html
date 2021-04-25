@@ -7,6 +7,12 @@
   <span *ngIf="doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/doctors/overview">Patient Overview</button>
   </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/profile">Profile</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/overview">Quest Overview</button>
+  </span>
   <div style="width: 5px"></div>
   <span *ngIf="doctorLoginService.isUserLoggedIn() || userLoginService.isUserLoggedIn()">
     <button mat-button (click)="logOut()" routerLink="/">Logout</button>

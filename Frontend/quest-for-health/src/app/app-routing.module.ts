@@ -9,6 +9,7 @@ import {CreateCharacterComponent} from "./component/create-character/create-char
 import {UserLoginComponent} from "./component/user-login/user-login.component";
 import {UserOverviewComponent} from "./component/user-overview/user-overview.component";
 import {AuthGuardUserService} from "./service/auth-guard-user.service";
+import {UserProfileComponent} from "./component/user-profile/user-profile.component";
 
 const routes: Routes = [
   {path: 'doctors/overview', component: DoctorOverviewComponent, canActivate: [AuthGuardDoctorService]},
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path: 'doctors/logout', component: DoctorLogoutComponent, canActivate: [AuthGuardDoctorService]},
   {path: 'createCharacter', component: CreateCharacterComponent},
   {path: 'userLogin', component: UserLoginComponent},
-  {path: 'users/overview', component: UserOverviewComponent, canActivate: [AuthGuardUserService]}
+  {path: 'users/overview', component: UserOverviewComponent, canActivate: [AuthGuardUserService]},
+  {path: 'users/profile', component: UserProfileComponent, canActivate: [AuthGuardUserService]}
 ];
 
 @NgModule({
