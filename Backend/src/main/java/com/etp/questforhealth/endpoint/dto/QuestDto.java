@@ -1,6 +1,7 @@
 package com.etp.questforhealth.endpoint.dto;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.Objects;
 
 public class QuestDto {
@@ -13,6 +14,7 @@ public class QuestDto {
     private int exp_penalty;
     private int gold_penalty;
     private int doctor;
+    private Date dueDate;
 
 
     private QuestDto(){}
@@ -23,7 +25,7 @@ public class QuestDto {
         this.description = description;
     }
 
-    public QuestDto(int id, String name, String description, int exp_reward, int gold_reward, long repetition_cycle, int exp_penalty, int gold_penalty, int doctor) {
+    public QuestDto(int id, String name, String description, int exp_reward, int gold_reward, long repetition_cycle, int exp_penalty, int gold_penalty, int doctor, Date dueDate) {
         this(id, name, description);
         this.exp_reward = exp_reward;
         this.gold_reward = gold_reward;
@@ -31,6 +33,7 @@ public class QuestDto {
         this.exp_penalty = exp_penalty;
         this.gold_penalty = gold_penalty;
         this.doctor = doctor;
+        this.dueDate = dueDate;
     }
 
     public int getId() {
@@ -104,6 +107,10 @@ public class QuestDto {
     public void setDoctor(int doctor) {
         this.doctor = doctor;
     }
+
+    public Date getDueDate() {return dueDate; }
+
+    public void setDueDate(Date dueDate) {this.dueDate = dueDate;}
 
     @Override
     public int hashCode() {
