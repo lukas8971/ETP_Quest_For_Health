@@ -1,7 +1,7 @@
 <div class="side-margin">
   <table style="width: 100%">
   <tr>
-    <td style="width: 10px"> <!-- Thats a little trick in order to keep table size consistent when switching quests -->
+    <td> <!-- Thats a little trick in order to keep table size consistent when switching quests -->
       <mat-form-field style="width: 100%">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
@@ -38,7 +38,7 @@
         </tr>
       </table>
     </td>
-    <td *ngIf="selectedQuest" style="max-width: 0%">
+    <td *ngIf="selectedQuest" style="width: 30%">
       <table>
         <tr>
           <td colspan="2"><h1>{{selectedQuest.name}}</h1></td>
