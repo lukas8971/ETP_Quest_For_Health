@@ -70,7 +70,7 @@ public class QuestEndpoint {
      */
     @GetMapping(value="/accept")
     @ResponseBody
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public boolean acceptQuest (@RequestParam int user, @RequestParam int quest){
         LOGGER.info("PUT " + BASE_URL + "accept/?user={}&quest={}", user,quest);
         try{
