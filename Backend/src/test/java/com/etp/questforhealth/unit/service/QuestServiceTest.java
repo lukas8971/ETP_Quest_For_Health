@@ -1,8 +1,6 @@
 package com.etp.questforhealth.unit.service;
 
 import com.etp.questforhealth.base.TestData;
-import com.etp.questforhealth.endpoint.dto.CreateDoctorQuestDto;
-import com.etp.questforhealth.endpoint.dto.QuestDto;
 import com.etp.questforhealth.entity.CreateDoctorQuest;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -33,11 +31,11 @@ public class QuestServiceTest {
     QuestService questService;
     QuestDao questDao;
 
-    /*
+
     @AfterEach
     public void tearDownDBData(){
         questDao.rollbackChanges();
-    }*/
+    }
 
     @Test
     @DisplayName("Requesting a not existing quest should throw NotFoundException")
