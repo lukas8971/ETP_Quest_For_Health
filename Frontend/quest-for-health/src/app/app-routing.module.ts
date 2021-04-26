@@ -5,12 +5,14 @@ import {PatientDoctorQuestComponent} from './component/patient-doctor-quest/pati
 import {DoctorComponent} from './component/doctor/doctor.component';
 import {DoctorLogoutComponent} from './component/doctor-logout/doctor-logout.component';
 import {AuthGuardDoctorService} from './service/auth-guard-doctor.service';
+import {CreateDoctorQuestComponent} from "./component/create-doctor-quest/create-doctor-quest.component";
 
 const routes: Routes = [
   {path: 'doctors/overview', component: DoctorOverviewComponent, canActivate: [AuthGuardDoctorService]},
   {path: 'doctors/patientquest', component: PatientDoctorQuestComponent, canActivate: [AuthGuardDoctorService]},
   {path: 'doctors', component: DoctorComponent},
-  {path: 'doctors/logout', component: DoctorLogoutComponent, canActivate: [AuthGuardDoctorService]}
+  {path: 'doctors/logout', component: DoctorLogoutComponent, canActivate: [AuthGuardDoctorService]},
+  {path: 'doctors/createquest', component: CreateDoctorQuestComponent, canActivate: [AuthGuardDoctorService]}
 ];
 
 @NgModule({

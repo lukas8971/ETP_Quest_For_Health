@@ -1,9 +1,12 @@
 package com.etp.questforhealth.endpoint;
 
 
+import com.etp.questforhealth.endpoint.dto.CreateDoctorQuestDto;
 import com.etp.questforhealth.endpoint.dto.QuestDto;
+import com.etp.questforhealth.endpoint.mapper.CreateDoctorQuestMapper;
 import com.etp.questforhealth.endpoint.mapper.QuestMapper;
 import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.QuestService;
@@ -25,11 +28,13 @@ public class QuestEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final QuestService questService;
     private final QuestMapper questMapper;
+    private final CreateDoctorQuestMapper createDoctorQuestMapper;
 
     @Autowired
-    public QuestEndpoint(QuestService questService, QuestMapper questMapper){
+    public QuestEndpoint(QuestService questService, QuestMapper questMapper, CreateDoctorQuestMapper createDoctorQuestMapper){
         this.questService = questService;
         this.questMapper = questMapper;
+        this.createDoctorQuestMapper = createDoctorQuestMapper;
     }
 
     /**
@@ -49,6 +54,27 @@ public class QuestEndpoint {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quest not found",e1);
         }
     }
+
+    /**
+     * Saves the given Quest.
+     * @param createDoctorQuestDto The quest to be saved.
+     * @return The quest with a new id.
+     */
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public QuestDto createQuest(@RequestBody CreateDoctorQuestDto createDoctorQuestDto){
+        LOGGER.info("POST "+BASE_URL, createDoctorQuestDto);
+        try{
+            return questMapper.entityToDto(questService.createQuest(createDoctorQuestMapper.dtoToEntity(createDoctorQuestDto)));
+        } catch(ValidationException e1){
+            LOGGER.error("Validation exception while creating new Quest {} " + e1 + "\n",createDoctorQuestDto);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage(), e1);
+        } catch(InvalidLoginException e2){
+            LOGGER.error("InvalidLoginException while creating new Quest {} " + e2 + "\n", createDoctorQuestDto);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password!", e2);
+        }
+    }
+
 
     /**
      * Gets all the quests available for a doctor to a user

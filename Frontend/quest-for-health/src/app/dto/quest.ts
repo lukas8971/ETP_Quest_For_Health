@@ -6,5 +6,8 @@ export interface Quest {
   description: string;
   exp_reward: number;
   gold_reward: number;
-  repetition_cycle: Time;
+  repetition_cycle: string;
+  exp_penalty: number;
+  gold_penalty: number;
+  doctor: number;
 }

@@ -1,8 +1,10 @@
 package com.etp.questforhealth.service;
 
 import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.entity.CreateDoctorQuest;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
 
@@ -18,6 +20,15 @@ public interface QuestService {
      * @throws NotFoundException if the id was not found in the persistence or the id is <= 0
      */
     public Quest getOneById(int id) throws NotFoundException;
+
+    /**
+     * Saves the Quest in the persistence.
+     *
+     * @param quest The quest to be saved.
+     * @return The saved quest with an id.
+     * @throws ValidationException If the quest ist not valid.
+     */
+    public Quest createQuest(CreateDoctorQuest quest) throws ValidationException;
 
     /**
      * Returns all the available doctor quests for a user.

@@ -6,6 +6,7 @@ import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
+import com.etp.questforhealth.exception.ValidationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +20,15 @@ public interface QuestDao {
     * @return a Quest entity with the given id
     * @throws NotFoundException if the id was not found in the persistence
     */
-   public Quest getOneById(int id) throws NotFoundException;
+   Quest getOneById(int id) throws NotFoundException;
+
+   /**
+    * Saves the Quest in the persistence.
+    *
+    * @param quest The quest to be saved.
+    * @return The saved quest with an id.
+    */
+   Quest createQuest(Quest quest);
 
    /**
     * Returns all the available doctor quests for a user
@@ -56,6 +65,9 @@ public interface QuestDao {
     */
    boolean addAssignedDoctorQuestForUser(AcceptedQuest acceptedQuest);
 
+
+   void rollbackChanges();
+
    /**
     * Checks if an accepted quest is already accepted by a user.
     * @param acceptedQuest AcceptedQuest object that should be checked.
@@ -63,4 +75,5 @@ public interface QuestDao {
     * TRUE if either: quest is already accepted by the user AND not completed, quest is completed AND has a repetition cycle AND the repetition cycle is not already met
     */
    boolean checkIfQuestAlreadyAccepted(AcceptedQuest acceptedQuest);
+
 }

@@ -1,0 +1,93 @@
+<br><br>
+
+<div class="center" style="min-width: 1200px">
+  <mat-card class="mat-elevation-z2">
+    <mat-card-title>Create New Doctor Quest</mat-card-title>
+
+    <div class="center">
+      <div class="center-small">
+        <mat-card class="mat-elevation-z4">
+          <form [formGroup]="questForm" (ngSubmit)="createDoctorQuest()">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-form-field>
+                  <mat-label>Name</mat-label>
+                  <input matInput [(ngModel)]="name" formControlName="name" id="name" placeholder="New Doctor-Quest">
+                </mat-form-field>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div layout="column">
+                <div flex="">
+                  <mat-form-field>
+                    <mat-label>Experience Points Reward</mat-label>
+                    <input matInput placeholder="100" type="number" min="0" [(ngModel)]="exp_reward" formControlName="exp_reward" id="exp_reward">
+                  </mat-form-field>
+                </div>
+                <div flex="">
+                  <mat-form-field>
+                    <mat-label>Gold Coins Reward</mat-label>
+                    <input matInput placeholder="10" type="number" min="0" [(ngModel)]="gold_reward" formControlName="gold_reward" id="gold_reward">
+                  </mat-form-field>
+                </div>
+                <div flex="">
+                  <mat-form-field>
+                    <mat-label>Repetition Cycle - Days</mat-label>
+                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_days" formControlName="repetition_cycle_days" id="repetition_cycle_days">
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Repetition Cycle - Hours</mat-label>
+                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_hours" formControlName="repetition_cycle_hours" id="repetition_cycle_hours">
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Repetition Cycle - Minutes</mat-label>
+                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_minutes" formControlName="repetition_cycle_minutes" id="repetition_cycle_minutes">
+                  </mat-form-field>
+                </div>
+                <div flex="">
+                  <mat-form-field>
+                    <mat-label>Experience Points Penalty</mat-label>
+                    <input matInput placeholder="0"  type="number" min="0"[(ngModel)]="exp_penalty" formControlName="exp_penalty" id="exp_penalty">
+                  </mat-form-field>
+                </div>
+                <div flex="">
+                  <mat-form-field>
+                    <mat-label>Gold Coins Penalty</mat-label>
+                    <input matInput placeholder="0" type="number" min="0" [(ngModel)]="gold_penalty" formControlName="gold_penalty" id="gold_penalty">
+                  </mat-form-field>
+                </div>
+                <div flex="">
+                  <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="This is a new Doctor-Quest." [(ngModel)]="description" formControlName="description"
+                              id="description"></textarea>
+                  </mat-form-field>
+                </div>
+                <div flex="">
+                  <mat-form-field>
+                    <label>E-Mail Addres</label>
+                    <input matInput [(ngModel)]="email" type="email" formControlName="email">
+                  </mat-form-field>
+                </div>
+                <div flex="">
+                  <mat-form-field>
+                    <label>Password</label>
+                    <input matInput [(ngModel)]="password" type="password" formControlName="password">
+                  </mat-form-field>
+
+                </div>
+              </div>
+            </mat-card-content>
+            <mat-card-footer>
+              <button mat-raised-button color="primary" type="submit">Create</button>
+            </mat-card-footer>
+          </form>
+        </mat-card>
+      </div>
+    </div>
+
+  </mat-card>
+</div>
+
+
+
