@@ -36,6 +36,14 @@ public interface DoctorDao {
     Doctor getOneById(int id);
 
     /**
+     * Checks if a doctor - user relationship exists.
+     * @param doctor id of the doctor.
+     * @param user id of the user.
+     * @return true if a relationship exists.
+     */
+    boolean checkIfDoctorUserRelationshipExists(int doctor, int user);
+
+    /**
      * Rollback for changes made during testing.
      */
     void rollbackChanges();

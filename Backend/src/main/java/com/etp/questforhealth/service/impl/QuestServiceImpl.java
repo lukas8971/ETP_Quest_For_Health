@@ -12,7 +12,11 @@ import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.persistence.QuestDao;
 import com.etp.questforhealth.service.DoctorService;
 import com.etp.questforhealth.service.QuestService;
+
 import com.etp.questforhealth.util.validator.QuestValidator;
+
+import com.etp.questforhealth.util.Validator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +28,20 @@ import java.util.List;
 @Service
 public class QuestServiceImpl implements QuestService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private final QuestDao questDao;
+
     private final QuestValidator questValidator;
+    private final Validator validator;
     private final DoctorService doctorService;
 
+
     @Autowired
-    public QuestServiceImpl(QuestDao questDao, QuestValidator questValidator, DoctorService doctorService){
+    public QuestServiceImpl(QuestDao questDao, Validator validator, QuestValidator questValidator){
         this.questDao = questDao;
         this.questValidator = questValidator;
-        this.doctorService = doctorService;
+        this.validator = validator;
+
     }
 
     @Override
@@ -59,6 +68,7 @@ public class QuestServiceImpl implements QuestService {
     public List<Quest> getAllUserAvailableDoctorQuests(int user, int doctor){
         LOGGER.trace("getAllUserAvailableDoctorQuests({}, {})", user, doctor);
         try {
+            validator.validateDoctorUserRelation(doctor, user);
             return questDao.getAllUserAvailableDoctorQuests(user, doctor);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);
@@ -69,6 +79,7 @@ public class QuestServiceImpl implements QuestService {
     public List<Quest> getAllUserAssignedDoctorQuests(int user, int doctor){
         LOGGER.trace("getAllUserAssignedDoctorQuests({}, {})", user, doctor);
         try {
+            validator.validateDoctorUserRelation(doctor, user);
             return questDao.getAllUserAssignedDoctorQuests(user, doctor);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);
@@ -89,6 +100,7 @@ public class QuestServiceImpl implements QuestService {
     public boolean addAssignedDoctorQuestForUser(AcceptedQuest acceptedQuest){
         LOGGER.trace("addAssignedDoctorQuestForUser({})", acceptedQuest);
         try {
+            validator.validateAcceptedQuest(acceptedQuest);
             return questDao.addAssignedDoctorQuestForUser(acceptedQuest);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);

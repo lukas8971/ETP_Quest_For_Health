@@ -86,7 +86,12 @@ public class QuestEndpoint {
     @ResponseBody
     public List<QuestDto> getAllUserAvailableDoctorQuests(@RequestParam int user, @RequestParam int doctor){
         LOGGER.info("GET " + BASE_URL + "/available?user={}&doctor={}", user, doctor);
-        return questMapper.entityToDto(questService.getAllUserAvailableDoctorQuests(user, doctor));
+        try{
+            return questMapper.entityToDto(questService.getAllUserAvailableDoctorQuests(user, doctor));
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
     }
 
     /**
@@ -99,7 +104,12 @@ public class QuestEndpoint {
     @ResponseBody
     public List<QuestDto> getAllUserAssignedDoctorQuests(@RequestParam int user, @RequestParam int doctor){
         LOGGER.info("GET " + BASE_URL + "/assigned?user={}&doctor={}", user, doctor);
-        return questMapper.entityToDto(questService.getAllUserAssignedDoctorQuests(user, doctor));
+        try {
+            return questMapper.entityToDto(questService.getAllUserAssignedDoctorQuests(user, doctor));
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
     }
 
     /**
@@ -124,6 +134,11 @@ public class QuestEndpoint {
     @ResponseStatus(HttpStatus.CREATED)
     public boolean addAssignedDoctorQuestForUser(@RequestBody AcceptedQuest acceptedQuest) {
         LOGGER.info("POST " + BASE_URL + "/assigned");
-        return questService.addAssignedDoctorQuestForUser(acceptedQuest);
+        try {
+            return questService.addAssignedDoctorQuestForUser(acceptedQuest);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
     }
 }
