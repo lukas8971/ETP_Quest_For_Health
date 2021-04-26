@@ -21,39 +21,39 @@
                 <div flex="">
                   <mat-form-field>
                     <mat-label>Experience Points Reward</mat-label>
-                    <input matInput placeholder="100" [(ngModel)]="exp_reward" formControlName="exp_reward" id="exp_reward">
+                    <input matInput placeholder="100" type="number" min="0" [(ngModel)]="exp_reward" formControlName="exp_reward" id="exp_reward">
                   </mat-form-field>
                 </div>
                 <div flex="">
                   <mat-form-field>
                     <mat-label>Gold Coins Reward</mat-label>
-                    <input matInput placeholder="10" [(ngModel)]="gold_reward" formControlName="gold_reward" id="gold_reward">
+                    <input matInput placeholder="10" type="number" min="0" [(ngModel)]="gold_reward" formControlName="gold_reward" id="gold_reward">
                   </mat-form-field>
                 </div>
                 <div flex="">
                   <mat-form-field>
                     <mat-label>Repetition Cycle - Days</mat-label>
-                    <input matInput placeholder="PT0H" [(ngModel)]="repetition_cycle_days" formControlName="repetition_cycle_days" id="repetition_cycle_days">
+                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_days" formControlName="repetition_cycle_days" id="repetition_cycle_days">
                   </mat-form-field>
                   <mat-form-field>
                     <mat-label>Repetition Cycle - Hours</mat-label>
-                    <input matInput placeholder="PT0H" [(ngModel)]="repetition_cycle_hours" formControlName="repetition_cycle_hours" id="repetition_cycle_hours">
+                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_hours" formControlName="repetition_cycle_hours" id="repetition_cycle_hours">
                   </mat-form-field>
                   <mat-form-field>
                     <mat-label>Repetition Cycle - Minutes</mat-label>
-                    <input matInput placeholder="PT0H" [(ngModel)]="repetition_cycle_minutes" formControlName="repetition_cycle_minutes" id="repetition_cycle_minutes">
+                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_minutes" formControlName="repetition_cycle_minutes" id="repetition_cycle_minutes">
                   </mat-form-field>
                 </div>
                 <div flex="">
                   <mat-form-field>
                     <mat-label>Experience Points Penalty</mat-label>
-                    <input matInput placeholder="0" [(ngModel)]="exp_penalty" formControlName="exp_penalty" id="exp_penalty">
+                    <input matInput placeholder="0"  type="number" min="0"[(ngModel)]="exp_penalty" formControlName="exp_penalty" id="exp_penalty">
                   </mat-form-field>
                 </div>
                 <div flex="">
                   <mat-form-field>
                     <mat-label>Gold Coins Penalty</mat-label>
-                    <input matInput placeholder="0" [(ngModel)]="gold_penalty" formControlName="gold_penalty" id="gold_penalty">
+                    <input matInput placeholder="0" type="number" min="0" [(ngModel)]="gold_penalty" formControlName="gold_penalty" id="gold_penalty">
                   </mat-form-field>
                 </div>
                 <div flex="">
@@ -66,7 +66,7 @@
                 <div flex="">
                   <mat-form-field>
                     <label>E-Mail Addres</label>
-                    <input matInput [(ngModel)]="email" formControlName="email">
+                    <input matInput [(ngModel)]="email" type="email" formControlName="email">
                   </mat-form-field>
                 </div>
                 <div flex="">
