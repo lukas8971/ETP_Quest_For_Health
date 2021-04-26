@@ -5,6 +5,7 @@ import com.etp.questforhealth.entity.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public interface TestData {
      * QuestDto Data
      */
 
-    static QuestDto getNewQuestDto(){return new QuestDto(0,"UnitQuest","This Quest was created by a Unit Test", 100,10, Duration.parse("PT0S"),0,0,1);}
+    static QuestDto getNewQuestDto(){return new QuestDto(0,"UnitQuest","This Quest was created by a Unit Test", 100,10, Duration.parse("PT0S"),0,0,1, new Date());}
 
 
 
@@ -62,7 +63,7 @@ public interface TestData {
 
     static Quest getNewDoctorQuest(int id, int doctor) { return new Quest(id, "Doctor Test Quest", 20, 4, doctor); }
 
-    static Quest getNewDoctorQuest() {return new Quest(0,"UnitQuest","This Quest was created by a Unit Test", 100,10, Duration.parse("PT0S"),0,0,1);}
+    static Quest getNewDoctorQuest() {return new Quest(0,"UnitQuest","This Quest was created by a Unit Test", 100,10, Duration.parse("PT0S"),0,0,1, new Date());}
 
 
 

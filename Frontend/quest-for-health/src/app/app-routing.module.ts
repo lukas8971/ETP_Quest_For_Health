@@ -22,7 +22,7 @@ const routes: Routes = [
   {path: 'userLogin', component: UserLoginComponent},
   {path: 'users/overview', component: UserOverviewComponent, canActivate: [AuthGuardUserService]},
   {path: 'users/profile', component: UserProfileComponent, canActivate: [AuthGuardUserService]},
-  {path: 'users/browseQuests', component: UserBrowseQuestsComponent, canActivate: [AuthGuardUserService]}
+  {path: 'users/browseQuests', component: UserBrowseQuestsComponent, canActivate: [AuthGuardUserService]},
   {path: 'doctors/createquest', component: CreateDoctorQuestComponent, canActivate: [AuthGuardDoctorService]}
 ];
 

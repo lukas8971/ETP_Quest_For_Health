@@ -33,15 +33,7 @@
                 <div flex="">
                   <mat-form-field>
                     <mat-label>Repetition Cycle - Days</mat-label>
-                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_days" formControlName="repetition_cycle_days" id="repetition_cycle_days">
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Repetition Cycle - Hours</mat-label>
-                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_hours" formControlName="repetition_cycle_hours" id="repetition_cycle_hours">
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Repetition Cycle - Minutes</mat-label>
-                    <input matInput placeholder="PT0H" type="number" min="0" [(ngModel)]="repetition_cycle_minutes" formControlName="repetition_cycle_minutes" id="repetition_cycle_minutes">
+                    <input matInput placeholder="Insert days" type="number" min="0" [(ngModel)]="repetition_cycle_days" formControlName="repetition_cycle_days" id="repetition_cycle_days">
                   </mat-form-field>
                 </div>
                 <div flex="">
@@ -65,7 +57,7 @@
                 </div>
                 <div flex="">
                   <mat-form-field>
-                    <label>E-Mail Addres</label>
+                    <label>E-Mail Address</label>
                     <input matInput [(ngModel)]="email" type="email" formControlName="email">
                   </mat-form-field>
                 </div>

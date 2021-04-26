@@ -29,6 +29,7 @@ public class QuestServiceTest {
 
     @Autowired
     QuestService questService;
+    @Autowired
     QuestDao questDao;
 
 

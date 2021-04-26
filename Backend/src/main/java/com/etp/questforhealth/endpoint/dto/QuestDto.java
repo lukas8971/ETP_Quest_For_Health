@@ -10,7 +10,7 @@ public class QuestDto {
     private String description;
     private int exp_reward;
     private int gold_reward;
-    private long repetition_cycle;
+    private Duration repetition_cycle;
     private int exp_penalty;
     private int gold_penalty;
     private int doctor;
@@ -25,7 +25,7 @@ public class QuestDto {
         this.description = description;
     }
 
-    public QuestDto(int id, String name, String description, int exp_reward, int gold_reward, long repetition_cycle, int exp_penalty, int gold_penalty, int doctor, Date dueDate) {
+    public QuestDto(int id, String name, String description, int exp_reward, int gold_reward, Duration repetition_cycle, int exp_penalty, int gold_penalty, int doctor, Date dueDate) {
         this(id, name, description);
         this.exp_reward = exp_reward;
         this.gold_reward = gold_reward;
@@ -76,11 +76,11 @@ public class QuestDto {
         this.gold_reward = gold_reward;
     }
 
-    public long getRepetition_cycle() {
+    public Duration getRepetition_cycle() {
         return repetition_cycle;
     }
 
-    public void setRepetition_cycle(long repetition_cycle) {
+    public void setRepetition_cycle(Duration repetition_cycle) {
         this.repetition_cycle = repetition_cycle;
     }
 

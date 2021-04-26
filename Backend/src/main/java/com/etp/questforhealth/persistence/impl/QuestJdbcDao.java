@@ -32,6 +32,9 @@ public class QuestJdbcDao implements QuestDao {
     String USERNAME;
     @Value("${spring.datasource.password}")
     String PASSWORD;
+    @Value("${spring.datasource.autoCommit}")
+    String AUTOCOMMIT;
+
 
 
     @Override
@@ -113,7 +116,8 @@ public class QuestJdbcDao implements QuestDao {
         makeJDBCConnection();
         List<Quest> questList = new ArrayList<>();
         try{
-            String query = "select * from quest q " +
+            String query = "select * from quest q left join doctor_quest d " +
+                    "on q.id = d.id " +
                     "where q.id not in ( " +
                     "  select d.id  " +
                     "  from doctor_quest d) " +
@@ -308,28 +312,32 @@ public class QuestJdbcDao implements QuestDao {
     }
 
 
-    private void makeJDBCConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Congrats - Seems your MySQL JDBC Driver Registered!");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Sorry, couldn't found JDBC driver. Make sure you have added JDBC Maven Dependency Correctly");
-            e.printStackTrace();
-            return;
-        }
-
-        try {
-            // DriverManager: The basic service for managing a set of JDBC drivers.
-            questForHealthConn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            if (questForHealthConn != null) {
-                System.out.println("Connection Successful! Enjoy. Now it's time to push data");
-            } else {
-                System.out.println("Failed to make connection!");
+    public void makeJDBCConnection() {
+        LOGGER.trace("makeJDBCConnection()");
+        if (questForHealthConn == null) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                System.out.println("Congrats - Seems your MySQL JDBC Driver Registered!");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Sorry, couldn't find JDBC driver. Make sure you have added JDBC Maven Dependency Correctly");
+                e.printStackTrace();
+                return;
             }
-        } catch (SQLException e) {
-            System.out.println("MySQL Connection Failed!");
-            e.printStackTrace();
-            return;
+
+            try {
+                // DriverManager: The basic service for managing a set of JDBC drivers.
+                questForHealthConn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+                if (!(Boolean.parseBoolean(AUTOCOMMIT))) questForHealthConn.setAutoCommit(false);
+                if (questForHealthConn != null) {
+                    System.out.println("Connection Successful! Enjoy. Now it's time to push data");
+                } else {
+                    System.out.println("Failed to make connection!");
+                }
+            } catch (SQLException e) {
+                System.out.println("MySQL Connection Failed!");
+                e.printStackTrace();
+                return;
+            }
         }
     }
 

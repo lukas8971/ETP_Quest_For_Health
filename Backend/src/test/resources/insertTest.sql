@@ -19,3 +19,5 @@ insert into equipment (name,description,price,strength,type) values
 ('Farm Trousers', 'Ideal for working at the farm.',8,2,'legs'),
 ('Wooden Stick', 'A stick some kid found in the woods. It really is nothing special.', 5,1,'right hand'),
 ('Piece of Bark', 'This bark fell from a tree during the last storm. Looks kinda cool though.',5,1,'left hand');
+
+insert into doctor(id,firstname,lastname,email,password) values (1,'Test','Doc','e.m@il.com','QWERT1234');

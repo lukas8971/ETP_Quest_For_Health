@@ -18,7 +18,6 @@ import { Location } from '@angular/common'
 })
 export class CreateDoctorQuestComponent implements OnInit {
 
-  patient: any;
   doctor: any;
 
   questForm = new FormGroup({
@@ -27,8 +26,6 @@ export class CreateDoctorQuestComponent implements OnInit {
     exp_reward: new FormControl(),
     gold_reward: new FormControl(),
     repetition_cycle_days : new FormControl(),
-    repetition_cycle_hours : new FormControl(),
-    repetition_cycle_minutes : new FormControl(),
     exp_penalty: new FormControl(),
     gold_penalty: new FormControl(),
     email: new FormControl(),
@@ -40,8 +37,6 @@ export class CreateDoctorQuestComponent implements OnInit {
   exp_reward = 0;
   gold_reward = 0;
   repetition_cycle_days =0;
-  repetition_cycle_hours = 0;
-  repetition_cycle_minutes = 0;
   exp_penalty = 0;
   gold_penalty = 0;
   email = '';
@@ -59,12 +54,10 @@ export class CreateDoctorQuestComponent implements OnInit {
    */
   createDoctorQuest() {
     let repetition_cycle: Duration = moment.duration({
-      minutes: this.repetition_cycle_minutes,
-      hours: this.repetition_cycle_hours,
       days: this.repetition_cycle_days
     });
     let credentials: Credentials = {email: this.email, password:  this.password};
-    let quest: Quest = {id: 0, name: this.name, description: this.description, exp_reward: this.exp_reward, gold_reward: this.gold_reward, repetition_cycle: repetition_cycle.toISOString(), exp_penalty: this.exp_penalty, gold_penalty: this.gold_penalty, doctor: Number(sessionStorage.getItem('id'))};
+    let quest: Quest = {id: 0, name: this.name, description: this.description, exp_reward: this.exp_reward, gold_reward: this.gold_reward, repetition_cycle: repetition_cycle.toISOString(), exp_penalty: this.exp_penalty, gold_penalty: this.gold_penalty, doctor: Number(sessionStorage.getItem('id')), dueDate: new Date()};
     let createDoctorQuest: CreateDoctorQuest = {credentials: credentials, quest: quest};
     this.questService.createDoctorQuest(createDoctorQuest).subscribe(
       (quest : Quest) => {

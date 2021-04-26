@@ -44,7 +44,7 @@ import { CreateDoctorQuestComponent } from './component/create-doctor-quest/crea
     UserLoginComponent,
     UserOverviewComponent,
     UserProfileComponent,
-    UserBrowseQuestsComponent
+    UserBrowseQuestsComponent,
     CreateDoctorQuestComponent
   ],
   imports: [

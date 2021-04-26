@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Duration;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,7 +54,7 @@ public class QuestPersistenceTest {
     @Test
     @DisplayName("Inserting a quest with a repetition cycle of a week should return a new quest ith a repetition cycle of a week")
     public void insertRepetitionCycleWeek_shouldReturnRepetitionCycleWeek(){
-        Quest quest = questDao.createQuest(new Quest(0, "UnitQuest", "This Quest was created by a Unit Test", 100, 10, Duration.parse("PT168H"), 0, 10, 1));
+        Quest quest = questDao.createQuest(new Quest(0, "UnitQuest", "This Quest was created by a Unit Test", 100, 10, Duration.parse("PT168H"), 0, 10, 1, new Date()));
         assertEquals(Duration.parse("P7D"), quest.getRepetition_cycle());
     }
 

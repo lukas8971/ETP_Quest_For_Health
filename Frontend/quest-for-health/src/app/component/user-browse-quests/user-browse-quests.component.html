@@ -22,8 +22,8 @@
         <ng-container matColumnDef="repetition_cycle">
           <th mat-header-cell *matHeaderCellDef> Repeat every </th>
           <td mat-cell *matCellDef="let quest">
-            <div *ngIf="quest.repetition_cycle >=0"> {{quest.repetition_cycle | date:'d' }} days </div>
-            <div *ngIf="quest.repetition_cycle <0">Never</div>
+             <div *ngIf="momentToDays(quest.repetition_cycle) !== '0'"> {{momentToDays(quest.repetition_cycle) }} days </div>
+            <div *ngIf="momentToDays(quest.repetition_cycle) === '0'"> Never </div>
           </td>
         </ng-container>
         <tr  mat-header-row *matHeaderRowDef="questColumns"></tr>
