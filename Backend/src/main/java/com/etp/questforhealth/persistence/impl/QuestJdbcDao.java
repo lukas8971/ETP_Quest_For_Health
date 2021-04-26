@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -207,5 +208,33 @@ public class QuestJdbcDao implements QuestDao {
         }
     }
 
+    @Override
+    public boolean checkIfQuestAlreadyAccepted(AcceptedQuest acceptedQuest){
+        LOGGER.trace("checkIfQuestAlreadyAccepted({})", acceptedQuest);
+        makeJDBCConnection();
+        try {
+            String query = "SELECT a.accepted_on AS accepted_on, c.completed_on AS completed_on, q.repetition_cycle AS repetition_cycle " +
+            "FROM user_accepted_quest a LEFT JOIN user_completed_quest c ON (a.quest = c.quest) JOIN quest q ON (a.quest = q.id) " +
+            "WHERE a.user = ? AND a.quest = ? " +
+            "ORDER BY c.completed_on DESC LIMIT 1;";
 
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, acceptedQuest.getUser());
+            pstmnt.setInt(2, acceptedQuest.getQuest());
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()){
+                if (rs.getObject("completed_on") == null) return true;
+                LocalDate completedOn = rs.getDate("completed_on").toLocalDate();
+                String rep = rs.getString("repetition_cycle");
+                if (rep == null || rep.equals("")) return false;
+                Duration repetition_cycle = parseRepetitionCycle(rep);
+                LocalDate today = LocalDate.now();
+                Duration between = Duration.between(today.atStartOfDay(), completedOn.atStartOfDay());
+                if (between.compareTo(repetition_cycle) <= 0) return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 }
