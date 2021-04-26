@@ -29,6 +29,7 @@ import { UserProfileComponent } from './component/user-profile/user-profile.comp
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-browse-quests.component';
+import { CreateDoctorQuestComponent } from './component/create-doctor-quest/create-doctor-quest.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-b
     UserLoginComponent,
     UserOverviewComponent,
     UserProfileComponent,
-    UserBrowseQuestsComponent
+    UserBrowseQuestsComponent,
+    CreateDoctorQuestComponent
   ],
   imports: [
     BrowserModule,

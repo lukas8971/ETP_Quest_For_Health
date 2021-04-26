@@ -1,9 +1,12 @@
 package com.etp.questforhealth.service;
 
 import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.entity.CreateDoctorQuest;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.exception.ServiceException;
+import com.etp.questforhealth.exception.ValidationException;
 
 import java.util.List;
 
@@ -31,6 +34,14 @@ public interface QuestService {
      * @param questId id of the quest
      */
      boolean acceptQuest(int userId, int questId);
+     /*
+     * Saves the Quest in the persistence.
+     *
+     * @param quest The quest to be saved.
+     * @return The saved quest with an id.
+     * @throws ValidationException If the quest ist not valid.
+     */
+    public Quest createQuest(CreateDoctorQuest quest) throws ValidationException;
 
     /**
      * Returns all the available doctor quests for a user.
@@ -38,6 +49,8 @@ public interface QuestService {
      * @param doctor that assigns the quests to a user.
      * @return a list of all available quests from a doctor to a user.
      * @throws ServiceException if something went wrong.
+     * @throws ValidationException if the data is not valid.
+     * @throws IllegalArgumentException if the given data is forbidden.
      */
     List<Quest> getAllUserAvailableDoctorQuests(int user, int doctor);
 
@@ -47,6 +60,8 @@ public interface QuestService {
      * @param doctor that assigns the quests to a user.
      * @return a list of all assigned quests from a doctor to a user.
      * @throws ServiceException if something went wrong.
+     * @throws ValidationException if the data is not valid.
+     * @throws IllegalArgumentException if the given data is forbidden.
      */
     List<Quest> getAllUserAssignedDoctorQuests(int user, int doctor);
 
@@ -64,6 +79,8 @@ public interface QuestService {
      * @param acceptedQuest the quest that should be added
      * @return true if successfully added to the user
      * @throws ServiceException if something went wrong.
+     * @throws ValidationException if the data is not valid.
+     * @throws IllegalArgumentException if the given data is forbidden.
      */
     boolean addAssignedDoctorQuestForUser(AcceptedQuest acceptedQuest);
 }

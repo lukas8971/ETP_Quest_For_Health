@@ -3,6 +3,9 @@ import {Quest} from "../../dto/quest";
 import {QuestService} from "../../service/quest.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatTableDataSource} from "@angular/material/table";
+import * as moment from "moment";
+import {Duration} from "moment";
+
 
 @Component({
   selector: 'app-user-browse-quests',
@@ -14,12 +17,13 @@ export class UserBrowseQuestsComponent implements OnInit {
   selectedQuest: any;
   dataSource = new MatTableDataSource(this.quests);
   questColumns: string[] = ['name', 'exp_reward','gold_reward','repetition_cycle'];
-
+  myMoment: any;
 
   constructor(private questService: QuestService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
+    this.myMoment = moment;
     this.loadQuests();
   }
 
@@ -34,6 +38,11 @@ export class UserBrowseQuestsComponent implements OnInit {
       }
     )
 
+  }
+
+  momentToDays(days: string): string {
+   let d_cycle: Duration = moment.duration(days);
+    return d_cycle.asDays().toString();
   }
 
   public selectQuest(quest: Quest){

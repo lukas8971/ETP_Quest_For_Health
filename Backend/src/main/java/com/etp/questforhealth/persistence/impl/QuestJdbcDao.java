@@ -8,11 +8,13 @@ import com.etp.questforhealth.persistence.QuestDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Repository;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.List;
 @Repository
 public class QuestJdbcDao implements QuestDao {
 
+    private static final String QUEST_TABLE_NAME = "quest";
+    private static final String DOCTOR_QUEST_TABLE_NAME = "doctor_quest";
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     static Connection questForHealthConn = null;
     @Value("${spring.datasource.url}")
@@ -28,24 +32,65 @@ public class QuestJdbcDao implements QuestDao {
     String USERNAME;
     @Value("${spring.datasource.password}")
     String PASSWORD;
+    @Value("${spring.datasource.autoCommit}")
+    String AUTOCOMMIT;
+
 
 
     @Override
     public Quest getOneById(int id) throws NotFoundException {
-        LOGGER.trace("getOneById({})",id);
+        LOGGER.trace("getOneById({})", id);
         makeJDBCConnection();
+
         try {
-            String query = "SELECT * FROM quest WHERE id = ?;";
-            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            final String sql = "SELECT * FROM " + QUEST_TABLE_NAME + " LEFT JOIN doctor_quest ON quest.id = doctor_quest.id WHERE quest.id = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql);
             pstmnt.setInt(1, id);
             ResultSet rs = pstmnt.executeQuery();
             if (rs == null || !rs.next()) throw new NotFoundException("Could not find quest with id " + id);
             return mapRow(rs);
         } catch (SQLException e) {
-            System.out.println("MySQL Connection Failed!");
-            e.printStackTrace();
+           throw new PersistenceException(e.getMessage(),e);
         }
-        return null;
+    }
+
+    @Override
+    public Quest createQuest(Quest quest) {
+        LOGGER.trace("createQuest({})", quest);
+        makeJDBCConnection();
+        try {
+            final String sql_quest = "INSERT INTO " + QUEST_TABLE_NAME + " (name, description, exp_reward, gold_reward, repetition_cycle) " +
+                    " VALUES (?,?,?,?,?);";
+            PreparedStatement stmt_quest = questForHealthConn.prepareStatement(sql_quest, Statement.RETURN_GENERATED_KEYS);
+            stmt_quest.setString(1, quest.getName());
+            stmt_quest.setString(2, quest.getDescription());
+            stmt_quest.setInt(3, quest.getExp_reward());
+            stmt_quest.setInt(4, quest.getGold_reward());
+            stmt_quest.setString(5, parseRepetitionCycle(quest.getRepetition_cycle()));
+            int added = stmt_quest.executeUpdate();
+            if (added == 0) throw new PersistenceException("Could not add new Quest");
+            ResultSet rs = stmt_quest.getGeneratedKeys();
+            rs.next();
+            quest.setId(rs.getInt(1));
+
+            final String query_doctor_quest = "INSERT INTO " + DOCTOR_QUEST_TABLE_NAME + " (id, doctor, exp_penalty, gold_penalty) " +
+                    " VALUES (?,?,?,?);";
+            PreparedStatement stmt_doctor_quest = questForHealthConn.prepareStatement(query_doctor_quest, Statement.RETURN_GENERATED_KEYS);
+            stmt_doctor_quest.setInt(1, quest.getId());
+            stmt_doctor_quest.setInt(2, quest.getDoctor());
+            stmt_doctor_quest.setInt(3, quest.getExp_penalty());
+            stmt_doctor_quest.setInt(4, quest.getGold_penalty());
+            added = stmt_doctor_quest.executeUpdate();
+            if (added == 0) throw new PersistenceException("Could not add new Quest");
+
+
+            return getOneById(quest.getId());
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new PersistenceException("Recently saved quest can't be accessed. \n");
+
+        }
     }
 
     @Override
@@ -71,7 +116,8 @@ public class QuestJdbcDao implements QuestDao {
         makeJDBCConnection();
         List<Quest> questList = new ArrayList<>();
         try{
-            String query = "select * from quest q " +
+            String query = "select * from quest q left join doctor_quest d " +
+                    "on q.id = d.id " +
                     "where q.id not in ( " +
                     "  select d.id  " +
                     "  from doctor_quest d) " +
@@ -103,6 +149,9 @@ public class QuestJdbcDao implements QuestDao {
         String mysqlTime = rs.getString("repetition_cycle");
         if (mysqlTime == null) mysqlTime = "00:00:00";
         quest.setRepetition_cycle(parseRepetitionCycle(mysqlTime));
+        quest.setExp_penalty(rs.getInt("exp_penalty"));
+        quest.setGold_penalty(rs.getInt("gold_penalty"));
+        quest.setDoctor(rs.getInt("doctor"));
         return quest;
     }
 
@@ -115,7 +164,7 @@ public class QuestJdbcDao implements QuestDao {
      * @return a java.time.Duration Object with the period
      */
     private Duration parseRepetitionCycle(String sqlTime) throws DateTimeParseException {
-        LOGGER.trace("parseRepetitionCycle({})",sqlTime);
+        LOGGER.trace("parseRepetitionCycle({})", sqlTime);
         int index1 = sqlTime.indexOf(':');
         int index2 = sqlTime.lastIndexOf(':');
         String hours = sqlTime.substring(0, index1);
@@ -226,30 +275,99 @@ public class QuestJdbcDao implements QuestDao {
         }
     }
 
-    private void makeJDBCConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Congrats - Seems your MySQL JDBC Driver Registered!");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Sorry, couldn't found JDBC driver. Make sure you have added JDBC Maven Dependency Correctly");
-            e.printStackTrace();
-            return;
+    /**
+     * All Java Libraries refuse to parse MySQL Time because it accepts
+     * vales greater than 23:59:59 which is not a valid time.
+     * java.time.Duration only accepts time in ISO-8601 format.
+     *
+     * @param duration java.time.Duration Object with the period
+     * @return The String to parse in MySQL Time format
+     */
+    private String parseRepetitionCycle(Duration duration) throws DateTimeParseException {
+        LOGGER.trace("parseRepetitionCycle({})", duration);
+
+        String sqlTime  ="00:00:00";
+        long seconds = duration.getSeconds();
+        if(seconds != 0) {
+            sqlTime = String.format("%02d:%02d:%02d",
+                    seconds / 3600,
+                    (seconds % 3600) / seconds/60,
+                    seconds % 60);
         }
 
-        try {
-            // DriverManager: The basic service for managing a set of JDBC drivers.
-            questForHealthConn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            if (questForHealthConn != null) {
-                System.out.println("Connection Successful! Enjoy. Now it's time to push data");
-            } else {
-                System.out.println("Failed to make connection!");
-            }
-        } catch (SQLException e) {
-            System.out.println("MySQL Connection Failed!");
-            e.printStackTrace();
-            return;
-        }
+        return sqlTime;
     }
 
 
+
+    // to rollback data after tests
+    @Override
+    public void rollbackChanges() {
+        try {
+            questForHealthConn.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void makeJDBCConnection() {
+        LOGGER.trace("makeJDBCConnection()");
+        if (questForHealthConn == null) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                System.out.println("Congrats - Seems your MySQL JDBC Driver Registered!");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Sorry, couldn't find JDBC driver. Make sure you have added JDBC Maven Dependency Correctly");
+                e.printStackTrace();
+                return;
+            }
+
+            try {
+                // DriverManager: The basic service for managing a set of JDBC drivers.
+                questForHealthConn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+                if (!(Boolean.parseBoolean(AUTOCOMMIT))) questForHealthConn.setAutoCommit(false);
+                if (questForHealthConn != null) {
+                    System.out.println("Connection Successful! Enjoy. Now it's time to push data");
+                } else {
+                    System.out.println("Failed to make connection!");
+                }
+            } catch (SQLException e) {
+                System.out.println("MySQL Connection Failed!");
+                e.printStackTrace();
+                return;
+            }
+        }
+    }
+
+    @Override
+    public boolean checkIfQuestAlreadyAccepted(AcceptedQuest acceptedQuest){
+        LOGGER.trace("checkIfQuestAlreadyAccepted({})", acceptedQuest);
+        makeJDBCConnection();
+        try {
+            String query = "SELECT a.accepted_on AS accepted_on, c.completed_on AS completed_on, q.repetition_cycle AS repetition_cycle " +
+            "FROM user_accepted_quest a LEFT JOIN user_completed_quest c ON (a.quest = c.quest) JOIN quest q ON (a.quest = q.id) " +
+            "WHERE a.user = ? AND a.quest = ? " +
+            "ORDER BY c.completed_on DESC LIMIT 1;";
+
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, acceptedQuest.getUser());
+            pstmnt.setInt(2, acceptedQuest.getQuest());
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()){
+                if (rs.getObject("completed_on") == null) return true;
+                LocalDate completedOn = rs.getDate("completed_on").toLocalDate();
+                String rep = rs.getString("repetition_cycle");
+                if (rep == null || rep.equals("")) return false;
+                Duration repetition_cycle = parseRepetitionCycle(rep);
+                LocalDate today = LocalDate.now();
+                Duration between = Duration.between(today.atStartOfDay(), completedOn.atStartOfDay());
+                if (between.compareTo(repetition_cycle) <= 0) return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 }

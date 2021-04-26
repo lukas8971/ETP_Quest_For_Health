@@ -3,7 +3,7 @@ import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
 import {DoctorService} from '../../service/doctor.service';
 import {UserService} from '../../service/user.service';
 import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Doctor} from '../../dto/doctor';
 import {User} from '../../dto/user';
 import {QuestService} from '../../service/quest.service';
@@ -32,7 +32,7 @@ export class PatientDoctorQuestComponent implements OnInit {
   questHeader = ['name', 'description', 'id'];
 
   constructor(private doctorService: DoctorService, private userService: UserService,
-              private dialog: MatDialog, private questService: QuestService, private route: ActivatedRoute) {
+              private dialog: MatDialog, private questService: QuestService, private route: ActivatedRoute, private router: Router) {
     this.route.queryParams.subscribe(queryParams => {
       if (queryParams.user !== undefined){
         console.log('queryParams: ' + queryParams.user);
@@ -212,5 +212,10 @@ export class PatientDoctorQuestComponent implements OnInit {
     this.dialog.open(ErrorDialogComponent, {
       data: { err: error, message: '' }
     });
+  }
+
+  createDoctorQuest() {
+    console.log("createDoctorQuest();");
+    this.router.navigate(['doctors/createquest'], {replaceUrl: true});
   }
 }

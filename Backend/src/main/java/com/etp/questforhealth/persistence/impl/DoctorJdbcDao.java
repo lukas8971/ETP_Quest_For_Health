@@ -27,6 +27,9 @@ public class DoctorJdbcDao implements DoctorDao {
     String USERNAME;
     @Value("${spring.datasource.password}")
     String PASSWORD;
+    @Value("${spring.datasource.autoCommit}")
+    String AUTOCOMMIT;
+
 
     @Override
     public Doctor checkLogin(Credentials credentials) {
@@ -99,28 +102,49 @@ public class DoctorJdbcDao implements DoctorDao {
         return doctor;
     }
 
-    private void makeJDBCConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Congrats - Seems your MySQL JDBC Driver Registered!");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Sorry, couldn't found JDBC driver. Make sure you have added JDBC Maven Dependency Correctly");
-            e.printStackTrace();
-            return;
-        }
-
-        try {
-            // DriverManager: The basic service for managing a set of JDBC drivers.
-            questForHealthConn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            if (questForHealthConn != null) {
-                System.out.println("Connection Successful! Enjoy. Now it's time to push data");
-            } else {
-                System.out.println("Failed to make connection!");
+    public void makeJDBCConnection() {
+        LOGGER.trace("makeJDBCConnection()");
+        if (questForHealthConn == null) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                System.out.println("Congrats - Seems your MySQL JDBC Driver Registered!");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Sorry, couldn't find JDBC driver. Make sure you have added JDBC Maven Dependency Correctly");
+                e.printStackTrace();
+                return;
             }
+
+            try {
+                // DriverManager: The basic service for managing a set of JDBC drivers.
+                questForHealthConn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+                if (!(Boolean.parseBoolean(AUTOCOMMIT))) questForHealthConn.setAutoCommit(false);
+                if (questForHealthConn != null) {
+                    System.out.println("Connection Successful! Enjoy. Now it's time to push data");
+                } else {
+                    System.out.println("Failed to make connection!");
+                }
+            } catch (SQLException e) {
+                System.out.println("MySQL Connection Failed!");
+                e.printStackTrace();
+                return;
+            }
+        }
+    }
+
+    @Override
+    public boolean checkIfDoctorUserRelationshipExists(int doctor, int user){
+        LOGGER.trace("CheckIfDoctorUserRelationshipExists({}, {})", doctor, user);
+        makeJDBCConnection();
+        try {
+            String query = "SELECT * FROM doctor_has_patients WHERE doctor=? AND user=?";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, doctor);
+            pstmnt.setInt(2, user);
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) return true;
+            return false;
         } catch (SQLException e) {
-            System.out.println("MySQL Connection Failed!");
-            e.printStackTrace();
-            return;
+            throw new PersistenceException(e.getMessage(), e);
         }
     }
 }
