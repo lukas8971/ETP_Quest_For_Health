@@ -19,13 +19,13 @@ public class QuestMapper {
     public QuestDto entityToDto (Quest quest){
         LOGGER.trace("entityToDto({})",quest);
         if(quest == null) return null;
-        return new QuestDto(quest.getId(), quest.getName(), quest.getDescription(), quest.getExp_reward(), quest.getGold_reward(), quest.getRepetition_cycle().toMillis()-calculateOffset(), quest.getExp_penalty(), quest.getGold_penalty(), quest.getDoctor());
+        return new QuestDto(quest.getId(), quest.getName(), quest.getDescription(), quest.getExp_reward(), quest.getGold_reward(), quest.getRepetition_cycle()!=null ?  quest.getRepetition_cycle().toMillis()-calculateOffset(): -calculateOffset(), quest.getExp_penalty(), quest.getGold_penalty(), quest.getDoctor(),quest.getDueDate());
     }
 
     public Quest dtoToEntity (QuestDto questDto){
         LOGGER.trace("dtoToEntity({})",questDto);
         if(questDto == null) return null;
-        return new Quest(questDto.getId(), questDto.getName(), questDto.getDescription(), questDto.getExp_reward(), questDto.getGold_reward(), Duration.ofMillis(questDto.getRepetition_cycle()+ calculateOffset()), questDto.getExp_penalty(), questDto.getGold_penalty(), questDto.getDoctor());
+        return new Quest(questDto.getId(), questDto.getName(), questDto.getDescription(), questDto.getExp_reward(), questDto.getGold_reward(), Duration.ofMillis(questDto.getRepetition_cycle()+ calculateOffset()), questDto.getExp_penalty(), questDto.getGold_penalty(), questDto.getDoctor(),questDto.getDueDate());
     }
 
     public List<QuestDto> entityToDto (List<Quest> quests){
