@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {Quest} from '../dto/quest';
 import {environment} from '../../environments/environment';
 import {AcceptedQuest} from '../dto/accepted-quest';
+import {CreateDoctorQuest} from "../dto/createDoctorQuest";
 
 const baseUri = environment.backendUrl + '/quests';
 
@@ -82,4 +83,9 @@ export class QuestService {
     acceptParams = acceptParams.set('quest', String(quest));
     return this.httpClient.get<boolean>(baseUri + '/accept?' + acceptParams);
   }
+  createDoctorQuest(createDoctorQuest: CreateDoctorQuest): Observable<Quest> {
+    console.log('createDoctorQuest(' + createDoctorQuest + ')');
+    return this.httpClient.post<Quest>(baseUri +'/', createDoctorQuest);
+  }
+  
 }

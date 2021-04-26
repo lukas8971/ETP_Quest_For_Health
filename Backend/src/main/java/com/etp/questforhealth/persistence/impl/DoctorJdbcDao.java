@@ -123,4 +123,21 @@ public class DoctorJdbcDao implements DoctorDao {
             return;
         }
     }
+
+    @Override
+    public boolean checkIfDoctorUserRelationshipExists(int doctor, int user){
+        LOGGER.trace("CheckIfDoctorUserRelationshipExists({}, {})", doctor, user);
+        makeJDBCConnection();
+        try {
+            String query = "SELECT * FROM doctor_has_patients WHERE doctor=? AND user=?";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, doctor);
+            pstmnt.setInt(2, user);
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) return true;
+            return false;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 }
