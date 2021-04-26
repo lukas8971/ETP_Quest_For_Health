@@ -1,5 +1,6 @@
 package com.etp.questforhealth.persistence;
 
+import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -11,7 +12,7 @@ public interface UserDao {
 
     List<User> getAll();
 
-    User createUser(User user);
+    User createUser(User user) throws PersistenceException;
 
     void rollbackChanges();
 
@@ -31,4 +32,22 @@ public interface UserDao {
      * @throws NotFoundException if no doctor with that id was found.
      */
     User getOneById(int id);
+
+    /**
+     * Checks if a User with the specified credentials exist.
+     * @param cred user credentials.
+     * @return the user with the specific credentials.
+     * @throws PersistenceException if something went wrong in the persistent data store.
+     * @throws NotFoundException if no user with that credentials was found.
+     */
+    User checkLogin(Credentials cred);
+
+    /**
+     * Checks if a User with the specified username exist.
+     * @param userName user name.
+     * @return true if found, otherwise false;
+     * @throws PersistenceException if something went wrong in the persistent data store.
+     * @throws NotFoundException if no user with that username was found.
+     */
+    boolean checkUserNameExists(String userName);
 }

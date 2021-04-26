@@ -1,0 +1,109 @@
+<mat-accordion>
+  <mat-expansion-panel hideToggle class="outer-mat-expansion-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Profile-info
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-grid-list cols="5" rowHeight="5:1">
+      <mat-grid-tile>Firstname</mat-grid-tile>
+      <mat-grid-tile colspan="4"> <div class="info"> {{user.firstname}}</div></mat-grid-tile>
+      <mat-grid-tile>Lastname</mat-grid-tile>
+      <mat-grid-tile colspan="4"><div class="info"> {{user.lastname}}</div></mat-grid-tile>
+      <mat-grid-tile>Email</mat-grid-tile>
+      <mat-grid-tile colspan="4"><div class="info"> {{user.email}}</div></mat-grid-tile>
+    </mat-grid-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel hideToggle class="outer-mat-expansion-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Character-info
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-grid-list cols="5" rowHeight="5:1">
+      <mat-grid-tile>Name</mat-grid-tile>
+      <mat-grid-tile colspan="4"> <div class="info"> {{user.characterName}}</div></mat-grid-tile>
+      <mat-grid-tile>Level</mat-grid-tile>
+      <mat-grid-tile colspan="2"> <div class="info"> {{user.characterLevel}}</div></mat-grid-tile>
+      <mat-grid-tile>Next Level-up in</mat-grid-tile>
+      <mat-grid-tile>{{neededExp}} exp</mat-grid-tile>
+      <mat-grid-tile>Strength</mat-grid-tile>
+      <mat-grid-tile colspan="4"> <div class="info"> {{user.characterStrength}}</div></mat-grid-tile>
+    </mat-grid-list>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Equipment
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-grid-list cols="5" rowHeight="5:1">
+        <mat-grid-tile>Head</mat-grid-tile>
+        <mat-grid-tile colspan="4">
+          <div class="info">
+            <div *ngIf="headEquipment">
+              {{headEquipment.name}}
+            </div>
+            <div *ngIf="!headEquipment">
+              None
+            </div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>Torso</mat-grid-tile>
+        <mat-grid-tile colspan="4">
+          <div class="info">
+            <div *ngIf="torsoEquipment">
+              {{torsoEquipment.name}}
+            </div>
+            <div *ngIf="!torsoEquipment">
+              None
+            </div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>Arms</mat-grid-tile>
+        <mat-grid-tile colspan="4">
+          <div class="info">
+            <div *ngIf="armsEquipment">
+              {{armsEquipment.name}}
+            </div>
+            <div *ngIf="!armsEquipment">
+              None
+            </div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>Right Hand</mat-grid-tile>
+        <mat-grid-tile colspan="4">
+          <div class="info">
+            <div *ngIf="rightHandEquipment">
+              {{rightHandEquipment.name}}
+            </div>
+            <div *ngIf="!rightHandEquipment">
+              None
+            </div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>Left Hand</mat-grid-tile>
+        <mat-grid-tile colspan="4">
+          <div class="info">
+            <div *ngIf="leftHandEquipment">
+              {{leftHandEquipment.name}}
+            </div>
+            <div *ngIf="!leftHandEquipment">
+              None
+            </div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>Legs</mat-grid-tile>
+        <mat-grid-tile colspan="4">
+          <div class="info">
+            <div *ngIf="legsEquipment">
+              {{legsEquipment.name}}
+            </div>
+            <div *ngIf="!legsEquipment">
+              None
+            </div>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-expansion-panel>
+  </mat-expansion-panel>
+</mat-accordion>

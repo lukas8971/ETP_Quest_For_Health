@@ -31,7 +31,9 @@ values ('Chapter 1: The Beginning', 'You find yourself in a dark inn nearby the 
 
 insert into character_level (total_strength, needed_exp, level, rank) values
     (0,0,1,'Beginner'),
+    (2,20,2,'Beginner'),
     (4,50,3,'Better Beginner'),
+    (6,80,4,'Better Beginner'),
     (9,132,5,'Expierenced');
 
 insert into doctor(id,firstname,lastname,email,password) values
@@ -54,6 +56,14 @@ insert into doctor_has_patients(doctor, user) values
     (1,6),
     (3,4),
     (2,4);
+
+insert into equipment (name,description,price,strength,type) values
+('Hat', 'A simple hat.',5,1,'head'),
+('Winter Gloves', 'These gloves are perfect for keeping you warm in the winter, regarding actual protection in combat, however, they are pretty useless. Better than nothing though...',5,1,'arms'),
+('Wool Jacket', 'Your basic jacket for the winter.',15,4,'torso'),
+('Farm Trousers', 'Ideal for working at the farm.',8,2,'legs'),
+('Wooden Stick', 'A stick some kid found in the woods. It really is nothing special.', 5,1,'right hand'),
+('Piece of Bark', 'This bark fell from a tree during the last storm. Looks kinda cool though.',5,1,'left hand');
 
 
 SET FOREIGN_KEY_CHECKS=1;

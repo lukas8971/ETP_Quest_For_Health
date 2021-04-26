@@ -1,4 +1,3 @@
-import {Time} from '@angular/common';
 
 export interface Quest {
   id: number;
@@ -6,6 +5,7 @@ export interface Quest {
   description: string;
   exp_reward: number;
   gold_reward: number;
+  dueDate: Date;
   repetition_cycle: string;
   exp_penalty: number;
   gold_penalty: number;

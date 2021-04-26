@@ -22,6 +22,19 @@ public interface QuestService {
     public Quest getOneById(int id) throws NotFoundException;
 
     /**
+     * Returns all normal quests the user has not yet accepted
+     * @param userId the id of the user for which to find new quests
+     * @return a List of new quests for the user
+     */
+    List<Quest> getNewQuestsForUserId (int userId);
+
+    /**
+     * User accepts a quest
+     * @param userId id of the user
+     * @param questId id of the quest
+     */
+     boolean acceptQuest(int userId, int questId);
+     /*
      * Saves the Quest in the persistence.
      *
      * @param quest The quest to be saved.

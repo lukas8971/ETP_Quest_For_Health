@@ -1,5 +1,6 @@
 package com.etp.questforhealth.util;
 
+
 import com.etp.questforhealth.entity.AcceptedQuest;
 import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.entity.Quest;
@@ -27,6 +28,26 @@ public class Validator {
         this.questDao = questDao;
         this.doctorDao = doctorDao;
         this.userDao = userDao;
+    }
+  
+      public void validateNewUser (User user){
+        LOGGER.trace("validateNewUser({})", user.toString());
+        String errorMsg = "";
+        if(user.getFirstname() == null || user.getFirstname().isBlank()){
+            errorMsg += "You must enter a firstname. \n";
+        }
+        if(user.getLastname() == null || user.getLastname().isBlank()){
+            errorMsg += "You must enter a lastname. \n";
+        }
+        if(user.getCharacterName() == null || user.getCharacterName().isBlank()){
+            errorMsg += "You must enter a character-name. \n";
+        }
+        if(user.getPassword() == null || user.getPassword().isBlank()){
+            errorMsg += "You must enter a password. \n";
+        }
+        if(!errorMsg.isBlank()){
+            throw new ValidationException(errorMsg);
+        }
     }
 
     /**

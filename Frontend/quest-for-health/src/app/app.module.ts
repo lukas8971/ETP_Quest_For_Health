@@ -22,6 +22,13 @@ import {CommonModule} from '@angular/common';
 import {MatCommonModule} from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
+import { CreateCharacterComponent } from './component/create-character/create-character.component';
+import { UserLoginComponent } from './component/user-login/user-login.component';
+import { UserOverviewComponent } from './component/user-overview/user-overview.component';
+import { UserProfileComponent } from './component/user-profile/user-profile.component';
+import {MatGridListModule} from "@angular/material/grid-list";
+import {MatExpansionModule} from "@angular/material/expansion";
+import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-browse-quests.component';
 import { CreateDoctorQuestComponent } from './component/create-doctor-quest/create-doctor-quest.component';
 
 @NgModule({
@@ -33,6 +40,11 @@ import { CreateDoctorQuestComponent } from './component/create-doctor-quest/crea
     PatientDoctorQuestComponent,
     DoctorComponent,
     DoctorLogoutComponent,
+    CreateCharacterComponent,
+    UserLoginComponent,
+    UserOverviewComponent,
+    UserProfileComponent,
+    UserBrowseQuestsComponent
     CreateDoctorQuestComponent
   ],
   imports: [
@@ -52,7 +64,9 @@ import { CreateDoctorQuestComponent } from './component/create-doctor-quest/crea
     CommonModule,
     MatCommonModule,
     MatCardModule,
-    MatInputModule
+    MatInputModule,
+    MatGridListModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent],

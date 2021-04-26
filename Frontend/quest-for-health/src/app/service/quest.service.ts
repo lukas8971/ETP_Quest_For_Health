@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Doctor} from '../dto/doctor';
 import {Quest} from '../dto/quest';
 import {environment} from '../../environments/environment';
 import {AcceptedQuest} from '../dto/accepted-quest';
@@ -30,6 +29,17 @@ export class QuestService {
     availableParams = availableParams.set('doctor', String(doctor));
     console.log(availableParams);
     return this.httpClient.get<Quest[]>(baseUri + '/available?' + availableParams);
+  }
+
+  /**
+   * Get all new normal quests for user
+   * @param user for which to find new quests
+   */
+  getNewQuestsForUser(user: number): Observable<Quest[]> {
+    console.log('getNewQuestsForUser('+ user + ')');
+    let newQuestParams = new HttpParams();
+    newQuestParams = newQuestParams.set('user', String(user));
+    return this.httpClient.get<Quest[]>(baseUri + '/newQuests?' + newQuestParams);
   }
 
   /**
@@ -66,9 +76,16 @@ export class QuestService {
     return this.httpClient.post<boolean>(baseUri + '/assigned', acceptedBody, this.httpOption);
   }
 
+  acceptQuest(user: number, quest: number): Observable<boolean> {
+    console.log('acceptQuest (' +user+ ", " + quest+ ')');
+    let acceptParams = new HttpParams();
+    acceptParams = acceptParams.set('user', String(user));
+    acceptParams = acceptParams.set('quest', String(quest));
+    return this.httpClient.get<boolean>(baseUri + '/accept?' + acceptParams);
+  }
   createDoctorQuest(createDoctorQuest: CreateDoctorQuest): Observable<Quest> {
     console.log('createDoctorQuest(' + createDoctorQuest + ')');
     return this.httpClient.post<Quest>(baseUri +'/', createDoctorQuest);
   }
-
+  
 }

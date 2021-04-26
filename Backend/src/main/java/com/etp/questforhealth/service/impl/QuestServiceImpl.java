@@ -37,10 +37,11 @@ public class QuestServiceImpl implements QuestService {
 
 
     @Autowired
-    public QuestServiceImpl(QuestDao questDao, Validator validator, QuestValidator questValidator){
+    public QuestServiceImpl(QuestDao questDao, Validator validator, QuestValidator questValidator, DoctorService doctorService){
         this.questDao = questDao;
         this.questValidator = questValidator;
         this.validator = validator;
+        this.doctorService = doctorService;
 
     }
 
@@ -51,6 +52,25 @@ public class QuestServiceImpl implements QuestService {
         return questDao.getOneById(id);
     }
 
+    @Override
+    public List<Quest> getNewQuestsForUserId(int userId) {
+        LOGGER.trace("getNewQuestsForUserId({})", userId);
+        try{
+            return questDao.getNewQuestsForUserId(userId);
+        }catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public boolean acceptQuest(int userId, int questId) {
+        LOGGER.trace("acceptQuest({},{})", userId,questId);
+        try{
+            return questDao.acceptQuest(userId,questId);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
     @Override
     public Quest createQuest(CreateDoctorQuest createDoctorQuest) throws ValidationException {
         LOGGER.trace("createQeust({})",createDoctorQuest);

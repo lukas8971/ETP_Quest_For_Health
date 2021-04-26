@@ -1,0 +1,16 @@
+.form{
+  margin-top: 10vh;
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  alignment: center;
+}
+.mat-form-field{
+  margin-left: 10%;
+  width: 100%;
+  max-width:400px;
+
+}
