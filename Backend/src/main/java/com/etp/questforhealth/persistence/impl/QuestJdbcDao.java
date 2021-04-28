@@ -304,6 +304,7 @@ public class QuestJdbcDao implements QuestDao {
     @Override
     public void rollbackChanges() {
         try {
+            if (questForHealthConn == null) makeJDBCConnection();
             questForHealthConn.rollback();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,12 +1,12 @@
 package com.etp.questforhealth.util;
 
 
-import com.etp.questforhealth.entity.AcceptedQuest;
-import com.etp.questforhealth.entity.Doctor;
-import com.etp.questforhealth.entity.Quest;
-import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.entity.*;
+import com.etp.questforhealth.entity.enums.mapper.EquipmentTypeMapper;
+import com.etp.questforhealth.exception.NotEnoughGoldException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.DoctorDao;
+import com.etp.questforhealth.persistence.EquipmentDao;
 import com.etp.questforhealth.persistence.QuestDao;
 import com.etp.questforhealth.persistence.UserDao;
 import org.slf4j.Logger;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @Component
 public class Validator {
@@ -22,12 +23,14 @@ public class Validator {
     private final QuestDao questDao;
     private final DoctorDao doctorDao;
     private final UserDao userDao;
+    private final EquipmentDao equipmentDao;
 
     @Autowired
-    public Validator(QuestDao questDao, DoctorDao doctorDao, UserDao userDao){
+    public Validator(QuestDao questDao, DoctorDao doctorDao, UserDao userDao, EquipmentDao equipmentDao){
         this.questDao = questDao;
         this.doctorDao = doctorDao;
         this.userDao = userDao;
+        this.equipmentDao = equipmentDao;
     }
   
       public void validateNewUser (User user){
@@ -106,5 +109,52 @@ public class Validator {
         if (quest < 0) throw new IllegalArgumentException("ID of a Quest has to be greater than 0");
         Quest q = questDao.getOneById(quest);
         if (q == null) throw new ValidationException("Quest does not exist!");
+    }
+
+    /**
+     * Validates an existing equipment via its id
+     * @param equipment id of the equipment to check
+     */
+    public void validateExistingEquipment(int equipment){
+        LOGGER.trace("validateExistingEquipment({})", equipment);
+        if (equipment < 0) throw new IllegalArgumentException("ID of an equipment has to be greater than 0");
+        Equipment e = equipmentDao.getOneById(equipment);
+        if (e == null) throw new ValidationException("Equipment does not exist!");
+    }
+
+    /**
+     * Validates the equipment type and user
+     * @param user to validate
+     * @param type to validate
+     */
+    public void validateEquipmentByTypeAndId(int user, String type){
+        LOGGER.trace("validateEquipmentByTypeAndId({}, {})", user, type);
+        validateExistingUser(user);
+        EquipmentTypeMapper.stringToEnum(type);
+    }
+
+    /**
+     * Validates if a user can buy a specific equipment item
+     * @param userEquipment the object with the userId and equipmentId
+     */
+    public void validateBuyEquipment(UserEquipment userEquipment){
+        LOGGER.trace("validateBuyEquipment({})", userEquipment);
+        validateExistingUser(userEquipment.getUserId());
+        validateExistingEquipment(userEquipment.getEquipmentId());
+        User u = userDao.getOneById(userEquipment.getUserId());
+        Equipment e = equipmentDao.getOneById(userEquipment.getEquipmentId());
+        if (u.getCharacterGold() < e.getPrice()) throw new NotEnoughGoldException("Not enough gold to buy the equipment! You need " + (e.getPrice() - u.getCharacterGold()) + " more gold.");
+    }
+
+    /**
+     * Checks if an item is allowed to be worn by a character
+     * @param id of the user that wants to wear the equipment
+     * @param equipment that should be worn
+     */
+    public void validateEquipItem(int id, Equipment equipment){
+        LOGGER.trace("validateEquipItem({}, {})", id, equipment);
+        validateExistingUser(id);
+        validateExistingEquipment(equipment.getId());
+        if (!equipmentDao.checkIfUserOwnsEquipment(id, equipment.getId())) throw new ValidationException("You do not own that equipment!");
     }
 }

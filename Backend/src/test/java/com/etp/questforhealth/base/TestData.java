@@ -76,12 +76,12 @@ public interface TestData {
 
     static User getNewUserWithName(int id) { return new User(id, "Andrew", "Adams"); }
 
-    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,1,400,"SuperSecretPassword", null,1); }
+    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,1,400,35,"SuperSecretPassword", null,1); }
 
     static List<User> getNWorkingUsers(int n){
         List<User> retVal = new ArrayList<User>();
         for(int i=0; i<n; i++){
-            retVal.add(new User(0,"Hans-Peter"+i, "Berger"+i, "Rudolf"+i, 0,1,400,"SuperSecretPassword"+i, null,1));
+            retVal.add(new User(0,"Hans-Peter"+i, "Berger"+i, "Rudolf"+i, 0,1,400,i,"SuperSecretPassword"+i, null,1));
         }
         return retVal;
     }

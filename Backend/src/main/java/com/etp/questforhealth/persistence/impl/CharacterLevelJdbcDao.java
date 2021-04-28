@@ -63,6 +63,7 @@ public class CharacterLevelJdbcDao implements CharacterLevelDao {
     public void rollbackChanges() {
         LOGGER.trace("rollbackChanges()");
         try {
+            if (questForHealthConn == null) makeJDBCConnection();
             questForHealthConn.rollback();
         } catch (SQLException e) {
             e.printStackTrace();

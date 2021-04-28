@@ -1,9 +1,9 @@
 package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.Credentials;
-import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.InvalidLoginException;
+import com.etp.questforhealth.exception.NotEnoughGoldException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.UserDao;
@@ -42,7 +42,7 @@ public class UserJdbcDao implements UserDao {
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = pstmnt.executeQuery();
             while (rs.next()){
-                users.add(new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("character_name"), rs.getInt("character_strength"), rs.getInt("character_level"), rs.getInt("character_exp"), rs.getString("password"), rs.getString("email"), rs.getInt("story_chapter")));
+                users.add(new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("character_name"), rs.getInt("character_strength"), rs.getInt("character_level"), rs.getInt("character_exp"), rs.getInt("character_gold"), rs.getString("password"), rs.getString("email"), rs.getInt("story_chapter")));
             }
         }catch (SQLException e){
             System.out.println("MySQL Connection Failed!");
@@ -85,6 +85,7 @@ public class UserJdbcDao implements UserDao {
     public void rollbackChanges() {
         LOGGER.trace("rollbackChanges()");
         try {
+            if (questForHealthConn == null) makeJDBCConnection();
             questForHealthConn.rollback();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -177,12 +178,30 @@ public class UserJdbcDao implements UserDao {
                 rs.getInt("character_strength"),
                 rs.getInt("character_level"),
                 rs.getInt("character_exp"),
+                rs.getInt("character_gold"),
                 rs.getString("password"),
                 rs.getString("email"),
                 rs.getInt("story_chapter")
         );
     }
 
+    @Override
+    public boolean changeUserGold(int id, int changeValue){
+        LOGGER.trace("changeUserGold({}, {})", id, changeValue);
+        makeJDBCConnection();
+        try{
+            User u = getOneById(id);
+            int newGold = u.getCharacterGold() + changeValue;
+            if (newGold < 0) throw new NotEnoughGoldException("The gold can't get negative!");
+            String sql = "UPDATE " + TABLE_NAME + " SET character_gold = ? WHERE id = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql);
+            pstmnt.setInt(1, newGold);
+            pstmnt.setInt(2, id);
+            return pstmnt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 
     public void makeJDBCConnection() {
         LOGGER.trace("makeJDBCConnection()");

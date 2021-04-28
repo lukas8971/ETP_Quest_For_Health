@@ -50,4 +50,13 @@ public interface UserDao {
      * @throws NotFoundException if no user with that username was found.
      */
     boolean checkUserNameExists(String userName);
+
+    /**
+     * Changes the gold of a user
+     * @param id of the user to change the gold
+     * @param changeValue number of gold that should be changed (can be either positive or negative)
+     * @return true if change was successful
+     * @throws PersistenceException if something went wrong
+     */
+    boolean changeUserGold(int id, int changeValue);
 }

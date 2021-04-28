@@ -7,6 +7,7 @@ export interface User{
   characterLevel: number;
   password: string;
   email: string;
-  storyChapter:number;
-  characterExp:number;
+  storyChapter: number;
+  characterExp: number;
+  characterGold: number;
 }

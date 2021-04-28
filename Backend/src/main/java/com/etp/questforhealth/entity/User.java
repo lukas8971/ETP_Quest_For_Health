@@ -10,6 +10,7 @@ public class User {
     private int characterStrength;
     private int characterLevel;
     private int characterExp;
+    private int characterGold;
     private String password;
     private String email;
     private int storyChapter;
@@ -18,7 +19,7 @@ public class User {
 
     }
 
-    public User(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, String password, String email, int storyChapter) {
+    public User(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, int characterGold, String password, String email, int storyChapter) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -26,6 +27,7 @@ public class User {
         this.characterStrength = characterStrength;
         this.characterLevel = characterLevel;
         this.characterExp = characterExp;
+        this.characterGold = characterGold;
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
@@ -85,6 +87,10 @@ public class User {
         this.characterExp = characterExp;
     }
 
+    public int getCharacterGold() { return characterGold; }
+
+    public void setCharacterGold(int characterGold) { this.characterGold = characterGold; }
+
     public String getPassword() {
         return password;
     }
@@ -128,6 +134,7 @@ public class User {
                 characterStrength == user.characterStrength &&
                 characterLevel == user.characterLevel &&
                 characterExp == user.characterExp &&
+                characterGold == user.characterGold &&
                 storyChapter == user.storyChapter &&
                 Objects.equals(firstname, user.firstname) &&
                 Objects.equals(lastname, user.lastname) &&
@@ -138,7 +145,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterLevel, characterExp, password, email, storyChapter);
+        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterLevel, characterExp, characterGold, password, email, storyChapter);
     }
 
     @Override
@@ -151,6 +158,7 @@ public class User {
                 ", characterStrength=" + characterStrength +
                 ", characterLevel=" + characterLevel +
                 ", characterExp=" + characterExp +
+                ", characterGold=" + characterGold +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", storyChapter=" + storyChapter +

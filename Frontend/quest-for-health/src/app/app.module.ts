@@ -30,6 +30,10 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-browse-quests.component';
 import { CreateDoctorQuestComponent } from './component/create-doctor-quest/create-doctor-quest.component';
+import { ShopComponent } from './component/shop/shop.component';
+import { EquipmentComponentComponent } from './component/equipment-component/equipment-component.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatSortModule} from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -45,7 +49,9 @@ import { CreateDoctorQuestComponent } from './component/create-doctor-quest/crea
     UserOverviewComponent,
     UserProfileComponent,
     UserBrowseQuestsComponent,
-    CreateDoctorQuestComponent
+    CreateDoctorQuestComponent,
+    ShopComponent,
+    EquipmentComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +72,9 @@ import { CreateDoctorQuestComponent } from './component/create-doctor-quest/crea
     MatCardModule,
     MatInputModule,
     MatGridListModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent],

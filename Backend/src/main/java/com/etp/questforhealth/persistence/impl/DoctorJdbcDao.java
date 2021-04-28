@@ -86,6 +86,7 @@ public class DoctorJdbcDao implements DoctorDao {
     @Override
     public void rollbackChanges() {
         try {
+            if (questForHealthConn == null) makeJDBCConnection();
             questForHealthConn.rollback();
         } catch (SQLException e) {
             e.printStackTrace();

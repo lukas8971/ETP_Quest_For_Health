@@ -1,0 +1,8 @@
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.mat-tab-group {
+  margin-bottom: 48px;
+}

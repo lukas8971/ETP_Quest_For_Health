@@ -11,6 +11,7 @@ public class UserDto {
     private int characterStrength;
     private int characterLevel;
     private int characterExp;
+    private int characterGold;
     private String password;
     private String email;
     private int storyChapter;
@@ -25,12 +26,13 @@ public class UserDto {
         this.lastname = lastname;
     }
 
-    public UserDto(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, String password, String email, int storyChapter) {
+    public UserDto(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, int characterGold, String password, String email, int storyChapter) {
         this(id, firstname, lastname);
         this.characterName = characterName;
         this.characterStrength = characterStrength;
         this.characterLevel = characterLevel;
         this.characterExp = characterExp;
+        this.characterGold = characterGold;
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
@@ -84,6 +86,10 @@ public class UserDto {
         this.characterExp = characterExp;
     }
 
+    public int getCharacterGold() { return characterGold; }
+
+    public void setCharacterGold(int characterGold) { this.characterGold = characterGold; }
+
     public String getPassword() {
         return password;
     }
@@ -125,6 +131,7 @@ public class UserDto {
                 characterStrength == user.characterStrength &&
                 characterLevel == user.characterLevel &&
                 characterExp == user.characterExp &&
+                characterGold == user.characterGold &&
                 storyChapter == user.storyChapter &&
                 Objects.equals(firstname, user.firstname) &&
                 Objects.equals(lastname, user.lastname) &&
@@ -135,7 +142,7 @@ public class UserDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterExp, password, email, storyChapter);
+        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterExp, characterGold, password, email, storyChapter);
     }
 
     @Override
@@ -148,6 +155,7 @@ public class UserDto {
                 ", characterStrength=" + characterStrength +
                 ", characterLevel =" + characterLevel +
                 ", characterExp=" + characterExp +
+                ", characterGold=" + characterGold +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", storyChapter=" + storyChapter +
