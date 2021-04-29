@@ -87,5 +87,15 @@ export class QuestService {
     console.log('createDoctorQuest(' + createDoctorQuest + ')');
     return this.httpClient.post<Quest>(baseUri +'/', createDoctorQuest);
   }
-  
+
+  getAllQuestsDueForUser(user:number): Observable<Quest[]>{
+    console.log('getAllQuestsDueForUser(' +user+')');
+    return this.httpClient.get<Quest[]>(baseUri+'/dueQuests/'+user);
+  }
+
+  getAllOpenOneTimeQuestsForUser(user:number): Observable<Quest[]>{
+    console.log('getAllOpenOneTimeQuestsForUser('+user+')');
+    return this.httpClient.get<Quest[]>(baseUri+ '/openOneTimeQuests/'+user);
+  }
+
 }

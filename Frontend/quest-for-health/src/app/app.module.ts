@@ -30,6 +30,8 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-browse-quests.component';
 import { CreateDoctorQuestComponent } from './component/create-doctor-quest/create-doctor-quest.component';
+import {MatSortModule} from "@angular/material/sort";
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -66,7 +68,9 @@ import { CreateDoctorQuestComponent } from './component/create-doctor-quest/crea
     MatCardModule,
     MatInputModule,
     MatGridListModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSortModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent],
