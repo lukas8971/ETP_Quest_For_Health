@@ -44,6 +44,20 @@ public interface QuestService {
     public Quest createQuest(CreateDoctorQuest quest) throws ValidationException;
 
     /**
+     * Returns all repetitive quests which are due for the user
+     * @param userId id of the User
+     * @return
+     */
+    List<Quest> getAllQuestsDueForUser(int userId);
+
+    /**
+     * Returns all one-time quests which the user has accepted but not yet finished.
+     * @param userId the id of the User
+     * @return a list of all quests which the user accepted and are one-time
+     */
+    List<Quest> getAllOpenOneTimeQuestsForUser(int userId);
+
+    /**
      * Returns all the available doctor quests for a user.
      * @param user of to assign quests to.
      * @param doctor that assigns the quests to a user.

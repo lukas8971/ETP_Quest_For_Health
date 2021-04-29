@@ -85,6 +85,26 @@ public class QuestServiceImpl implements QuestService {
     }
 
     @Override
+    public List<Quest> getAllQuestsDueForUser(int userId) {
+        LOGGER.trace("getAllQuestsDueForUser({})", userId);
+        try{
+            return questDao.getAllQuestsDueForUser(userId);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllOpenOneTimeQuestsForUser(int userId) {
+        LOGGER.trace("getAllOpenOneTimeQuestsForUser({})", userId);
+        try{
+            return questDao.getAllOpenOneTimeQuestsForUser(userId);
+        }catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public List<Quest> getAllUserAvailableDoctorQuests(int user, int doctor){
         LOGGER.trace("getAllUserAvailableDoctorQuests({}, {})", user, doctor);
         try {

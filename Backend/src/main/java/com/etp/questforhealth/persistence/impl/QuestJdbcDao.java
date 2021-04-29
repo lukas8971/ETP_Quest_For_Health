@@ -155,6 +155,23 @@ public class QuestJdbcDao implements QuestDao {
         return quest;
     }
 
+    private Quest mapRowDueQuests (ResultSet rs) throws  SQLException{
+        LOGGER.trace("mapRowDueQuests({})", rs);
+        final Quest quest = new Quest();
+        quest.setId(rs.getInt("id"));
+        quest.setName(rs.getString("name"));
+        quest.setDescription(rs.getString("description"));
+        quest.setExp_reward(rs.getInt("exp_reward"));
+        quest.setGold_reward(rs.getInt("gold_reward"));
+        String mysqlTime = rs.getString("repetition_cycle");
+        if (mysqlTime == null) mysqlTime = "00:00:00";
+        quest.setRepetition_cycle(parseRepetitionCycle(mysqlTime));
+        Date dueDate = rs.getDate("OldDueOn");
+        if (dueDate == null) dueDate = rs.getDate("NewDueOn");
+        quest.setDueDate(dueDate);
+        return quest;
+    }
+
     /**
      * All Java Libraries refuse to parse MySQL Time because it accepts
      * vales greater than 23:59:59 which is not a valid time.
@@ -198,6 +215,64 @@ public class QuestJdbcDao implements QuestDao {
             return quests;
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllQuestsDueForUser(int userId) {
+        LOGGER.trace("getAllQuestsDueForUser({})", userId);
+        makeJDBCConnection();
+        try {
+            List<Quest> questList = new ArrayList<>();
+            //HOLY MOLY THATS A BIG QUERY
+            String query = "select q.id, q.name, q.description, q.exp_reward, q.gold_reward, q.repetition_cycle, max(ADDTIME(uaq.accepted_on, q.repetition_cycle)) as NewDueOn, max(ADDTIME(ucq.completed_on, q.repetition_cycle)) as OldDueOn from user_accepted_quest uaq " +
+                    "inner join quest q on q.id = uaq.quest " +
+                    "left join user_completed_quest ucq on q.id = ucq.quest and uaq.user = ucq.user " +
+                    "where uaq.quest not in( " +
+                    "  select ucq.quest from user_completed_quest ucq " +
+                    "\tinner join quest q on q.id = ucq.quest " +
+                    "\twhere ucq.user = ?  " +
+                    "  \tAND ADDTIME(ucq.completed_on, q.repetition_cycle) > CURRENT_DATE " +
+                    "  ) and uaq.user = ? " +
+                    "  \tand q.repetition_cycle IS NOT NULL " +
+                    "    group by q.id, q.name, q.description, q.exp_reward, q.gold_reward, q.repetition_cycle " +
+                    "    ;";
+            PreparedStatement preparedStatement = questForHealthConn.prepareStatement(query);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, userId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                questList.add(mapRowDueQuests(rs));
+            }
+            return questList;
+        } catch (SQLException e){
+            throw new PersistenceException("Failed to get due quests: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllOpenOneTimeQuestsForUser(int userId) {
+        LOGGER.trace("getAllOpenOneTimeQuestsForUser({})", userId);
+        makeJDBCConnection();
+        try{
+            String query = "SELECT * FROM user_accepted_quest uaq " +
+                    "INNER JOIN quest q ON uaq.quest = q.id " +
+                    "LEFT JOIN doctor_quest d on d.id = q.id " +
+                    "WHERE uaq.user = ? AND q.id NOT IN ( " +
+                    "  SELECT ucq.id FROM user_completed_quest ucq " +
+                    "  WHERE ucq.user = ?) " +
+                    "  AND q.repetition_cycle IS NULL; ";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1,userId);
+            pstmnt.setInt(2,userId);
+            ResultSet rs = pstmnt.executeQuery();
+            List<Quest> quests = new ArrayList<>();
+            while (rs.next()){
+                quests.add(mapRow(rs));
+            }
+            return quests;
+        } catch (SQLException e){
+            throw new PersistenceException("Could not get Open one-time Quests for user " + userId + " :" + e.getMessage(),e);
         }
     }
 
