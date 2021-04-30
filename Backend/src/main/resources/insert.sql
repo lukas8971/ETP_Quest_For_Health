@@ -10,7 +10,8 @@ INSERT INTO quest (id, name, description, exp_reward, gold_reward, repetition_cy
     (5,'Created by Steinhardt', 'Doc Quest 2', 5, 3, TIME('24:00:00')),
     (6,'Assigned to User 4', 'Created by Steinhardt', 1, 1, TIME('48:00:00')),
     (7,'Assigned to User 2', 'Created by Test Doc', 2, 5, NULL),
-    (8,'Test Doc not assigned', 'Test Doc Inc', 20, 7, NULL);
+    (8,'Test Doc not assigned', 'Test Doc Inc', 20, 7, NULL),
+    (9,'Do 50 Pushups', 'Gonna get those gainz', 10,3,TIME('72:00:00'));
 
 insert into doctor_quest (id, doctor, exp_penalty, gold_penalty)
 values (4, 2, 1, 0),

@@ -154,6 +154,23 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public boolean completeQuest(int userId, int questId) {
+        LOGGER.trace("completeQuest({},{})", userId,questId);
+        makeJDBCConnection();
+        try {
+            String query ="insert into user_completed_quest(user,quest,completed_on) "+
+                    "values (?,?,CURRENT_DATE)";
+            PreparedStatement preparedStatement = questForHealthConn.prepareStatement(query);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2,questId);
+            int val  = preparedStatement.executeUpdate();
+            return val > 0;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public boolean checkUserNameExists(String userName) {
         LOGGER.trace("checkUserNameExists({})",userName);
         makeJDBCConnection();

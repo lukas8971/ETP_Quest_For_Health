@@ -43,6 +43,14 @@ public interface UserDao {
     User checkLogin(Credentials cred);
 
     /**
+     * User completed a quest
+     * @param userId the id of the user
+     * @param questId the id of the quest
+     * @return  true if successful
+     */
+    boolean completeQuest(int userId, int questId);
+
+    /**
      * Checks if a User with the specified username exist.
      * @param userName user name.
      * @return true if found, otherwise false;

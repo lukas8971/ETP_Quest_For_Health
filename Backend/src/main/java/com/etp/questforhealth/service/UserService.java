@@ -1,6 +1,7 @@
 package com.etp.questforhealth.service;
 
 import com.etp.questforhealth.entity.Credentials;
+import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
@@ -38,5 +39,13 @@ public interface UserService {
      * @throws NotFoundException if no user with that credentials was found.
      */
     User checkLogin(Credentials cred);
+
+    /**
+     * User completed a quest. For that, his exp., gold and level will be updated
+     * @param user the user who completed the quest
+     * @param quest the quest
+     * @return the updated user
+     */
+    User completeQuest(User user, Quest quest);
 
 }

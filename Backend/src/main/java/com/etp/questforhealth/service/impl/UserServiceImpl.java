@@ -1,6 +1,7 @@
 package com.etp.questforhealth.service.impl;
 
 import com.etp.questforhealth.entity.Credentials;
+import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
@@ -61,6 +62,17 @@ public class UserServiceImpl implements UserService {
         try{
             return userDao.checkLogin(cred);
         } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public User completeQuest(User user, Quest quest) {
+        LOGGER.trace("completeQuest({},{})", user.toString(), quest.toString());
+        try{
+            userDao.completeQuest(user.getId(), quest.getId());
+            return user;
+        }catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
         }
     }
