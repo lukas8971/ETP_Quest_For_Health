@@ -54,10 +54,15 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header="gold_reward"> Gold Reward </th>
               <td mat-cell *matCellDef="let quest"> {{quest.gold_reward}} gold </td>
             </ng-container>
-            <ng-container matColumnDef="repetition_cycle">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header="repetition_cycle"> Repeat every </th>
+            <ng-container matColumnDef="dueDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header="dueDate"> Due in </th>
               <td mat-cell *matCellDef="let quest">
-                {{momentToDays(quest.repetition_cycle) }} days
+                <div *ngIf="getDifference(quest.dueDate) >=1">
+                {{getDifference(quest.dueDate)  }} days
+                </div>
+                <div *ngIf="getDifference(quest.dueDate)<1">
+                  Today
+                </div>
               </td>
             </ng-container>
             <tr  mat-header-row *matHeaderRowDef="questColumns"></tr>

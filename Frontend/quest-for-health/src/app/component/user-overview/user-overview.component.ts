@@ -15,7 +15,7 @@ import {MatSort} from '@angular/material/sort';
 export class UserOverviewComponent implements OnInit {
   repetitiveQuests: Quest[] = [];
   oneTimeQuests: Quest[] = [];
-  questColumns: string[] = ['name', 'exp_reward','gold_reward','repetition_cycle'];
+  questColumns: string[] = ['name', 'exp_reward','gold_reward','dueDate'];
   oneTimeQuestColumns: string[] = ['name', 'exp_reward','gold_reward'];
   repDataSource = new MatTableDataSource(this.repetitiveQuests);
   oneTimeDatSource = new MatTableDataSource(this.oneTimeQuests);
@@ -23,6 +23,7 @@ export class UserOverviewComponent implements OnInit {
   radioButtonQuests: string='Repetitive';
   repSort:MatSort = new MatSort();
   oneTimeSort: MatSort = new MatSort();
+  currentDate: Date = new Date();
 
   @ViewChild(MatSort)  set matSort(ms: MatSort){
     this.repSort=ms;
@@ -68,9 +69,14 @@ export class UserOverviewComponent implements OnInit {
   }
 
 
-  momentToDays(days: string): string {
-    let d_cycle: Duration = moment.duration(days);
-    return d_cycle.asDays().toString();
+  getDifference(date: string): number {
+    let d1 = new Date(date);
+    return this.millisecondsToDays(d1.getTime()-this.currentDate.getTime());
+  }
+
+  private millisecondsToDays(milli: number): number{
+    return Math.floor((((milli/1000)/60)/60)/24);
+
   }
 
   private defaultServiceErrorHandling(error: any): void {
