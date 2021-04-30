@@ -6,6 +6,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import * as moment from "moment";
 import {Duration} from "moment";
 import {MatSort} from '@angular/material/sort';
+import {UserService} from "../../service/user.service";
+import {User} from "../../dto/user";
+import {UserQuest} from "../../dto/userQuest";
 
 @Component({
   selector: 'app-user-overview',
@@ -24,6 +27,7 @@ export class UserOverviewComponent implements OnInit {
   repSort:MatSort = new MatSort();
   oneTimeSort: MatSort = new MatSort();
   currentDate: Date = new Date();
+  user: any;
 
   @ViewChild(MatSort)  set matSort(ms: MatSort){
     this.repSort=ms;
@@ -31,12 +35,13 @@ export class UserOverviewComponent implements OnInit {
     this.oneTimeSort = ms;
     this.oneTimeDatSource.sort = this.oneTimeSort;
   }
-  constructor(private questService:QuestService, private snackBar: MatSnackBar) { }
+  constructor(private questService:QuestService, private userService:UserService, private snackBar: MatSnackBar) { }
 
 
   ngOnInit(): void {
     this.loadRepetitiveQuests();
     this.loadOneTimeQuests();
+    this.loadUser();
   }
 
   loadRepetitiveQuests(){
@@ -44,7 +49,16 @@ export class UserOverviewComponent implements OnInit {
       (q: Quest[]) => {
         this.repetitiveQuests = q;
         this.repDataSource = new MatTableDataSource<Quest>(q);
-        console.log(q);
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    )
+  }
+
+  loadUser(){
+    this.userService.getUserById(Number(sessionStorage.getItem('userId'))).subscribe(
+      (u:User) =>{
+        this.user = u;
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
@@ -88,7 +102,24 @@ export class UserOverviewComponent implements OnInit {
   }
 
   public finishQuest(){
-    this.snackBar.open('YOSSSS', 'OK');
+    let userQuest = () : UserQuest =>({
+      quest: this.selectedQuest,
+      user:this.user
+    });
+    this.userService.completeQuest(userQuest()).subscribe(
+      (u:User) =>{
+        if(u.characterLevel !== this.user.characterLevel){
+          this.snackBar.open('You leveled up!', 'Great!');
+        }
+        this.snackBar.open('YOSSSS', 'OK');
+        this.user = u;
+        this.repDataSource.data = this.repDataSource.data.filter(item => item !== this.selectedQuest);
+        this.oneTimeDatSource.data = this.oneTimeDatSource.data.filter(item => item !== this.selectedQuest);
+        this.selectedQuest=null;
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    )
   }
 
 }
