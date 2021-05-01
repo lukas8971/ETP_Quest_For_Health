@@ -108,11 +108,10 @@ export class UserOverviewComponent implements OnInit {
     });
     this.userService.completeQuest(userQuest()).subscribe(
       (u:User) =>{
+        this.snackBar.open('Quest completed!', 'OK');
         if(u.characterLevel !== this.user.characterLevel){
           this.snackBar.open('You leveled up!', 'Great!');
-        }
-        this.snackBar.open('YOSSSS', 'OK');
-        this.user = u;
+        }this.user = u;
         this.repDataSource.data = this.repDataSource.data.filter(item => item !== this.selectedQuest);
         this.oneTimeDatSource.data = this.oneTimeDatSource.data.filter(item => item !== this.selectedQuest);
         this.selectedQuest=null;
