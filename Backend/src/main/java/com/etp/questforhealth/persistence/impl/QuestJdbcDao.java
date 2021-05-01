@@ -259,7 +259,7 @@ public class QuestJdbcDao implements QuestDao {
                     "INNER JOIN quest q ON uaq.quest = q.id " +
                     "LEFT JOIN doctor_quest d on d.id = q.id " +
                     "WHERE uaq.user = ? AND q.id NOT IN ( " +
-                    "  SELECT ucq.id FROM user_completed_quest ucq " +
+                    "  SELECT ucq.quest FROM user_completed_quest ucq " +
                     "  WHERE ucq.user = ?) " +
                     "  AND q.repetition_cycle IS NULL; ";
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
