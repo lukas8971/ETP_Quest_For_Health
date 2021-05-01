@@ -6,6 +6,4 @@ public interface CharacterLevelService {
     CharacterLevel getCharacterLevelById(int id);
 
     CharacterLevel getCharacterLevelByLevel(int id);
-
-    void rollbackChanges();
 }

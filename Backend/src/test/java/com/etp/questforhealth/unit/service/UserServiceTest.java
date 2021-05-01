@@ -1,10 +1,11 @@
 package com.etp.questforhealth.unit.service;
 
+import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.UserService;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,13 +25,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class UserServiceTest {
 
+    @BeforeAll
+    public static void testData(){
+        DatabaseTestData.insertTestData();
+    }
+
     @Autowired
     UserService userService;
-
-    @AfterEach
-    public void tearDownDBData(){
-        userService.rollbackChanges();
-    }
 
     @Test
     @DisplayName("Requesting an empty user list should return null")
@@ -51,4 +52,14 @@ public class UserServiceTest {
         assertThrows(ValidationException.class, () -> userService.createUser(TestData.getNewUser()));
     }
 
+    @Test
+    @DisplayName("Changing the gold amount of a user to still be positive should not throw any exception")
+    public void chaningUserGold_shouldNotThrow(){
+        assertDoesNotThrow(() -> {
+            User u = userService.createUser(TestData.getNewWorkingUserDifferentCharacter());
+            assertNotNull(u);
+            assertTrue(userService.changeUserGold(u.getId(), 500000));
+            assertEquals(userService.getOneById(u.getId()).getCharacterGold(), 500000);
+        });
+    }
 }

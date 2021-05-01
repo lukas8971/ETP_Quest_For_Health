@@ -56,8 +56,8 @@ public class UserJdbcDao implements UserDao {
         LOGGER.trace("createUser({})", user.toString());
         makeJDBCConnection();
         try {
-            String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp)" +
-                    " values (?,?,?,?,?,?,?,?,?)";
+            String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp, character_gold)" +
+                    " values (?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement pstmtnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmtnt.setString(1, user.getFirstname());
             pstmtnt.setString(2, user.getLastname());
@@ -68,6 +68,7 @@ public class UserJdbcDao implements UserDao {
             pstmtnt.setInt(7, user.getCharacterLevel());
             pstmtnt.setInt(8, user.getCharacterStrength());
             pstmtnt.setInt(9, user.getCharacterExp());
+            pstmtnt.setInt(10, user.getCharacterGold());
 
 
             pstmtnt.executeUpdate();
@@ -79,17 +80,6 @@ public class UserJdbcDao implements UserDao {
             throw new PersistenceException("Error while inserting user in Database", e);
         }
         return user;
-    }
-
-    @Override
-    public void rollbackChanges() {
-        LOGGER.trace("rollbackChanges()");
-        try {
-            if (questForHealthConn == null) makeJDBCConnection();
-            questForHealthConn.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -192,12 +182,13 @@ public class UserJdbcDao implements UserDao {
         try{
             User u = getOneById(id);
             int newGold = u.getCharacterGold() + changeValue;
-            if (newGold < 0) throw new NotEnoughGoldException("The gold can't get negative!");
+            if (newGold < 0) throw new NotEnoughGoldException("The amount of gold can't get negative!");
             String sql = "UPDATE " + TABLE_NAME + " SET character_gold = ? WHERE id = ?;";
-            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql);
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmnt.setInt(1, newGold);
             pstmnt.setInt(2, id);
-            return pstmnt.executeUpdate() > 0;
+            int rowsAffected = pstmnt.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }

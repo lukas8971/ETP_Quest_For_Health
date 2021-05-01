@@ -143,6 +143,10 @@ public class Validator {
         validateExistingEquipment(userEquipment.getEquipmentId());
         User u = userDao.getOneById(userEquipment.getUserId());
         Equipment e = equipmentDao.getOneById(userEquipment.getEquipmentId());
+        List<UserEquipment> allUserEquipments = equipmentDao.getAllUserEquipments(userEquipment.getUserId());
+        for (UserEquipment ue: allUserEquipments) {
+            if (ue.getEquipmentId() == userEquipment.getEquipmentId()) throw new ValidationException("You already own this item!");
+        }
         if (u.getCharacterGold() < e.getPrice()) throw new NotEnoughGoldException("Not enough gold to buy the equipment! You need " + (e.getPrice() - u.getCharacterGold()) + " more gold.");
     }
 
@@ -156,5 +160,44 @@ public class Validator {
         validateExistingUser(id);
         validateExistingEquipment(equipment.getId());
         if (!equipmentDao.checkIfUserOwnsEquipment(id, equipment.getId())) throw new ValidationException("You do not own that equipment!");
+    }
+
+    /**
+     * Checks if an item is allowed to be unworn by a character
+     * @param id of the user that wants to unwear the equipment
+     * @param equipment that should be unworn
+     */
+    public void validateUnequipItem(int id, Equipment equipment){
+        LOGGER.trace("validateUnequipItem({}, {})", id, equipment);
+        validateEquipItem(id, equipment);
+        Equipment worn = equipmentDao.getWornEquipmentByTypeAndUser(id, equipment.getType());
+        if (worn != null) {
+            if (worn.getId() != equipment.getId()) throw new ValidationException("Can not unequip not wearing equipment item!");
+        }
+    }
+
+    /**
+     * Checks if a new equipment is valid
+     * @param equipment that should be checked for validity
+     */
+    public void validateNewEquipment(Equipment equipment){
+        LOGGER.trace("validateNewEquipment({})", equipment);
+        //if (equipment == null) throw new ValidationException("Equipment has to exist!");
+        if (equipment.getPrice() < 0) throw new ValidationException("Equipment price can not be negative!");
+        if (equipment.getStrength() < 0) throw new ValidationException("Equipment strength can not be negative!");
+        if (equipment.getName() == null) throw new ValidationException("Equipment has to have a name!");
+        if (equipment.getName().trim().length() == 0) throw new ValidationException("Equipment name has to contain characters!");
+    }
+
+    /**
+     * Checks if the amount of gold change is valid for a user
+     * @param userId that gets or loses gold
+     * @param changeValue the amount of gold that is going to change (positive or negative!)
+     */
+    public void validateUserGold(int userId, int changeValue){
+        LOGGER.trace("validateUserGold({}, {})", userId, changeValue);
+        validateExistingUser(userId);
+        User u = userDao.getOneById(userId);
+        if (u.getCharacterGold() + changeValue < 0) throw new ValidationException("Can not get a negative amount of gold!");
     }
 }

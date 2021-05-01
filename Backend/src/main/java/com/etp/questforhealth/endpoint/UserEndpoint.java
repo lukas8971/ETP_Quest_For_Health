@@ -98,8 +98,4 @@ public class UserEndpoint {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         }
     }
-
-    public void rollbackChanges(){
-        userService.rollbackChanges();;
-    }
 }

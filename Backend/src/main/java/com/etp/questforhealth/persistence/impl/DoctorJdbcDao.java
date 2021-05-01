@@ -83,16 +83,6 @@ public class DoctorJdbcDao implements DoctorDao {
         throw new NotFoundException("Could not find doctor with id " + id);
     }
 
-    @Override
-    public void rollbackChanges() {
-        try {
-            if (questForHealthConn == null) makeJDBCConnection();
-            questForHealthConn.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Doctor mapRow(ResultSet rs) throws SQLException {
         LOGGER.trace("mapRow({})", rs);
         final Doctor doctor = new Doctor();

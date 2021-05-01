@@ -35,7 +35,7 @@ public interface EquipmentDao {
      * @return the bought equipment
      * @throws PersistenceException if something went wrong in the persistent data store
      */
-    Equipment buyNewEquipment(UserEquipment userEquipment);
+    boolean buyNewEquipment(UserEquipment userEquipment);
 
     /**
      * Gets all the userEquipments that a specific user owns
@@ -73,7 +73,7 @@ public interface EquipmentDao {
     boolean unequipItem(int userId, EquipmentType type);
 
     /**
-     * Unequips an item of the equipment type from an user
+     * Unequips an item of the equipment id from an user
      * @param userId of the user that should get unequipped
      * @param equipmentId of the equipment that should get unequipped
      * @return true if unequipped (or character did not wear equipment of that type)
@@ -89,4 +89,11 @@ public interface EquipmentDao {
      * @throws PersistenceException if something went wrong
      */
     Equipment equipItem(int userId, int equipmentId);
+
+    /**
+     * Creates a new equipment
+     * @param equipment that should be created
+     * @return the created equipment
+     */
+    Equipment createNewEquipment(Equipment equipment);
 }

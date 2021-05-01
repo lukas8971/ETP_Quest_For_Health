@@ -1,10 +1,12 @@
 package com.etp.questforhealth.unit.endpoint;
 
+import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.endpoint.UserEndpoint;
 import com.etp.questforhealth.endpoint.dto.UserDto;
 import com.etp.questforhealth.entity.User;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +31,9 @@ public class UserEndointTest {
     @Autowired
     UserEndpoint userEndpoint;
 
-    @AfterEach
-    public void tearDownDBData(){
-        userEndpoint.rollbackChanges();
+    @BeforeAll
+    public static void testData(){
+        DatabaseTestData.insertTestData();
     }
 
     @Test

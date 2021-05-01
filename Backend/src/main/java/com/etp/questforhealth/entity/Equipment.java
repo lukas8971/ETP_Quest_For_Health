@@ -13,7 +13,11 @@ public class Equipment {
     private EquipmentType type;
 
     public Equipment(int id, String name, String description, int price, int strength, EquipmentType type) {
+        this(name, description, price, strength, type);
         this.id = id;
+    }
+
+    public Equipment(String name, String description, int price, int strength, EquipmentType type) {
         this.name = name;
         this.description = description;
         this.price = price;

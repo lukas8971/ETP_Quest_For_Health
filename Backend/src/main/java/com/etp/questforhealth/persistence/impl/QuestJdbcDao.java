@@ -298,21 +298,6 @@ public class QuestJdbcDao implements QuestDao {
         return sqlTime;
     }
 
-
-
-    // to rollback data after tests
-    @Override
-    public void rollbackChanges() {
-        try {
-            if (questForHealthConn == null) makeJDBCConnection();
-            questForHealthConn.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
     public void makeJDBCConnection() {
         LOGGER.trace("makeJDBCConnection()");
         if (questForHealthConn == null) {

@@ -4,6 +4,8 @@ import com.etp.questforhealth.endpoint.dto.EquipmentDto;
 import com.etp.questforhealth.endpoint.mapper.EquipmentMapper;
 import com.etp.questforhealth.entity.Equipment;
 import com.etp.questforhealth.entity.UserEquipment;
+import com.etp.questforhealth.exception.NotEnoughGoldException;
+import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.EquipmentService;
@@ -48,6 +50,20 @@ public class EquipmentEndpoint {
         return equipmentDtoList;
     }
 
+    @GetMapping(value="/{id}")
+    public EquipmentDto getOneById(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/{}",id);
+        try{
+            return equipmentMapper.entityToDto(equipmentService.getOneById(id));
+        } catch (NotFoundException e){
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+    }
+
     /**
      * Gets all the available equipment for a user and type
      * @param user id to get the available equipment
@@ -77,7 +93,7 @@ public class EquipmentEndpoint {
      * @return the bought equipment
      */
     @PostMapping(value = "/buy")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public EquipmentDto buyNewEquipment(@RequestBody UserEquipment userEquipment) {
         LOGGER.info("POST " + BASE_URL + "/buy" + userEquipment);
         try {
@@ -85,6 +101,12 @@ public class EquipmentEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (NotEnoughGoldException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -95,14 +117,38 @@ public class EquipmentEndpoint {
      * @return the newly equipped item
      */
     @PostMapping(value = "/equip/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public EquipmentDto equipItem(@PathVariable("id") int id, @RequestBody EquipmentDto equipmentDto) {
-        LOGGER.info("POST " + BASE_URL + "/equip/{}" + equipmentDto, id);
+        LOGGER.info("POST " + BASE_URL + "/equip/{} " + equipmentDto, id);
         try {
             return equipmentMapper.entityToDto(equipmentService.equipItem(id, equipmentMapper.dtoToEntity(equipmentDto)));
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Unequips an item for a user
+     * @param id of the user that should unwear the equipment item
+     * @param equipmentDto that should be unworn
+     * @return true if worked
+     */
+    @PostMapping(value = "/unequip/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean unequipItem(@PathVariable("id") int id, @RequestBody EquipmentDto equipmentDto) {
+        LOGGER.info("POST " + BASE_URL + "/unequip/{} " + equipmentDto, id);
+        try {
+            return equipmentService.unequipItem(id, equipmentDto.getId());
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 }

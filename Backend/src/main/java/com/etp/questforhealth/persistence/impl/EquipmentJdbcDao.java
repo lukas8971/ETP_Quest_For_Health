@@ -23,6 +23,7 @@ public class EquipmentJdbcDao implements EquipmentDao {
     static Connection questForHealthConn = null;
     static String TABLE_NAME = "equipment";
     static String USER_WEARS_EQUIPMENT_TABLE_NAME ="user_wears_equipment";
+    static String USER_HAS_EQUIPMENT_TABLE_NAME = "user_has_equipment";
     @Value(value = "${spring.datasource.url}")
     String URL;
     @Value("${spring.datasource.username}")
@@ -36,7 +37,6 @@ public class EquipmentJdbcDao implements EquipmentDao {
     public List<Equipment> getWornEquipmentFromUserId(int userId) {
         LOGGER.trace("getWornEquipmentFromUserId({})", userId);
         makeJDBCConnection();
-        List<Equipment> equipmentList = new ArrayList<>();
         try{
             String query = "SELECT * FROM "+ USER_WEARS_EQUIPMENT_TABLE_NAME + " u" +
                     " INNER JOIN " + TABLE_NAME + " e ON u.equipment = e.id" +
@@ -44,14 +44,15 @@ public class EquipmentJdbcDao implements EquipmentDao {
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
             pstmnt.setInt(1, userId);
             ResultSet rs = pstmnt.executeQuery();
+            if (rs == null) return null;
+            List<Equipment> equipmentList = new ArrayList<>();
             while (rs.next()){
                 equipmentList.add(mapRow(rs));
             }
-
+            return equipmentList;
         } catch (SQLException e){
             throw new PersistenceException(e.getMessage(),e);
         }
-        return equipmentList;
     }
 
     private Equipment mapRow(ResultSet rs) throws SQLException {
@@ -82,7 +83,7 @@ public class EquipmentJdbcDao implements EquipmentDao {
         makeJDBCConnection();
         try {
             String query = "SELECT e.* FROM " + TABLE_NAME + " e " +
-                    "WHERE e.id NOT IN (SELECT uhe.equipment AS id FROM user_has_equipment uhe WHERE uhe.user = ?) AND " +
+                    "WHERE e.id NOT IN (SELECT uhe.equipment AS id FROM " + USER_HAS_EQUIPMENT_TABLE_NAME + " uhe WHERE uhe.user = ?) AND " +
                     "e.type = ?;";
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
             pstmnt.setInt(1, user);
@@ -116,20 +117,24 @@ public class EquipmentJdbcDao implements EquipmentDao {
     }
 
     @Override
-    public Equipment buyNewEquipment(UserEquipment userEquipment){
+    public boolean buyNewEquipment(UserEquipment userEquipment){
         LOGGER.trace("buyNewEquipment({})", userEquipment);
+        LOGGER.debug("buyNewEquipment({})", userEquipment);
         makeJDBCConnection();
+        LOGGER.debug("makeJDBCConnection done");
         try {
-            final String sql = "INSERT INTO user_has_equipment (user, equipment) " +
-                    " VALUES (?,?);";
-            PreparedStatement stmt = questForHealthConn.prepareStatement(sql);
+            String sql = "INSERT INTO " + USER_HAS_EQUIPMENT_TABLE_NAME + "(user, equipment) " +
+                    " VALUES(?,?);";
+            LOGGER.debug("sql: " + sql);
+            PreparedStatement stmt = questForHealthConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            LOGGER.debug("stmt done");
             stmt.setInt(1, userEquipment.getUserId());
+            LOGGER.debug("setInt user done");
             stmt.setInt(2, userEquipment.getEquipmentId());
-            int change = stmt.executeUpdate();
-            if (change > 0) {
-                return getOneById(userEquipment.getEquipmentId());
-            }
-            else throw new PersistenceException("Could not set new Equipment for user");
+            LOGGER.debug("setInt equipment done");
+            int rowsAffected = stmt.executeUpdate();
+            LOGGER.debug("rowsAffected: " + rowsAffected);
+            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }
@@ -140,7 +145,7 @@ public class EquipmentJdbcDao implements EquipmentDao {
         LOGGER.trace("getAllUserEquipments({})", id);
         makeJDBCConnection();
         try {
-            final String sql = "SELECT * FROM user_has_equipment WHERE user = ?;";
+            final String sql = "SELECT * FROM " + USER_HAS_EQUIPMENT_TABLE_NAME + " WHERE user = ?;";
             PreparedStatement stmt = questForHealthConn.prepareStatement(sql);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -160,13 +165,13 @@ public class EquipmentJdbcDao implements EquipmentDao {
         LOGGER.trace("checkIfUserOwnsEquipment({}, {})", usereId, equipmentId);
         makeJDBCConnection();
         try{
-            final String sql = "SELECT * FROM user_has_equipment WHERE user = ? AND equipment = ?;";
+            final String sql = "SELECT * FROM " + USER_HAS_EQUIPMENT_TABLE_NAME + " WHERE user = ? AND equipment = ?;";
             PreparedStatement stmt = questForHealthConn.prepareStatement(sql);
             stmt.setInt(1, usereId);
             stmt.setInt(2, equipmentId);
             ResultSet rs = stmt.executeQuery();
-            if (rs == null) return false;
-            return true;
+            if (rs != null && rs.next()) return true;
+            return false;
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }
@@ -176,8 +181,10 @@ public class EquipmentJdbcDao implements EquipmentDao {
     public Equipment getWornEquipmentByTypeAndUser(int user, EquipmentType type){
         LOGGER.trace("getWornEquipmentByTypeAndUser({}, {})", user, type);
         List<Equipment> eqs = getWornEquipmentFromUserId(user);
-        for (Equipment e: eqs) {
-            if (e.getType() == type) return e;
+        if (eqs.size() > 0) {
+            for (Equipment e : eqs) {
+                if (e.getType() == type) return e;
+            }
         }
         return null;
     }
@@ -208,7 +215,8 @@ public class EquipmentJdbcDao implements EquipmentDao {
             PreparedStatement stmt = questForHealthConn.prepareStatement(sql);
             stmt.setInt(1, userId);
             stmt.setInt(2, equipmentId);
-            return stmt.executeUpdate() > 0;
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows == 0 || affectedRows == 1;
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }
@@ -232,6 +240,32 @@ public class EquipmentJdbcDao implements EquipmentDao {
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public Equipment createNewEquipment(Equipment equipment) {
+        LOGGER.trace("createNewEquipment({})", equipment);
+        makeJDBCConnection();
+        try {
+            String query = "Insert into " + TABLE_NAME + " (name, description, price, strength, type)" +
+                    " values (?,?,?,?,?)";
+            PreparedStatement pstmtnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmtnt.setString(1, equipment.getName());
+            pstmtnt.setString(2, equipment.getDescription());
+            pstmtnt.setInt(3, equipment.getPrice());
+            pstmtnt.setInt(4, equipment.getStrength());
+            pstmtnt.setObject(5, EquipmentTypeMapper.enumToString(equipment.getType()));
+
+
+            pstmtnt.executeUpdate();
+            ResultSet rs = pstmtnt.getGeneratedKeys();
+            rs.next();
+            equipment.setId(rs.getInt(1));
+        }
+        catch (SQLException e){
+            throw new PersistenceException("Error while inserting equipment in database", e);
+        }
+        return equipment;
     }
 
     public void makeJDBCConnection() {

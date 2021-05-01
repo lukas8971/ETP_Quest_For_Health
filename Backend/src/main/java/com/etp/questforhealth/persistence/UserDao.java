@@ -14,8 +14,6 @@ public interface UserDao {
 
     User createUser(User user) throws PersistenceException;
 
-    void rollbackChanges();
-
     /**
      * Gets all users from a doctor from the persistent data store.
      * @param doctor that treats patients.

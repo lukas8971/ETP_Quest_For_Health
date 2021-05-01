@@ -59,18 +59,6 @@ public class CharacterLevelJdbcDao implements CharacterLevelDao {
         throw new NotFoundException("Could not find level " + id +" in the database.");
     }
 
-    @Override
-    public void rollbackChanges() {
-        LOGGER.trace("rollbackChanges()");
-        try {
-            if (questForHealthConn == null) makeJDBCConnection();
-            questForHealthConn.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     private CharacterLevel mapRow(ResultSet rs) throws SQLException {
         LOGGER.trace("mapRow({})", rs);
         return new CharacterLevel(rs.getInt("id"),

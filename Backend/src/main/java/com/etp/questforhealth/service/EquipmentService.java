@@ -52,4 +52,18 @@ public interface EquipmentService {
      * @throws RuntimeException if something went wrong
      */
     boolean unequipItem(int userId, int equipmentId);
+
+    /**
+     * Creates a new equipment
+     * @param equipment that should be created
+     * @return the created equipment
+     */
+    Equipment createNewEquipment(Equipment equipment);
+
+    /**
+     * Gets the equipment of the specific id
+     * @param id of the equipment
+     * @return the equipment of the id
+     */
+    Equipment getOneById(int id);
 }
