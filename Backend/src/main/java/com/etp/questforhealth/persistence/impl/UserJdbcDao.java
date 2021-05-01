@@ -42,7 +42,7 @@ public class UserJdbcDao implements UserDao {
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = pstmnt.executeQuery();
             while (rs.next()){
-                users.add(new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("character_name"), rs.getInt("character_strength"), rs.getInt("character_level"), rs.getInt("character_exp"), rs.getString("password"), rs.getString("email"), rs.getInt("story_chapter")));
+                users.add(mapRow(rs));
             }
         }catch (SQLException e){
             System.out.println("MySQL Connection Failed!");
@@ -56,8 +56,8 @@ public class UserJdbcDao implements UserDao {
         LOGGER.trace("createUser({})", user.toString());
         makeJDBCConnection();
         try {
-            String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp)" +
-                    " values (?,?,?,?,?,?,?,?,?)";
+            String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp,character_gold)" +
+                    " values (?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement pstmtnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmtnt.setString(1, user.getFirstname());
             pstmtnt.setString(2, user.getLastname());
@@ -68,6 +68,7 @@ public class UserJdbcDao implements UserDao {
             pstmtnt.setInt(7, user.getCharacterLevel());
             pstmtnt.setInt(8, user.getCharacterStrength());
             pstmtnt.setInt(9, user.getCharacterExp());
+            pstmtnt.setInt(10, user.getCharacterGold());
 
 
             pstmtnt.executeUpdate();
@@ -196,7 +197,8 @@ public class UserJdbcDao implements UserDao {
                 rs.getInt("character_exp"),
                 rs.getString("password"),
                 rs.getString("email"),
-                rs.getInt("story_chapter")
+                rs.getInt("story_chapter"),
+                rs.getInt("character_gold")
         );
     }
 

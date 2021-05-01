@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `user` (
                                       `character_strength` INT NOT NULL,
                                       `character_level` INT NOT NULL,
                                       `character_exp` INT NOT NULL,
+                                      `character_gold` INT NOT NULL,
                                       `password` VARCHAR(512) NOT NULL,
                                       `email` VARCHAR(255) NULL,
                                       `story_chapter` INT NOT NULL,
