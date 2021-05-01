@@ -137,6 +137,18 @@ public class QuestEndpoint {
     }
 
     /**
+     * Gets all missed repetitive quests for User
+     * @param id to get due quests for user
+     * @return a list of all missed quests for the user
+     */
+    @GetMapping(value="/missedQuests/{id}")
+    @ResponseBody
+    public List<QuestDto> getAllMissedQuestsForUser(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/missedQuests/{}", id);
+        return questMapper.entityToDto(questService.getAllMissedQuestsForUser(id));
+    }
+
+    /**
      * Gets all one-time open quests for User
      * @param id to get open quests for user
      * @return a list of all open one-time quests for the user

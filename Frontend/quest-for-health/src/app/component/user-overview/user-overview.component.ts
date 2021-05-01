@@ -1,14 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Quest} from "../../dto/quest";
 import {MatTableDataSource} from "@angular/material/table";
 import {QuestService} from "../../service/quest.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import * as moment from "moment";
-import {Duration} from "moment";
 import {MatSort} from '@angular/material/sort';
 import {UserService} from "../../service/user.service";
 import {User} from "../../dto/user";
 import {UserQuest} from "../../dto/userQuest";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {UserQuests} from "../../dto/userQuests";
 
 @Component({
   selector: 'app-user-overview',
@@ -35,12 +35,11 @@ export class UserOverviewComponent implements OnInit {
     this.oneTimeSort = ms;
     this.oneTimeDatSource.sort = this.oneTimeSort;
   }
-  constructor(private questService:QuestService, private userService:UserService, private snackBar: MatSnackBar) { }
+  constructor(private questService:QuestService, private userService:UserService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
 
   ngOnInit(): void {
-    this.loadRepetitiveQuests();
-    this.loadOneTimeQuests();
+    this.loadQuests()
     this.loadUser();
   }
 
@@ -53,6 +52,39 @@ export class UserOverviewComponent implements OnInit {
         this.defaultServiceErrorHandling(error);
       }
     )
+  }
+  loadQuests(){
+    this.questService.getAllMissedQuestsForUser(Number(sessionStorage.getItem('userId'))).subscribe(
+      (q: Quest[]) => {
+        if(q.length === 0){
+          this.loadRepetitiveQuests();
+          this.loadOneTimeQuests();
+        } else{
+          this.openDialog(q);
+        }
+      }
+    )
+  }
+
+  openDialog(quests: Quest[]):void {
+    const dialogRef = this.dialog.open(MissedQuestsDialog, {
+      width: '50%',
+      data: {quests: quests }
+    });
+    dialogRef.afterClosed().subscribe(result =>{
+      let userQuests = () : UserQuests =>({
+        quests: quests,
+        user:this.user
+      })
+      this.userService.dismissMissedQuests(userQuests()).subscribe(
+        (u:User) => {
+          this.user = u;
+          this.loadRepetitiveQuests();
+          this.loadOneTimeQuests();
+        }
+      )
+
+    })
   }
 
   loadUser(){
@@ -121,4 +153,36 @@ export class UserOverviewComponent implements OnInit {
     )
   }
 
+}
+
+export interface DialogData {
+  quests: Quest[];
+}
+
+@Component(
+  {
+    selector:'missed-quest-dialog',
+    templateUrl: 'missed-quest-dialog.html',
+  })
+export class MissedQuestsDialog{
+  constructor(private dialogRef: MatDialogRef<MissedQuestsDialog>,@Inject(MAT_DIALOG_DATA) public data: DialogData ) {
+    }
+  close(): void{
+    this.dialogRef.close();
+
+  }
+  getTotalGoldPenalty(): number {
+    let goldPenalty = 0;
+    this.data.quests.forEach(function (quest) {
+      goldPenalty += quest.gold_penalty;
+    })
+    return goldPenalty;
+  }
+  getTotalExpPenalty(): number {
+    let expPenalty = 0;
+    this.data.quests.forEach(function (quest) {
+      expPenalty += quest.exp_penalty;
+    })
+    return expPenalty;
+  }
 }

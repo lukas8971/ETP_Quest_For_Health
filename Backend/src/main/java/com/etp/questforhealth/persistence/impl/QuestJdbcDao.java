@@ -166,6 +166,8 @@ public class QuestJdbcDao implements QuestDao {
         String mysqlTime = rs.getString("repetition_cycle");
         if (mysqlTime == null) mysqlTime = "00:00:00";
         quest.setRepetition_cycle(parseRepetitionCycle(mysqlTime));
+        quest.setExp_penalty(rs.getInt("exp_penalty"));
+        quest.setGold_penalty(rs.getInt("gold_penalty"));
         Date dueDate = rs.getDate("OldDueOn");
         if (dueDate == null) dueDate = rs.getDate("NewDueOn");
         quest.setDueDate(dueDate);
@@ -225,9 +227,10 @@ public class QuestJdbcDao implements QuestDao {
         try {
             List<Quest> questList = new ArrayList<>();
             //HOLY MOLY THATS A BIG QUERY
-            String query = "select q.id, q.name, q.description, q.exp_reward, q.gold_reward, q.repetition_cycle, max(ADDTIME(uaq.accepted_on, q.repetition_cycle)) as NewDueOn, max(ADDTIME(ucq.completed_on, q.repetition_cycle)) as OldDueOn from user_accepted_quest uaq " +
+            String query = "select q.id, q.name, q.description, q.exp_reward, q.gold_reward, d.exp_penalty, d.gold_penalty, q.repetition_cycle, max(ADDTIME(uaq.accepted_on, q.repetition_cycle)) as NewDueOn, max(ADDTIME(ucq.completed_on, q.repetition_cycle)) as OldDueOn from user_accepted_quest uaq " +
                     "inner join quest q on q.id = uaq.quest " +
                     "left join user_completed_quest ucq on q.id = ucq.quest and uaq.user = ucq.user " +
+                    "left join doctor_quest d on d.id = q.id " +
                     "where uaq.quest not in( " +
                     "  select ucq.quest from user_completed_quest ucq " +
                     "\tinner join quest q on q.id = ucq.quest " +
@@ -330,6 +333,39 @@ public class QuestJdbcDao implements QuestDao {
             return val > 0;
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllMissedQuestsForUser(int userId) {
+        LOGGER.trace("getAllMissedQuestsForUser({})", userId);
+        makeJDBCConnection();
+        try{
+            List<Quest> retVal = new ArrayList<>();
+            String query = "select q.id, q.name, q.description, q.exp_reward, q.gold_reward, q.repetition_cycle, d.exp_penalty, d.gold_penalty, max(ADDTIME(uaq.accepted_on, q.repetition_cycle)) as NewDueOn, max(ADDTIME(ucq.completed_on, q.repetition_cycle)) as OldDueOn from user_accepted_quest uaq " +
+                    "                    inner join quest q on q.id = uaq.quest " +
+                    "                    left join user_completed_quest ucq on q.id = ucq.quest and uaq.user = ucq.user " +
+                    "                    left join doctor_quest d on d.id = q.id " +
+                    "                    where uaq.quest not in( " +
+                    "                      select ucq.quest from user_completed_quest ucq " +
+                    "                    inner join quest q on q.id = ucq.quest " +
+                    "                    where ucq.user = ?  " +
+                    "                      AND ADDTIME(ucq.completed_on, q.repetition_cycle) > CURRENT_DATE " +
+                    "                      ) and uaq.user = ? " +
+                    "                      and q.repetition_cycle IS NOT NULL " +
+                    "                        group by q.id, q.name, q.description, q.exp_reward, q.gold_reward, q.repetition_cycle " +
+                    "                       HAVING NewDueOn < CURRENT_DATE AND (OldDueOn IS NULL OR OldDueOn < CURRENT_DATE) " +
+                    "                        ;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1,userId);
+            pstmnt.setInt(2,userId);
+            ResultSet rs = pstmnt.executeQuery();
+            while(rs.next()){
+                retVal.add(mapRowDueQuests(rs));
+            }
+            return retVal;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
         }
     }
 

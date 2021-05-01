@@ -48,4 +48,12 @@ public interface UserService {
      */
     User completeQuest(User user, Quest quest);
 
+    /**
+     * Dismisses missed Quests so that they do not appear again and sets gold, exp and character level according to the penalties
+     * @param user the user who missed the quests
+     * @param missedQuests the missed quests
+     * @return the updated user
+     */
+    User dismissMissedQuests(User user, List<Quest> missedQuests);
+
 }

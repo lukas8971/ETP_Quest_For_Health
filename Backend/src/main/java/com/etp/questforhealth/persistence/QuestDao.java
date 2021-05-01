@@ -88,6 +88,13 @@ public interface QuestDao {
     */
    boolean deleteAssignedDoctorQuestForUser(int quest, int user);
 
+    /**
+     * Gets all repetitive Quests the user has missed
+     * @param userId the id of the user for which to check
+     * @return A list of all quests the user missed
+     */
+   List<Quest> getAllMissedQuestsForUser (int userId);
+
    /**
     * Adds a new assigned doctor quest for a patient
     * @param acceptedQuest the quest that should be added

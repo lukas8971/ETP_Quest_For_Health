@@ -10,6 +10,7 @@ import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.persistence.QuestDao;
+import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.DoctorService;
 import com.etp.questforhealth.service.QuestService;
 
@@ -30,6 +31,7 @@ public class QuestServiceImpl implements QuestService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final QuestDao questDao;
+    private final UserDao userDao;
 
     private final QuestValidator questValidator;
     private final Validator validator;
@@ -37,11 +39,12 @@ public class QuestServiceImpl implements QuestService {
 
 
     @Autowired
-    public QuestServiceImpl(QuestDao questDao, Validator validator, QuestValidator questValidator, DoctorService doctorService){
+    public QuestServiceImpl(QuestDao questDao, Validator validator, QuestValidator questValidator, DoctorService doctorService, UserDao userDao){
         this.questDao = questDao;
         this.questValidator = questValidator;
         this.validator = validator;
         this.doctorService = doctorService;
+        this.userDao = userDao;
 
     }
 
@@ -89,6 +92,23 @@ public class QuestServiceImpl implements QuestService {
         LOGGER.trace("getAllQuestsDueForUser({})", userId);
         try{
             return questDao.getAllQuestsDueForUser(userId);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllMissedQuestsForUser(int userId) {
+        LOGGER.trace("getAllMissedQuestsForUser({})", userId);
+        try{
+            List<Quest> missedQuests = questDao.getAllMissedQuestsForUser(userId);
+            //Insert quests into completed-table but mark them as uncompleted so that the user only gets notified once
+            /*for (Quest q: missedQuests){
+                userDao.completeQuest(userId,q.getId(),false);
+            }
+
+             */
+            return missedQuests;
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
         }

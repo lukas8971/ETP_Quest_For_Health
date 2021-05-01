@@ -61,6 +61,13 @@ public interface UserDao {
     boolean checkUserNameExists(String userName);
 
     /**
+     * Saves the updated user to the database
+     * @param user the user to update
+     * @return true if successful
+     */
+    boolean updateUser(User user);
+
+    /**
      * Adds or subtracts gold and exp to a user
      * @param user the user to change gold and exp
      * @param expChange the change in exp (positive: user gets exp, negative: user loses exp)
@@ -69,11 +76,4 @@ public interface UserDao {
      */
     User changeUserGoldAndExp (User user, int expChange, int goldChange);
 
-    /**
-     * sets the character level of a user
-     * @param user the user
-     * @param levelId the new level-id
-     * @return the updated user
-     */
-    User setCharacterLevel (User user, int levelId);
 }

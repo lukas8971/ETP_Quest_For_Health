@@ -8,6 +8,7 @@ import com.etp.questforhealth.endpoint.mapper.UserMapper;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.entity.UserQuest;
+import com.etp.questforhealth.entity.UserQuests;
 import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ServiceException;
@@ -82,6 +83,16 @@ public class UserEndpoint {
         LOGGER.info("POST" + BASE_URL + "/completeQuest");
         try{
             return userMapper.entityToDto(userService.completeQuest(userQuest.getUser(), userQuest.getQuest()));
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
+        }
+    }
+    @PostMapping(value="/dismissQuests")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto dismissQuest(@RequestBody UserQuests userQuests){
+        LOGGER.info("POST" + BASE_URL + "/dismissQuests");
+        try{
+            return userMapper.entityToDto(userService.dismissMissedQuests(userQuests.getUser(), userQuests.getQuests()));
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }

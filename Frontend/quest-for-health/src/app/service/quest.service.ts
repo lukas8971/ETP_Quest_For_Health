@@ -92,6 +92,10 @@ export class QuestService {
     console.log('getAllQuestsDueForUser(' +user+')');
     return this.httpClient.get<Quest[]>(baseUri+'/dueQuests/'+user);
   }
+  getAllMissedQuestsForUser(user:number): Observable<Quest[]>{
+    console.log('getAllMissedQuestsForUser(' +user+')');
+    return this.httpClient.get<Quest[]>(baseUri+'/missedQuests/'+user);
+  }
 
   getAllOpenOneTimeQuestsForUser(user:number): Observable<Quest[]>{
     console.log('getAllOpenOneTimeQuestsForUser('+user+')');

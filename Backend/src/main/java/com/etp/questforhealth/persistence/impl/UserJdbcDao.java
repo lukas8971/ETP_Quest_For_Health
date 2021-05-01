@@ -189,6 +189,32 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public boolean updateUser(User user) {
+        LOGGER.trace("updateUser({})", user.toString());
+        makeJDBCConnection();
+        try{
+            String query = "update user set firstname = ?, lastname = ?, character_name = ?, character_strength = ?, character_level = ?, character_exp = ?, password =?, email= ?, story_chapter= ?, character_gold= ? where id = ?;";
+
+            PreparedStatement preparedStatement = questForHealthConn.prepareStatement(query);
+            preparedStatement.setString(1, user.getFirstname());
+            preparedStatement.setString(2, user.getLastname());
+            preparedStatement.setString(3, user.getCharacterName());
+            preparedStatement.setInt(4, user.getCharacterStrength());
+            preparedStatement.setInt(5, user.getCharacterLevel());
+            preparedStatement.setInt(6,user.getCharacterExp());
+            preparedStatement.setString(7,user.getPassword());
+            preparedStatement.setString(8, user.getEmail());
+            preparedStatement.setInt(9, user.getStoryChapter());
+            preparedStatement.setInt(10, user.getCharacterGold());
+            preparedStatement.setInt(11, user.getId());
+            int val = preparedStatement.executeUpdate();
+            return val >0;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public User changeUserGoldAndExp(User user, int expChange, int goldChange) {
         LOGGER.trace("changeUserGoldAndExp({},{},{})", user.toString(), expChange,goldChange);
         makeJDBCConnection();
@@ -203,24 +229,6 @@ public class UserJdbcDao implements UserDao {
             if (val <=0) throw new SQLException("Update: No rows altered!");
             user.setCharacterExp(user.getCharacterExp()+expChange);
             user.setCharacterGold(user.getCharacterGold()+goldChange);
-            return user;
-        } catch (SQLException e){
-            throw new PersistenceException(e.getMessage(),e);
-        }
-    }
-
-    @Override
-    public User setCharacterLevel(User user, int levelId) {
-        LOGGER.trace("setCharacterLevel({},{})", user.toString(), levelId);
-        makeJDBCConnection();
-        try{
-            String query = "update user set character_level = ? where id = ?;";
-            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
-            pstmnt.setInt(1, levelId);
-            pstmnt.setInt(2, user.getId());
-            int val = pstmnt.executeUpdate();
-            if (val <=0) throw new SQLException("Update: No rows altered!");
-            user.setCharacterLevel(levelId);
             return user;
         } catch (SQLException e){
             throw new PersistenceException(e.getMessage(),e);
