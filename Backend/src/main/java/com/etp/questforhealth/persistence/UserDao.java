@@ -46,9 +46,10 @@ public interface UserDao {
      * User completed a quest
      * @param userId the id of the user
      * @param questId the id of the quest
+     * @param complete true if the user completed the quest, false if the quest's deadline is over
      * @return  true if successful
      */
-    boolean completeQuest(int userId, int questId);
+    boolean completeQuest(int userId, int questId, boolean complete);
 
     /**
      * Checks if a User with the specified username exist.

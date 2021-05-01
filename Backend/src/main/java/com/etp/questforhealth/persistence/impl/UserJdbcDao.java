@@ -155,15 +155,16 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public boolean completeQuest(int userId, int questId) {
+    public boolean completeQuest(int userId, int questId, boolean complete) {
         LOGGER.trace("completeQuest({},{})", userId,questId);
         makeJDBCConnection();
         try {
-            String query ="insert into user_completed_quest(user,quest,completed_on) "+
-                    "values (?,?,CURRENT_DATE)";
+            String query ="insert into user_completed_quest(user,quest,completed_on,completed) "+
+                    "values (?,?,CURRENT_DATE,?)";
             PreparedStatement preparedStatement = questForHealthConn.prepareStatement(query);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2,questId);
+            preparedStatement.setBoolean(3,complete);
             int val  = preparedStatement.executeUpdate();
             return val > 0;
         } catch (SQLException e){

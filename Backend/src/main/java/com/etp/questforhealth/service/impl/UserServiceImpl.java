@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public User completeQuest(User user, Quest quest) {
         LOGGER.trace("completeQuest({},{})", user.toString(), quest.toString());
         try{
-            userDao.completeQuest(user.getId(), quest.getId());
+            userDao.completeQuest(user.getId(), quest.getId(), true);
             CharacterLevel currentLevel = characterLevelDao.getCharacterLevelById(user.getCharacterLevel());
             User updatedUser = userDao.changeUserGoldAndExp(user, quest.getExp_reward(), quest.getGold_reward());
             CharacterLevel nextLevel = characterLevelDao.getCharacterLevelByExp(updatedUser.getCharacterExp());

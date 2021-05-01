@@ -202,6 +202,7 @@ CREATE TABLE IF NOT EXISTS `user_completed_quest` (
                                                       `user` INT NOT NULL,
                                                       `quest` INT NOT NULL,
                                                       `completed_on` DATE NOT NULL,
+                                                      `completed` BOOLEAN NOT NULL,
                                                       PRIMARY KEY (`id`),
                                                       INDEX `fk_user_has_quest_quest2_idx` (`quest` ASC),
                                                       INDEX `fk_user_has_quest_user2_idx` (`user` ASC),
