@@ -60,6 +60,23 @@ public class CharacterLevelJdbcDao implements CharacterLevelDao {
     }
 
     @Override
+    public CharacterLevel getCharacterLevelByExp(int exp) {
+        LOGGER.trace("getCharacterLevelByExp({})", exp);
+        makeJDBCConnection();
+        try{
+            String query = "select * from character_level where needed_exp <= ? " +
+                    "order by level desc LIMIT 1 ;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, exp);
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) return mapRow(rs);
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+        throw new NotFoundException("Could not find level with " + exp + " or less exp in the database.");
+    }
+
+    @Override
     public void rollbackChanges() {
         LOGGER.trace("rollbackChanges()");
         try {

@@ -186,6 +186,46 @@ public class UserJdbcDao implements UserDao {
         }
         return false;
     }
+
+    @Override
+    public User changeUserGoldAndExp(User user, int expChange, int goldChange) {
+        LOGGER.trace("changeUserGoldAndExp({},{},{})", user.toString(), expChange,goldChange);
+        makeJDBCConnection();
+        try{
+            String query = "UPDATE user SET character_exp = character_exp + ?, character_gold = character_gold + ? " +
+                    "WHERE id = ?;";
+            PreparedStatement pstmnt= questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, expChange);
+            pstmnt.setInt(2, goldChange);
+            pstmnt.setInt(3,user.getId());
+            int val = pstmnt.executeUpdate();
+            if (val <=0) throw new SQLException("Update: No rows altered!");
+            user.setCharacterExp(user.getCharacterExp()+expChange);
+            user.setCharacterGold(user.getCharacterGold()+goldChange);
+            return user;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public User setCharacterLevel(User user, int levelId) {
+        LOGGER.trace("setCharacterLevel({},{})", user.toString(), levelId);
+        makeJDBCConnection();
+        try{
+            String query = "update user set character_level = ? where id = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, levelId);
+            pstmnt.setInt(2, user.getId());
+            int val = pstmnt.executeUpdate();
+            if (val <=0) throw new SQLException("Update: No rows altered!");
+            user.setCharacterLevel(levelId);
+            return user;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
     private User mapRow(ResultSet rs) throws SQLException {
         LOGGER.trace("mapRow({})", rs);
         return new User(rs.getInt("id"),

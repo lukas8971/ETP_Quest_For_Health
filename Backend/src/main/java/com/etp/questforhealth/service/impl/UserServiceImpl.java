@@ -1,11 +1,13 @@
 package com.etp.questforhealth.service.impl;
 
+import com.etp.questforhealth.entity.CharacterLevel;
 import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
+import com.etp.questforhealth.persistence.CharacterLevelDao;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.Validator;
@@ -24,12 +26,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final UserDao userDao;
+    private final CharacterLevelDao characterLevelDao;
     private final Validator validator;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, Validator validator) {
+    public UserServiceImpl(UserDao userDao, Validator validator, CharacterLevelDao characterLevelDao) {
         this.userDao = userDao;
         this.validator = validator;
+        this.characterLevelDao = characterLevelDao;
     }
 
 
@@ -71,7 +75,15 @@ public class UserServiceImpl implements UserService {
         LOGGER.trace("completeQuest({},{})", user.toString(), quest.toString());
         try{
             userDao.completeQuest(user.getId(), quest.getId());
-            return user;
+            CharacterLevel currentLevel = characterLevelDao.getCharacterLevelById(user.getCharacterLevel());
+            User updatedUser = userDao.changeUserGoldAndExp(user, quest.getExp_reward(), quest.getGold_reward());
+            CharacterLevel nextLevel = characterLevelDao.getCharacterLevelByExp(updatedUser.getCharacterExp());
+            if(!(currentLevel.equals(nextLevel))){
+                updatedUser.setCharacterStrength(updatedUser.getCharacterStrength() + (nextLevel.getTotal_strength() - currentLevel.getTotal_strength()));
+                 updatedUser = userDao.setCharacterLevel(updatedUser, nextLevel.getId());
+
+            }
+            return updatedUser;
         }catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
         }

@@ -58,4 +58,21 @@ public interface UserDao {
      * @throws NotFoundException if no user with that username was found.
      */
     boolean checkUserNameExists(String userName);
+
+    /**
+     * Adds or subtracts gold and exp to a user
+     * @param user the user to change gold and exp
+     * @param expChange the change in exp (positive: user gets exp, negative: user loses exp)
+     * @param goldChange the change in gold
+     * @return the updated user
+     */
+    User changeUserGoldAndExp (User user, int expChange, int goldChange);
+
+    /**
+     * sets the character level of a user
+     * @param user the user
+     * @param levelId the new level-id
+     * @return the updated user
+     */
+    User setCharacterLevel (User user, int levelId);
 }
