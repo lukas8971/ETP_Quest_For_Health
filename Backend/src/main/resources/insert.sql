@@ -63,7 +63,14 @@ insert into equipment (name,description,price,strength,type) values
 ('Wool Jacket', 'Your basic jacket for the winter.',15,4,'torso'),
 ('Farm Trousers', 'Ideal for working at the farm.',8,2,'legs'),
 ('Wooden Stick', 'A stick some kid found in the woods. It really is nothing special.', 5,1,'right hand'),
-('Piece of Bark', 'This bark fell from a tree during the last storm. Looks kinda cool though.',5,1,'left hand');
+('Piece of Bark', 'This bark fell from a tree during the last storm. Looks kinda cool though.',5,1,'left hand'),
+('Giant Hat', 'A giant hat that distracts others.', 10, 2, 'head'),
+('Summer Gloves', 'Fancy gloves for the rich.', 30, 2, 'arms'),
+('Windshield', 'A jacket that protects you against windy days.', 18, 5, 'torso'),
+('Worker Trousers', 'A pair of trousers that you can wear for all kind of work.', 12, 4, 'legs'),
+('Wooden Stick with Thorns', 'This stick can hurt if used correctly. Pay attention that you do not hurt yourself.', 9, 3, 'Right hand'),
+('Glued Wood', 'It helps to weaken some attacks, but breaks pretty easy.', 8, 5, 'Left hand');
+
 
 
 SET FOREIGN_KEY_CHECKS=1;

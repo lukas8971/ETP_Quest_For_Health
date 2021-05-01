@@ -42,6 +42,28 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
+    public Equipment getEquipmentOfTypeWornByUserId(EquipmentType type, int id){
+        LOGGER.trace("getEquipmentOfTypeWornByUserId({}, {})", type, id);
+        validator.validateExistingUser(id);
+        try{
+            return equipmentDao.getEquipmentOfTypeWornByUserId(type, id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Equipment> getAvailableEquipmentToEquip(EquipmentType type, int id){
+        LOGGER.trace("getAvailableEquipmentToEquip({}, {})", type, id);
+        validator.validateExistingUser(id);
+        try{
+            return equipmentDao.getAvailableEquipmentToEquip(type, id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
     public List<Equipment> getAvailableEquipmentByTypeAndId(int user, String type){
         LOGGER.trace("getAvailableEquipmentByTypeAndId({}, {})", user, type);
         try{

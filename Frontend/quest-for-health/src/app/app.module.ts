@@ -34,6 +34,8 @@ import { ShopComponent } from './component/shop/shop.component';
 import { EquipmentComponentComponent } from './component/equipment-component/equipment-component.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSortModule} from '@angular/material/sort';
+import { UserEquipmentComponent } from './component/user-equipment/user-equipment.component';
+import { EquippedItemComponent } from './component/equipped-item/equipped-item.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import {MatSortModule} from '@angular/material/sort';
     UserBrowseQuestsComponent,
     CreateDoctorQuestComponent,
     ShopComponent,
-    EquipmentComponentComponent
+    EquipmentComponentComponent,
+    UserEquipmentComponent,
+    EquippedItemComponent
   ],
   imports: [
     BrowserModule,

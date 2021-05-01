@@ -4,6 +4,7 @@ import com.etp.questforhealth.endpoint.dto.EquipmentDto;
 import com.etp.questforhealth.endpoint.mapper.EquipmentMapper;
 import com.etp.questforhealth.entity.Equipment;
 import com.etp.questforhealth.entity.UserEquipment;
+import com.etp.questforhealth.entity.enums.mapper.EquipmentTypeMapper;
 import com.etp.questforhealth.exception.NotEnoughGoldException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ServiceException;
@@ -50,6 +51,59 @@ public class EquipmentEndpoint {
         return equipmentDtoList;
     }
 
+    /**
+     * Gets the worn equipment of the type and the user id
+     * @param type of the equipment
+     * @param id of the user
+     * @return the worn equipment of type by an user
+     */
+    @GetMapping(value="/type/{type}/wornByUser/{id}")
+    public EquipmentDto getEquipmentOfTypeWornByUserId(@PathVariable("type") String type, @PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/type/{}/wornByUser/{}", type, id);
+        try{
+            Equipment e = equipmentService.getEquipmentOfTypeWornByUserId(EquipmentTypeMapper.stringToEnum(type), id);
+            if (e == null) return null;
+            return equipmentMapper.entityToDto(e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Gets all the available (bought) equipment for a user that is not worn
+     * @param type of the equipment
+     * @param id of the user
+     * @return the equipment that can be worn by an user
+     */
+    @GetMapping(value="/type/{type}/toEquipFor/{id}")
+    public List<EquipmentDto> getAvailableEquipmentToEquip(@PathVariable("type") String type, @PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/type/{}/toEquipFor/{}", type, id);
+        try{
+            List<Equipment> eq = equipmentService.getAvailableEquipmentToEquip(EquipmentTypeMapper.stringToEnum(type), id);
+            if (eq == null || eq.size() == 0) return null;
+            List<EquipmentDto> eqDto = new ArrayList<>();
+            for (Equipment e: eq) {
+                eqDto.add(equipmentMapper.entityToDto(e));
+            }
+            return eqDto;
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Gets the equipment with the id
+     * @param id of the equipment
+     * @return the equipment of the id
+     */
     @GetMapping(value="/{id}")
     public EquipmentDto getOneById(@PathVariable("id") int id){
         LOGGER.info("GET " + BASE_URL + "/{}",id);

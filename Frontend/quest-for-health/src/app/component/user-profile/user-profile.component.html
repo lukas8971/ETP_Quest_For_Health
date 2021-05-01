@@ -28,7 +28,7 @@
       <mat-grid-tile>Next Level-up in</mat-grid-tile>
       <mat-grid-tile>{{neededExp}} exp</mat-grid-tile>
       <mat-grid-tile>Strength</mat-grid-tile>
-      <mat-grid-tile colspan="4"> <div class="info"> {{user.characterStrength}}</div></mat-grid-tile>
+      <mat-grid-tile colspan="4"> <div class="info"> {{strength}} <!--{{user.characterStrength}}--></div></mat-grid-tile>
       <mat-grid-tile>Gold</mat-grid-tile>
       <mat-grid-tile colspan="4"> <div class="info"> {{user.characterGold}}</div></mat-grid-tile>
     </mat-grid-list>
@@ -43,69 +43,108 @@
         <mat-grid-tile colspan="4">
           <div class="info">
             <div *ngIf="headEquipment">
-              {{headEquipment.name}}
+              {{headEquipment.name}} ({{headEquipment.strength}} st)
             </div>
             <div *ngIf="!headEquipment">
               None
             </div>
+          </div>
+          <div>
+            <button mat-stroked-button (click)="changeEquipment('head')"> Change </button>
           </div>
         </mat-grid-tile>
         <mat-grid-tile>Torso</mat-grid-tile>
         <mat-grid-tile colspan="4">
           <div class="info">
             <div *ngIf="torsoEquipment">
-              {{torsoEquipment.name}}
+              {{torsoEquipment.name}} ({{torsoEquipment.strength}} st)
             </div>
             <div *ngIf="!torsoEquipment">
               None
             </div>
+          </div>
+          <div>
+            <button mat-stroked-button (click)="changeEquipment('torso')"> Change </button>
           </div>
         </mat-grid-tile>
         <mat-grid-tile>Arms</mat-grid-tile>
         <mat-grid-tile colspan="4">
           <div class="info">
             <div *ngIf="armsEquipment">
-              {{armsEquipment.name}}
+              {{armsEquipment.name}} ({{armsEquipment.strength}} st)
             </div>
             <div *ngIf="!armsEquipment">
               None
             </div>
+          </div>
+          <div>
+            <button mat-stroked-button (click)="changeEquipment('arms')"> Change </button>
           </div>
         </mat-grid-tile>
         <mat-grid-tile>Right Hand</mat-grid-tile>
         <mat-grid-tile colspan="4">
           <div class="info">
             <div *ngIf="rightHandEquipment">
-              {{rightHandEquipment.name}}
+              {{rightHandEquipment.name}} ({{rightHandEquipment.strength}} st)
             </div>
             <div *ngIf="!rightHandEquipment">
               None
             </div>
+          </div>
+          <div>
+            <button mat-stroked-button (click)="changeEquipment('right hand')"> Change </button>
           </div>
         </mat-grid-tile>
         <mat-grid-tile>Left Hand</mat-grid-tile>
         <mat-grid-tile colspan="4">
           <div class="info">
             <div *ngIf="leftHandEquipment">
-              {{leftHandEquipment.name}}
+              {{leftHandEquipment.name}} ({{leftHandEquipment.strength}} st)
             </div>
             <div *ngIf="!leftHandEquipment">
               None
             </div>
+          </div>
+          <div>
+            <button mat-stroked-button (click)="changeEquipment('left hand')"> Change </button>
           </div>
         </mat-grid-tile>
         <mat-grid-tile>Legs</mat-grid-tile>
         <mat-grid-tile colspan="4">
           <div class="info">
             <div *ngIf="legsEquipment">
-              {{legsEquipment.name}}
+              {{legsEquipment.name}} ({{legsEquipment.strength}} st)
             </div>
             <div *ngIf="!legsEquipment">
               None
             </div>
           </div>
+          <div>
+            <button mat-stroked-button (click)="changeEquipment('legs')"> Change </button>
+          </div>
         </mat-grid-tile>
       </mat-grid-list>
+      <mat-card class="mat-elevation-z2" *ngIf="head || torso || arms || legs || rHand || lHand">
+        <mat-card-title>
+          <div *ngIf="head">Head equipment</div>
+          <div *ngIf="torso">Torso equipment</div>
+          <div *ngIf="arms">Arms equipment</div>
+          <div *ngIf="legs">Legs equipment</div>
+          <div *ngIf="rHand">Right hand equipment</div>
+          <div *ngIf="lHand">Left hand equipment</div>
+        </mat-card-title><br>
+        <mat-card>
+          <app-user-equipment *ngIf="head" type="head" (changedEvent)="childChanged()"></app-user-equipment>
+          <app-user-equipment *ngIf="torso" type="torso" (changedEvent)="childChanged()"></app-user-equipment>
+          <app-user-equipment *ngIf="arms" type="arms" (changedEvent)="childChanged()"></app-user-equipment>
+          <app-user-equipment *ngIf="legs" type="legs" (changedEvent)="childChanged()"></app-user-equipment>
+          <app-user-equipment *ngIf="rHand" type="right hand" (changedEvent)="childChanged()"></app-user-equipment>
+          <app-user-equipment *ngIf="lHand" type="left hand" (changedEvent)="childChanged()"></app-user-equipment>
+        </mat-card>
+      </mat-card>
     </mat-expansion-panel>
   </mat-expansion-panel>
 </mat-accordion>
+
+
+

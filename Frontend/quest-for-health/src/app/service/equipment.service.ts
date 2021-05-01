@@ -3,7 +3,6 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {Equipment} from '../dto/equipment';
-import {Quest} from '../dto/quest';
 import {UserEquipment} from '../dto/user-equipment';
 
 const baseUri = environment.backendUrl + '/equipment';
@@ -17,9 +16,53 @@ export class EquipmentService {
 
   constructor(private httpClient: HttpClient) { }
 
+  /**
+   * Gets all the worn equipments of an user
+   * @param id of the user
+   */
   getEquipmentWornByUserId(id: number): Observable<Equipment[]> {
     console.log('getEquipmentWornByUserId');
     return this.httpClient.get<Equipment[]>(baseUri + '/wornByUser/' + id);
+  }
+
+  /**
+   * Gets the currently worn equipment of a specific type of an user
+   * @param type of the worn equipment
+   * @param id of the user
+   */
+  getEquipmentOfTypeWornByUserId(type: string, id: number): Observable<Equipment> {
+    console.log('getEquipmentOfTypeWornByUserId');
+    return this.httpClient.get<Equipment>(baseUri + '/type/' + type + '/wornByUser/' + id);
+  }
+
+  /**
+   * Gets all the bought equipments of a type except the curently equipped item
+   * @param type of the equipment
+   * @param id of the user
+   */
+  getAvailableEquipmentToEquip(type: string, id: number): Observable<Equipment[]> {
+    console.log('getAvailableEquipmentToEquip');
+    return this.httpClient.get<Equipment[]>(baseUri + '/type/' + type + '/toEquipFor/' + id);
+  }
+
+  /**
+   * Unequips an item that is currently worn by a user
+   * @param id of the user
+   * @param eq that should be unworn
+   */
+  unequip(id: number, eq: Equipment): Observable<boolean>{
+    console.log('unequip');
+    const unequipBody = JSON.stringify(eq);
+    return this.httpClient.post<boolean>(baseUri + '/unequip/' + id, unequipBody, this.httpOption);
+  }
+
+  /**
+   * Gets the quipment of the id
+   * @param id of the equipment
+   */
+  getOneById(id: number): Observable<Equipment> {
+    console.log('getOneById');
+    return this.httpClient.get<Equipment>(baseUri + '/' + id);
   }
 
   /**

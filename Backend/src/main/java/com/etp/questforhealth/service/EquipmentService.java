@@ -3,15 +3,31 @@ package com.etp.questforhealth.service;
 import com.etp.questforhealth.entity.Equipment;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.UserEquipment;
-import com.etp.questforhealth.exception.NotEnoughGoldException;
-import com.etp.questforhealth.exception.NotFoundException;
-import com.etp.questforhealth.exception.PersistenceException;
-import com.etp.questforhealth.exception.ValidationException;
+import com.etp.questforhealth.entity.enums.EquipmentType;
+import com.etp.questforhealth.exception.*;
 
 import java.util.List;
 
 public interface EquipmentService {
     List<Equipment> getWornEquipmentFromUserId (int userId);
+
+    /**
+     * Gets the worn equipment of an user by its equipment type
+     * @param type of the equipment
+     * @param id of the user
+     * @return the worn equipment by the user
+     * @throws RuntimeException if something went wrong
+     */
+    Equipment getEquipmentOfTypeWornByUserId(EquipmentType type, int id);
+
+    /**
+     * Gets all the available (bought) equipment for a user that is not worn
+     * @param type of the equipment
+     * @param id of the user
+     * @return the equipment that can be worn by an user
+     * @throws RuntimeException if something went wrong
+     */
+    List<Equipment> getAvailableEquipmentToEquip(EquipmentType type, int id);
 
     /**
      * Gets all the available equipment for a user and type

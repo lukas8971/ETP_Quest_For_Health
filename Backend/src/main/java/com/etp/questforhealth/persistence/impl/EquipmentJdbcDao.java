@@ -55,6 +55,49 @@ public class EquipmentJdbcDao implements EquipmentDao {
         }
     }
 
+    public Equipment getEquipmentOfTypeWornByUserId(EquipmentType type, int id){
+        LOGGER.trace("getEquipmentOfTypeWornByUserId({}, {})", type, id);
+        makeJDBCConnection();
+        try{
+            String query = "SELECT * FROM "+ USER_WEARS_EQUIPMENT_TABLE_NAME + " u" +
+                    " INNER JOIN " + TABLE_NAME + " e ON u.equipment = e.id" +
+                    " WHERE u.user = ? AND e.type = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, id);
+            pstmnt.setObject(2, EquipmentTypeMapper.enumToString(type));
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) return mapRow(rs);
+            return null;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
+    public List<Equipment> getAvailableEquipmentToEquip(EquipmentType type, int id){
+        LOGGER.trace("getAvailableEquipmentToEquip({}, {})", type, id);
+        makeJDBCConnection();
+        try{
+            String query = "SELECT * FROM "+ USER_HAS_EQUIPMENT_TABLE_NAME + " u" +
+                    " INNER JOIN " + TABLE_NAME + " e ON u.equipment = e.id" +
+                    " WHERE u.user = ? AND e.type = ? AND u.equipment NOT IN" +
+                    " (SELECT x.equipment FROM " + USER_WEARS_EQUIPMENT_TABLE_NAME + " x WHERE x.user = ?)" +
+                    " ORDER BY e.strength DESC;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, id);
+            pstmnt.setObject(2, EquipmentTypeMapper.enumToString(type));
+            pstmnt.setInt(3, id);
+            ResultSet rs = pstmnt.executeQuery();
+            List<Equipment> equipment = new ArrayList<>();
+            while(rs.next()) {
+                equipment.add(mapRow(rs));
+            }
+            if (equipment.size() > 0) return equipment;
+            return null;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
     private Equipment mapRow(ResultSet rs) throws SQLException {
         LOGGER.trace("mapRow({})", rs);
         return new Equipment(rs.getInt("id"),

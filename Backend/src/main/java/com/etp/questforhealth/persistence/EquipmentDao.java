@@ -12,6 +12,24 @@ public interface EquipmentDao {
     List<Equipment> getWornEquipmentFromUserId (int userId);
 
     /**
+     * Gets the worn equipment of an user by its equipment type
+     * @param type of the equipment
+     * @param id of the user
+     * @return the worn equipment by the user
+     * @throws PersistenceException if something went wrong
+     */
+    Equipment getEquipmentOfTypeWornByUserId(EquipmentType type, int id);
+
+    /**
+     * Gets all the available (bought) equipment for a user that is not worn
+     * @param type of the equipment
+     * @param id of the user
+     * @return the equipment that can be worn by an user
+     * @throws PersistenceException if something went wrong
+     */
+    List<Equipment> getAvailableEquipmentToEquip(EquipmentType type, int id);
+
+    /**
      * Gets all the available equipment for a user and type
      * @param user id to get the available equipment
      * @param type of the equipment to display

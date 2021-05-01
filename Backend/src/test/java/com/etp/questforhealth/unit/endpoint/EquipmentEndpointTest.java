@@ -234,4 +234,18 @@ public class EquipmentEndpointTest {
             assertTrue(head, "Head equipment is not worn!");
         });
     }
+
+    @Test
+    @DisplayName("Getting not existing equipment type should throw ResponseStatusException")
+    public void get_notExistingEquipmentType_shouldThrowResponseStatusException() {
+        assertThrows(ResponseStatusException.class, () -> {
+            equipmentEndpoint.getEquipmentOfTypeWornByUserId("not existing", 1);
+        });
+    }
+
+    @Test
+    @DisplayName("Requesting available user equipment to equip of no equipment is present should return null")
+    public void requestingNotAvailableEquipment_toEquip_shouldReturnNull() {
+        assertNull(equipmentEndpoint.getAvailableEquipmentToEquip("torso", 1));
+    }
 }
