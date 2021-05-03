@@ -10,6 +10,8 @@ import {QuestService} from '../../service/quest.service';
 import {Quest} from '../../dto/quest';
 import {AcceptedQuest} from '../../dto/accepted-quest';
 import {MatTableDataSource} from '@angular/material/table';
+import {CreateDoctorQuest} from "../../dto/createDoctorQuest";
+import {CreateDoctorQuestDialog} from "../create-doctor-quest/create-doctor-quest-dialog.component";
 
 @Component({
   selector: 'app-patient-doctor-quest',
@@ -216,6 +218,13 @@ export class PatientDoctorQuestComponent implements OnInit {
 
   createDoctorQuest() {
     console.log("createDoctorQuest();");
-    this.router.navigate(['doctors/createquest'], {replaceUrl: true});
+    const dialogRef = this.dialog.open(CreateDoctorQuestDialog, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.getAvailablePatientDoctorQuests(Number(sessionStorage.getItem('id')), Number(this.patient.id));
+    });
   }
+
 }
