@@ -1,6 +1,7 @@
 package com.etp.questforhealth.service;
 
 import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.entity.CompletedQuest;
 import com.etp.questforhealth.entity.CreateDoctorQuest;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -83,4 +84,8 @@ public interface QuestService {
      * @throws IllegalArgumentException if the given data is forbidden.
      */
     boolean addAssignedDoctorQuestForUser(AcceptedQuest acceptedQuest);
+
+    List<AcceptedQuest> getAllAcceptedQuestForUser(int user);
+
+    List<CompletedQuest> getAllCompletedQuestForUser(int user);
 }

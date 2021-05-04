@@ -2,6 +2,7 @@ package com.etp.questforhealth.persistence;
 
 
 import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.entity.CompletedQuest;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
@@ -92,4 +93,7 @@ public interface QuestDao {
     */
    boolean checkIfQuestAlreadyAccepted(AcceptedQuest acceptedQuest);
 
+    List<AcceptedQuest> getAllAcceptedQuestForUser(int user);
+
+    List<CompletedQuest> getAllCompletedQuestForUser(int user);
 }

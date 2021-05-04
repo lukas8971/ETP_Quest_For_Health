@@ -1,0 +1,27 @@
+.center-small{
+  min-width: 450px;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.my-grid-list{
+  width: 500px;
+}
+
+.grid-layout-custom{
+  width: 50px;
+  height: 20px;
+}
+
+.my-text-area{
+  height: 100%;
+  width: 100%;
+}
+
+
+.mat-form-field.fill-container textarea {
+  height: calc(100% - 25px);
+}

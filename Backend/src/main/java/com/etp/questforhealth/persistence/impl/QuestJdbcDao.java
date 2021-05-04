@@ -1,6 +1,7 @@
 package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.entity.CompletedQuest;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
@@ -370,4 +371,69 @@ public class QuestJdbcDao implements QuestDao {
             throw new PersistenceException(e.getMessage(), e);
         }
     }
+
+    @Override
+    public List<AcceptedQuest> getAllAcceptedQuestForUser(int user) {
+        LOGGER.trace("getAllAcceptedQuestForUser({})",user);
+        makeJDBCConnection();
+        List<AcceptedQuest> list = new ArrayList<AcceptedQuest>();
+
+        try {
+            final String query = "SELECT * FROM user_accepted_quest WHERE user = ?";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1,user);
+            ResultSet rs = pstmnt.executeQuery();
+            if(rs != null){
+                while(rs.next()){
+                    list.add(mapRowAcceptedQuest(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+        return list;
+    }
+
+    @Override
+    public List<CompletedQuest> getAllCompletedQuestForUser(int user) {
+        LOGGER.trace("getAllCompletedQuestForUser({})",user);
+        makeJDBCConnection();
+        List<CompletedQuest> list = new ArrayList<CompletedQuest>();
+
+        try {
+            final String query = "SELECT * FROM user_completed_quest WHERE user = ?";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1,user);
+            ResultSet rs = pstmnt.executeQuery();
+            if(rs != null){
+                while(rs.next()){
+                    list.add(mapRowCompletedQuest(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+        return list;
+    }
+
+    private AcceptedQuest mapRowAcceptedQuest(ResultSet rs) throws SQLException {
+        LOGGER.trace("mapRowAcceptedQuest({})",rs);
+        AcceptedQuest aq = new AcceptedQuest();
+        aq.setQuest(rs.getInt("quest"));
+        aq.setUser(rs.getInt("user"));
+        aq.setAcceptedOn(rs.getDate("accepted_on").toLocalDate());
+        return aq;
+    }
+
+    private CompletedQuest mapRowCompletedQuest(ResultSet rs) throws SQLException {
+        LOGGER.trace("mapRowCompletedQuest({})",rs);
+        CompletedQuest aq = new CompletedQuest();
+        aq.setQuest(rs.getInt("quest"));
+        aq.setUser(rs.getInt("user"));
+        aq.setCompletedOn(rs.getDate("completed_on").toLocalDate());
+        //aq.setCompleted(rs.getBoolean("completed"));
+        return aq;
+    }
+
+
 }

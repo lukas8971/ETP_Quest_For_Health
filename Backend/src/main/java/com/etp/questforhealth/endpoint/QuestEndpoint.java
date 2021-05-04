@@ -1,8 +1,12 @@
 package com.etp.questforhealth.endpoint;
 
 
+import com.etp.questforhealth.endpoint.dto.AcceptedQuestDto;
+import com.etp.questforhealth.endpoint.dto.CompletedQuestDto;
 import com.etp.questforhealth.endpoint.dto.CreateDoctorQuestDto;
 import com.etp.questforhealth.endpoint.dto.QuestDto;
+import com.etp.questforhealth.endpoint.mapper.AcceptedQuestMapper;
+import com.etp.questforhealth.endpoint.mapper.CompletedQuestMapper;
 import com.etp.questforhealth.endpoint.mapper.CreateDoctorQuestMapper;
 import com.etp.questforhealth.endpoint.mapper.QuestMapper;
 import com.etp.questforhealth.entity.AcceptedQuest;
@@ -30,12 +34,16 @@ public class QuestEndpoint {
     private final QuestService questService;
     private final QuestMapper questMapper;
     private final CreateDoctorQuestMapper createDoctorQuestMapper;
+    private final AcceptedQuestMapper acceptedQuestMapper;
+    private final CompletedQuestMapper completedQuestMapper;
 
     @Autowired
-    public QuestEndpoint(QuestService questService, QuestMapper questMapper, CreateDoctorQuestMapper createDoctorQuestMapper){
+    public QuestEndpoint(QuestService questService, QuestMapper questMapper, CreateDoctorQuestMapper createDoctorQuestMapper, AcceptedQuestMapper acceptedQuestMapper, CompletedQuestMapper completedQuestMapper){
         this.questService = questService;
         this.questMapper = questMapper;
         this.createDoctorQuestMapper = createDoctorQuestMapper;
+        this.acceptedQuestMapper = acceptedQuestMapper;
+        this.completedQuestMapper = completedQuestMapper;
     }
 
     /**
@@ -169,6 +177,30 @@ public class QuestEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(value="/accepted/{user}")
+    @ResponseBody
+    public List<AcceptedQuestDto> getAllAcceptedQuestForUser(@PathVariable("user") int user){
+        LOGGER.info("GET "+ BASE_URL + "/accepted/{}",user);
+        try{
+            return acceptedQuestMapper.entityToDto(questService.getAllAcceptedQuestForUser(user));
+        } catch (NotFoundException e){
+            LOGGER.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(value="/completed/{user}")
+    @ResponseBody
+    public List<CompletedQuestDto> getAllCompletedQuestForUser(@PathVariable("user") int user){
+        LOGGER.info("GET "+ BASE_URL + "/completed/{}",user);
+        try{
+            return completedQuestMapper.entityToDto(questService.getAllCompletedQuestForUser(user));
+        } catch (NotFoundException e){
+            LOGGER.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 }
