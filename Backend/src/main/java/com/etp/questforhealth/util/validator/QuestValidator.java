@@ -30,7 +30,6 @@ public class QuestValidator {
         validateGoldReward(quest.getGold_reward());
         validateExpPenalty(quest.getExp_penalty());
         validateGoldPenalty(quest.getGold_penalty());
-        // TODO Validate Doctor
     }
 
     private void validateName(String name) {
@@ -66,6 +65,7 @@ public class QuestValidator {
 
     private void validateRepetitionCycle(Duration d) {
         LOGGER.trace("validateRepetitionCycle({})",d);
+        if(d.toHours() > 838) throw new ValidationException("The repetition cycle must not exceed 383 hours! That's about 34 days.");
         if(d.isNegative()) throw new ValidationException("The repetition cycle must be a positive time duration!");
     }
 
