@@ -56,7 +56,7 @@ export class UserProfileComponent implements OnInit {
         this.chararacterLevelService.getCharacterLevelByLevel(c.level + 1).subscribe(
           (d: CharacterLevel) => {
             this.nextLevel = d;
-            this.neededExp =d.neededExp-this.user.characterExp;
+            this.neededExp = d.neededExp - this.user.characterExp;
             this.currentLevel = c;
 
           }
@@ -111,15 +111,13 @@ export class UserProfileComponent implements OnInit {
    */
   public calculateStrength(): void{
     console.log('Calculate strength');
-    let s = 0;
-    s = this.user.characterStrength;
-    if (this.headEquipment !== null && this.headEquipment !== undefined) { s += this.headEquipment.strength; }
-    if (this.armsEquipment !== null && this.armsEquipment !== undefined) { s += this.armsEquipment.strength; }
-    if (this.torsoEquipment !== null && this.torsoEquipment !== undefined) { s += this.torsoEquipment.strength; }
-    if (this.rightHandEquipment !== null && this.rightHandEquipment !== undefined) { s += this.rightHandEquipment.strength; }
-    if (this.leftHandEquipment !== null && this.leftHandEquipment !== undefined) { s += this.leftHandEquipment.strength; }
-    if (this.legsEquipment !== null && this.legsEquipment !== undefined) { s += this.legsEquipment.strength; }
-    this.strength = s;
+    this.userService.getUserStrength(this.user.id).subscribe(
+      (s: number) => {
+        this.strength = s;
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
   }
 
   private getEquipmentOfType(type: string): Equipment{

@@ -18,8 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -36,9 +35,9 @@ public class UserPersistenceTest {
     }
 
     @Test
-    @DisplayName("Requesting an empty user list should return null")
+    @DisplayName("Requesting an initial user list should return not null")
     public void requestingEmptyUserList_shouldReturnNull() {
-        assertEquals(new ArrayList<>(), userDao.getAll());
+        assertNotNull(userDao.getAll());
     }
 
     @Test

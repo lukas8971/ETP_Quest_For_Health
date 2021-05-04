@@ -77,6 +77,22 @@ public class UserEndpoint {
         }
     }
 
+    /**
+     * Returns the strength of a user
+     * @param id of the user to get its strength
+     * @return the strength of a user
+     */
+    @GetMapping(value="/{id}/strength")
+    public int getUserStrength(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/{}/strength",id);
+        try{
+            return userService.getUserStrength(id);
+        } catch (NotFoundException e){
+            LOGGER.error("Could not find user with id {} " + e, id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find user",e);
+        }
+    }
+
     @PostMapping(value="/completeQuest")
     @ResponseStatus(HttpStatus.OK)
     public UserDto completeQuest(@RequestBody UserQuest userQuest){

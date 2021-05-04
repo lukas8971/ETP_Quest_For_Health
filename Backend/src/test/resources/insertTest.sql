@@ -1,8 +1,6 @@
-use
-Quest_For_Health;
+use Quest_For_Health_Test;
 
-SET
-FOREIGN_KEY_CHECKS=0;
+SET FOREIGN_KEY_CHECKS=0;
 
 INSERT INTO quest (id, name, description, exp_reward, gold_reward, repetition_cycle)
 VALUES (1, 'Trink Wasser', 'Trinke über den Tag verteilt mindestens 2 Liter Wasser.', 10, 1, TIME ('24:00:00')),

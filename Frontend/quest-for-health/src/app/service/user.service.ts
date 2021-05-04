@@ -29,6 +29,15 @@ export class UserService {
   }
 
   /**
+   * Gets the strength of a user including the equipment
+   * @param id of the user
+   */
+  getUserStrength(id: number): Observable<number> {
+    console.log('Get user strength');
+    return this.httpClient.get<number>(baseUri + '/' + id + '/strength');
+  }
+
+  /**
    * Get the information about one user
    * @param id of the user to get the information for
    */

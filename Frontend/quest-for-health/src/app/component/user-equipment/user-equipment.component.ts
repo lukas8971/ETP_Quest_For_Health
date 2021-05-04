@@ -85,6 +85,8 @@ export class UserEquipmentComponent implements OnInit {
    */
   public equip(e: Equipment): void{
     console.log('equip');
+    this.equippedEquipment = null;
+    this.equipped = false;
     this.equipmentService.equipItem(this.userId, e).subscribe(
       (eq: Equipment) => {
         this.selectedEquipment = null;

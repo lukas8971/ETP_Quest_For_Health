@@ -32,6 +32,13 @@ public interface UserService {
     User getOneById(int id);
 
     /**
+     * Returns the strength of a user
+     * @param id of the user to get its strength
+     * @return the strength of a user
+     */
+    int getUserStrength(int id);
+
+    /**
      * Checks if a User with the specified credentials exist.
      * @param cred user credentials.
      * @return the user with the specific credentials.

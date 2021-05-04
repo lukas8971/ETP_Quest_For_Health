@@ -1,6 +1,6 @@
 
-<app-equipped-item equipmentId="{{equippedEquipment.id}}" *ngIf="equipped" (changedEvent)="itemChanged()"></app-equipped-item>
-<app-equipped-item equipmentId="-1" *ngIf="!equipped" (changedEvent)="itemChanged()"></app-equipped-item>
+<app-equipped-item *ngIf="equipped" equipmentId="{{equippedEquipment.id}}" (changedEvent)="itemChanged()"></app-equipped-item>
+<app-equipped-item *ngIf="!equipped" equipmentId="-1" (changedEvent)="itemChanged()"></app-equipped-item>
 
 <div class="side-margin">
   <table style="width: 100%">
