@@ -41,6 +41,15 @@ public interface UserDao {
     User checkLogin(Credentials cred);
 
     /**
+     * User completed a quest
+     * @param userId the id of the user
+     * @param questId the id of the quest
+     * @param complete true if the user completed the quest, false if the quest's deadline is over
+     * @return  true if successful
+     */
+    boolean completeQuest(int userId, int questId, boolean complete);
+
+    /**
      * Checks if a User with the specified username exist.
      * @param userName user name.
      * @return true if found, otherwise false;
@@ -48,6 +57,23 @@ public interface UserDao {
      * @throws NotFoundException if no user with that username was found.
      */
     boolean checkUserNameExists(String userName);
+
+    /**
+     * Saves the updated user to the database
+     * @param user the user to update
+     * @return true if successful
+     */
+    boolean updateUser(User user);
+
+    /**
+     * Adds or subtracts gold and exp to a user
+     * @param user the user to change gold and exp
+     * @param expChange the change in exp (positive: user gets exp, negative: user loses exp)
+     * @param goldChange the change in gold
+     * @return the updated user
+     */
+    User changeUserGoldAndExp (User user, int expChange, int goldChange);
+
 
     /**
      * Changes the gold of a user

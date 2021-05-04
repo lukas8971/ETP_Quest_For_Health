@@ -42,7 +42,7 @@ public class UserJdbcDao implements UserDao {
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = pstmnt.executeQuery();
             while (rs.next()){
-                users.add(new User(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("character_name"), rs.getInt("character_strength"), rs.getInt("character_level"), rs.getInt("character_exp"), rs.getInt("character_gold"), rs.getString("password"), rs.getString("email"), rs.getInt("story_chapter")));
+                users.add(mapRow(rs));
             }
         }catch (SQLException e){
             System.out.println("MySQL Connection Failed!");
@@ -145,6 +145,24 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public boolean completeQuest(int userId, int questId, boolean complete) {
+        LOGGER.trace("completeQuest({},{})", userId,questId);
+        makeJDBCConnection();
+        try {
+            String query ="insert into user_completed_quest(user,quest,completed_on,completed) "+
+                    "values (?,?,CURRENT_DATE,?)";
+            PreparedStatement preparedStatement = questForHealthConn.prepareStatement(query);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2,questId);
+            preparedStatement.setBoolean(3,complete);
+            int val  = preparedStatement.executeUpdate();
+            return val > 0;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public boolean checkUserNameExists(String userName) {
         LOGGER.trace("checkUserNameExists({})",userName);
         makeJDBCConnection();
@@ -159,6 +177,54 @@ public class UserJdbcDao implements UserDao {
         }
         return false;
     }
+
+    @Override
+    public boolean updateUser(User user) {
+        LOGGER.trace("updateUser({})", user.toString());
+        makeJDBCConnection();
+        try{
+            String query = "update user set firstname = ?, lastname = ?, character_name = ?, character_strength = ?, character_level = ?, character_exp = ?, password =?, email= ?, story_chapter= ?, character_gold= ? where id = ?;";
+
+            PreparedStatement preparedStatement = questForHealthConn.prepareStatement(query);
+            preparedStatement.setString(1, user.getFirstname());
+            preparedStatement.setString(2, user.getLastname());
+            preparedStatement.setString(3, user.getCharacterName());
+            preparedStatement.setInt(4, user.getCharacterStrength());
+            preparedStatement.setInt(5, user.getCharacterLevel());
+            preparedStatement.setInt(6,user.getCharacterExp());
+            preparedStatement.setString(7,user.getPassword());
+            preparedStatement.setString(8, user.getEmail());
+            preparedStatement.setInt(9, user.getStoryChapter());
+            preparedStatement.setInt(10, user.getCharacterGold());
+            preparedStatement.setInt(11, user.getId());
+            int val = preparedStatement.executeUpdate();
+            return val >0;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public User changeUserGoldAndExp(User user, int expChange, int goldChange) {
+        LOGGER.trace("changeUserGoldAndExp({},{},{})", user.toString(), expChange,goldChange);
+        makeJDBCConnection();
+        try{
+            String query = "UPDATE user SET character_exp = character_exp + ?, character_gold = character_gold + ? " +
+                    "WHERE id = ?;";
+            PreparedStatement pstmnt= questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, expChange);
+            pstmnt.setInt(2, goldChange);
+            pstmnt.setInt(3,user.getId());
+            int val = pstmnt.executeUpdate();
+            if (val <=0) throw new SQLException("Update: No rows altered!");
+            user.setCharacterExp(user.getCharacterExp()+expChange);
+            user.setCharacterGold(user.getCharacterGold()+goldChange);
+            return user;
+        } catch (SQLException e){
+            throw new PersistenceException(e.getMessage(),e);
+        }
+    }
+
     private User mapRow(ResultSet rs) throws SQLException {
         LOGGER.trace("mapRow({})", rs);
         return new User(rs.getInt("id"),
@@ -171,7 +237,8 @@ public class UserJdbcDao implements UserDao {
                 rs.getInt("character_gold"),
                 rs.getString("password"),
                 rs.getString("email"),
-                rs.getInt("story_chapter")
+                rs.getInt("story_chapter"),
+                rs.getInt("character_gold")
         );
     }
 

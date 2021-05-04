@@ -14,12 +14,13 @@ public class User {
     private String password;
     private String email;
     private int storyChapter;
+    private int characterGold;
 
     public User(){
 
     }
 
-    public User(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, int characterGold, String password, String email, int storyChapter) {
+    public User(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, String password, String email, int storyChapter, int characterGold) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -31,6 +32,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
+        this.characterGold = characterGold;
     }
 
     public User (int id, String firstname, String lastname){
@@ -123,7 +125,13 @@ public class User {
         this.characterLevel = characterLevel;
     }
 
+    public int getCharacterGold() {
+        return characterGold;
+    }
 
+    public void setCharacterGold(int characterGold) {
+        this.characterGold = characterGold;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -136,6 +144,7 @@ public class User {
                 characterExp == user.characterExp &&
                 characterGold == user.characterGold &&
                 storyChapter == user.storyChapter &&
+                characterGold == user.characterGold &&
                 Objects.equals(firstname, user.firstname) &&
                 Objects.equals(lastname, user.lastname) &&
                 Objects.equals(characterName, user.characterName) &&
@@ -145,7 +154,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterLevel, characterExp, characterGold, password, email, storyChapter);
+        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterLevel, characterExp, password, email, storyChapter, characterGold);
     }
 
     @Override

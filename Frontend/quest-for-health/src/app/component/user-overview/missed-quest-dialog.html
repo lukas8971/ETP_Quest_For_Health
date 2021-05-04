@@ -1,0 +1,16 @@
+<h1 mat-dialog-title> You missed some Quests </h1>
+<div mat-card-content>
+  <p>It seems like you forgot some Quests:</p>
+  <mat-list>
+    <mat-list-item *ngFor="let quest of data.quests">
+      {{quest.name}}
+    </mat-list-item>
+  </mat-list>
+  <div *ngIf="getTotalExpPenalty() == 0 && getTotalGoldPenalty() == 0">Luckily, you will not get any penalty for that, but still try to complete them next time.</div>
+  <div *ngIf="getTotalGoldPenalty() != 0 && getTotalGoldPenalty() != 0">You lose {{getTotalExpPenalty()}} exp and {{getTotalGoldPenalty()}} gold. </div>
+  <div *ngIf="getTotalGoldPenalty() != 0 && getTotalExpPenalty() == 0">You lose {{getTotalGoldPenalty()}} gold.</div>
+  <div *ngIf="getTotalGoldPenalty() == 0 && getTotalExpPenalty() != 0">You lose {{getTotalExpPenalty()}} exp.</div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Ok</button>
+  </div>
+</div>

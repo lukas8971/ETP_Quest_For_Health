@@ -10,6 +10,9 @@ import {QuestService} from '../../service/quest.service';
 import {Quest} from '../../dto/quest';
 import {AcceptedQuest} from '../../dto/accepted-quest';
 import {MatTableDataSource} from '@angular/material/table';
+import {CreateDoctorQuest} from "../../dto/createDoctorQuest";
+import {CreateDoctorQuestDialog} from "../create-doctor-quest/create-doctor-quest-dialog.component";
+import {CompletedQuest} from "../../dto/completed-quest";
 
 @Component({
   selector: 'app-patient-doctor-quest',
@@ -23,13 +26,19 @@ export class PatientDoctorQuestComponent implements OnInit {
   doctor: any;
   assignedQuests: any[] = [];
   availableQuests: any[] = [];
+  history: HistoryQuest[] = [];
+
   showAvailable = false;
   showAssigned = false;
 
   dataSourceAssigned = new MatTableDataSource(this.assignedQuests);
   dataSourceAvailable = new MatTableDataSource(this.availableQuests);
+  dataSourceHistory = new MatTableDataSource(this.history);
 
   questHeader = ['name', 'description', 'id'];
+  historyHeader = ['name', 'description', 'accept_date','complete_date']
+
+  showHistory=false;
 
   constructor(private doctorService: DoctorService, private userService: UserService,
               private dialog: MatDialog, private questService: QuestService, private route: ActivatedRoute, private router: Router) {
@@ -40,6 +49,7 @@ export class PatientDoctorQuestComponent implements OnInit {
           this.getUserById(Number(queryParams.user), Number(sessionStorage.getItem('id')));
           this.getAssignedPatientDoctorQuests(Number(sessionStorage.getItem('id')), Number(queryParams.user));
           this.getAvailablePatientDoctorQuests(Number(sessionStorage.getItem('id')), Number(queryParams.user));
+          this.getPatientQuestHistory(Number(queryParams.user));
         }
       }
     });
@@ -67,6 +77,15 @@ export class PatientDoctorQuestComponent implements OnInit {
   }
 
   /**
+   * Filter for the quest history
+   * @param event the given filter
+   */
+  public applyFilterHistory(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceHistory.filter = filterValue.trim().toLowerCase();
+  }
+
+  /**
    * Remove a doctor assigned quest from a patient
    * @param id of the quest that should be removed from the patient
    */
@@ -78,6 +97,7 @@ export class PatientDoctorQuestComponent implements OnInit {
           this.resetValues();
           this.getAvailablePatientDoctorQuests(this.doctor.id, this.patient.id);
           this.getAssignedPatientDoctorQuests(this.doctor.id, this.patient.id);
+          this.getPatientQuestHistory(this.patient.id);
         }
         else{
           this.dialog.open(ErrorDialogComponent, {
@@ -104,6 +124,7 @@ export class PatientDoctorQuestComponent implements OnInit {
           this.resetValues();
           this.getAvailablePatientDoctorQuests(this.doctor.id, this.patient.id);
           this.getAssignedPatientDoctorQuests(this.doctor.id, this.patient.id);
+          this.getPatientQuestHistory(this.patient.id);
         }
         else{
           this.dialog.open(ErrorDialogComponent, {
@@ -127,6 +148,9 @@ export class PatientDoctorQuestComponent implements OnInit {
     this.assignedQuests = [];
     this.dataSourceAssigned = new MatTableDataSource(this.assignedQuests);
     this.showAssigned = false;
+    this.history = [];
+    this.dataSourceHistory = new MatTableDataSource(this.history);
+    this.showHistory = false;
   }
 
   /**
@@ -216,6 +240,67 @@ export class PatientDoctorQuestComponent implements OnInit {
 
   createDoctorQuest() {
     console.log("createDoctorQuest();");
-    this.router.navigate(['doctors/createquest'], {replaceUrl: true});
+    const dialogRef = this.dialog.open(CreateDoctorQuestDialog, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.getAvailablePatientDoctorQuests(Number(sessionStorage.getItem('id')), Number(this.patient.id));
+    });
   }
+
+  showPatientHistory() {
+    this.showHistory = !this.showHistory;
+  }
+
+  /**
+   * Gets quest history of the patient
+   * @param patient to load history from
+   */
+  private getPatientQuestHistory(patient: number): void {
+    console.log('getPatientQuestHistory('+patient+')');
+
+    // accepted Quests
+    this.questService.getAcceptedQuestsForUser(patient).subscribe(
+      (accepted: AcceptedQuest[]) => {
+        for (let aq of accepted){
+          this.questService.getQuestById(aq.quest).subscribe(
+            (q: Quest) => {
+              let hq: HistoryQuest = {quest:q, acceptedOn:aq.acceptedOn, }
+              this.history.push(hq);
+            }
+          )
+        }
+
+        // completed Quests
+        let completed: CompletedQuest[] = [];
+        this.questService.getCompletedQuestsForUser(patient).subscribe(
+          (completed: CompletedQuest[]) => {
+
+            for (let cq of completed){
+              this.questService.getQuestById(cq.quest).subscribe(
+                (q: Quest) => {
+                  let hq: HistoryQuest = {quest:q, completedOn:cq.completedOn, }
+                  this.history.push(hq);
+                }
+              )
+            }
+          },
+          error => {
+            this.defaultServiceErrorHandling(error);
+          }
+        );
+      },
+      error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+}
+
+interface HistoryQuest {
+    quest: Quest;
+    acceptedOn?: Date;
+    completedOn?: Date;
+    //completed?: boolean;
 }

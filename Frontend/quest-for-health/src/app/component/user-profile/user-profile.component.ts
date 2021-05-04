@@ -23,6 +23,7 @@ export class UserProfileComponent implements OnInit {
   rightHandEquipment: any;
   leftHandEquipment: any;
   legsEquipment: any;
+  currentLevel: any;
 
   head = false;
   torso = false;
@@ -55,7 +56,9 @@ export class UserProfileComponent implements OnInit {
         this.chararacterLevelService.getCharacterLevelByLevel(c.level + 1).subscribe(
           (d: CharacterLevel) => {
             this.nextLevel = d;
-            this.neededExp = d.neededExp - this.user.characterExp;
+            this.neededExp =d.neededExp-this.user.characterExp;
+            this.currentLevel = c;
+
           }
         );
       }, error => {

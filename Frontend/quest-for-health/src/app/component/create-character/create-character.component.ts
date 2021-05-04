@@ -25,13 +25,11 @@ export class CreateCharacterComponent implements OnInit {
     id: 0,
     characterStrength: 0,
     characterLevel: 0,
-    storyChapter: 0,
-    characterExp: 0,
-    characterGold: 0
+    storyChapter:0,
+    characterExp:0,
+    characterGold:0
   };
-
-  constructor(private snackBar: MatSnackBar, private formBuilder: FormBuilder, private userService: UserService,
-              private dialog: MatDialog, private router: Router) {
+  constructor(private snackBar: MatSnackBar, private formBuilder: FormBuilder, private userService: UserService , private dialog: MatDialog, private router: Router) {
      this.form = this.formBuilder.group({
        firstname: [this.user.firstname, Validators.required],
        lastname: [this.user.lastname, Validators.required],

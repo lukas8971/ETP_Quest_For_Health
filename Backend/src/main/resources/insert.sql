@@ -10,7 +10,8 @@ INSERT INTO quest (id, name, description, exp_reward, gold_reward, repetition_cy
     (5,'Created by Steinhardt', 'Doc Quest 2', 5, 3, TIME('24:00:00')),
     (6,'Assigned to User 4', 'Created by Steinhardt', 1, 1, TIME('48:00:00')),
     (7,'Assigned to User 2', 'Created by Test Doc', 2, 5, NULL),
-    (8,'Test Doc not assigned', 'Test Doc Inc', 20, 7, NULL);
+    (8,'Test Doc not assigned', 'Test Doc Inc', 20, 7, NULL),
+    (9,'Do 50 Pushups', 'Gonna get those gainz', 10,3,TIME('72:00:00'));
 
 insert into doctor_quest (id, doctor, exp_penalty, gold_penalty)
 values (4, 2, 1, 0),
@@ -20,7 +21,17 @@ values (4, 2, 1, 0),
 
 insert into user_accepted_quest(user, quest, accepted_on)
 VALUES (4, 6, '2021-04-19'),
-       (2, 7, '2021-04-19');
+       (2, 7, '2021-04-19'),
+       (6, 1, '2021-02-10'),
+       (6, 5, '2021-04-18');
+
+insert into user_completed_quest(user, quest, completed_on)
+VALUES (4, 6, '2021-03-17'),
+       (3, 4, '2021-04-10'),
+       (3, 4, '2021-04-3'),
+       (6, 2, '2021-05,03'),
+       (6, 6, '2021-04-23');
+
 
 
 insert into story_chapter (name, description, strength_requirement)

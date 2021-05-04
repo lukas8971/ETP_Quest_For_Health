@@ -1,18 +1,17 @@
 package com.etp.questforhealth.service.impl;
 
 
-import com.etp.questforhealth.entity.AcceptedQuest;
-import com.etp.questforhealth.entity.CreateDoctorQuest;
-import com.etp.questforhealth.entity.Doctor;
-import com.etp.questforhealth.entity.Quest;
+import com.etp.questforhealth.entity.*;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.persistence.QuestDao;
+import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.DoctorService;
 import com.etp.questforhealth.service.QuestService;
 
+import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.validator.QuestValidator;
 
 import com.etp.questforhealth.util.Validator;
@@ -34,15 +33,17 @@ public class QuestServiceImpl implements QuestService {
     private final QuestValidator questValidator;
     private final Validator validator;
     private final DoctorService doctorService;
+    private final UserService userService;
 
 
     @Autowired
-    public QuestServiceImpl(QuestDao questDao, Validator validator, QuestValidator questValidator, DoctorService doctorService){
+    public QuestServiceImpl(QuestDao questDao, Validator validator, QuestValidator questValidator, DoctorService doctorService, UserService userService){
         this.questDao = questDao;
         this.questValidator = questValidator;
         this.validator = validator;
         this.doctorService = doctorService;
 
+        this.userService = userService;
     }
 
     @Override
@@ -85,6 +86,37 @@ public class QuestServiceImpl implements QuestService {
     }
 
     @Override
+    public List<Quest> getAllQuestsDueForUser(int userId) {
+        LOGGER.trace("getAllQuestsDueForUser({})", userId);
+        try{
+            return questDao.getAllQuestsDueForUser(userId);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllMissedQuestsForUser(int userId) {
+        LOGGER.trace("getAllMissedQuestsForUser({})", userId);
+        try{
+            List<Quest> missedQuests = questDao.getAllMissedQuestsForUser(userId);
+            return missedQuests;
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllOpenOneTimeQuestsForUser(int userId) {
+        LOGGER.trace("getAllOpenOneTimeQuestsForUser({})", userId);
+        try{
+            return questDao.getAllOpenOneTimeQuestsForUser(userId);
+        }catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public List<Quest> getAllUserAvailableDoctorQuests(int user, int doctor){
         LOGGER.trace("getAllUserAvailableDoctorQuests({}, {})", user, doctor);
         try {
@@ -122,6 +154,28 @@ public class QuestServiceImpl implements QuestService {
         try {
             validator.validateAcceptedQuest(acceptedQuest);
             return questDao.addAssignedDoctorQuestForUser(acceptedQuest);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<AcceptedQuest> getAllAcceptedQuestForUser(int user) {
+        LOGGER.trace("getAllAcceptedQuestForUser({})",user);
+        try {
+            userService.getOneById(user); // check if user exists
+            return questDao.getAllAcceptedQuestForUser(user);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<CompletedQuest> getAllCompletedQuestForUser(int user) {
+        LOGGER.trace("getAllCompletedQuestForUser({})",user);
+        try {
+            userService.getOneById(user); // check if user exists
+            return questDao.getAllCompletedQuestForUser(user);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);
         }

@@ -1,8 +1,12 @@
 package com.etp.questforhealth.endpoint;
 
 
+import com.etp.questforhealth.endpoint.dto.AcceptedQuestDto;
+import com.etp.questforhealth.endpoint.dto.CompletedQuestDto;
 import com.etp.questforhealth.endpoint.dto.CreateDoctorQuestDto;
 import com.etp.questforhealth.endpoint.dto.QuestDto;
+import com.etp.questforhealth.endpoint.mapper.AcceptedQuestMapper;
+import com.etp.questforhealth.endpoint.mapper.CompletedQuestMapper;
 import com.etp.questforhealth.endpoint.mapper.CreateDoctorQuestMapper;
 import com.etp.questforhealth.endpoint.mapper.QuestMapper;
 import com.etp.questforhealth.entity.AcceptedQuest;
@@ -30,12 +34,16 @@ public class QuestEndpoint {
     private final QuestService questService;
     private final QuestMapper questMapper;
     private final CreateDoctorQuestMapper createDoctorQuestMapper;
+    private final AcceptedQuestMapper acceptedQuestMapper;
+    private final CompletedQuestMapper completedQuestMapper;
 
     @Autowired
-    public QuestEndpoint(QuestService questService, QuestMapper questMapper, CreateDoctorQuestMapper createDoctorQuestMapper){
+    public QuestEndpoint(QuestService questService, QuestMapper questMapper, CreateDoctorQuestMapper createDoctorQuestMapper, AcceptedQuestMapper acceptedQuestMapper, CompletedQuestMapper completedQuestMapper){
         this.questService = questService;
         this.questMapper = questMapper;
         this.createDoctorQuestMapper = createDoctorQuestMapper;
+        this.acceptedQuestMapper = acceptedQuestMapper;
+        this.completedQuestMapper = completedQuestMapper;
     }
 
     /**
@@ -125,6 +133,42 @@ public class QuestEndpoint {
     }
 
     /**
+     * Gets all repetitive due quests for User
+     * @param id to get due quests for user
+     * @return a list of all repetitive quests for the user
+     */
+    @GetMapping(value="/dueQuests/{id}")
+    @ResponseBody
+    public List<QuestDto> getAllQuestsDueForUser(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/dueQuests/{}", id);
+        return questMapper.entityToDto(questService.getAllQuestsDueForUser(id));
+    }
+
+    /**
+     * Gets all missed repetitive quests for User
+     * @param id to get due quests for user
+     * @return a list of all missed quests for the user
+     */
+    @GetMapping(value="/missedQuests/{id}")
+    @ResponseBody
+    public List<QuestDto> getAllMissedQuestsForUser(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/missedQuests/{}", id);
+        return questMapper.entityToDto(questService.getAllMissedQuestsForUser(id));
+    }
+
+    /**
+     * Gets all one-time open quests for User
+     * @param id to get open quests for user
+     * @return a list of all open one-time quests for the user
+     */
+    @GetMapping(value="/openOneTimeQuests/{id}")
+    @ResponseBody
+    public List<QuestDto> getAllOpenOneTimeQuestsForUser(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/");
+        return questMapper.entityToDto(questService.getAllOpenOneTimeQuestsForUser(id));
+    }
+
+    /**
      * Gets all the quests assigned from a doctor to a user
      * @param user to assigned quests to
      * @param doctor who is assigning quests to a user
@@ -169,6 +213,30 @@ public class QuestEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(value="/accepted/{user}")
+    @ResponseBody
+    public List<AcceptedQuestDto> getAllAcceptedQuestForUser(@PathVariable("user") int user){
+        LOGGER.info("GET "+ BASE_URL + "/accepted/{}",user);
+        try{
+            return acceptedQuestMapper.entityToDto(questService.getAllAcceptedQuestForUser(user));
+        } catch (NotFoundException e){
+            LOGGER.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(value="/completed/{user}")
+    @ResponseBody
+    public List<CompletedQuestDto> getAllCompletedQuestForUser(@PathVariable("user") int user){
+        LOGGER.info("GET "+ BASE_URL + "/completed/{}",user);
+        try{
+            return completedQuestMapper.entityToDto(questService.getAllCompletedQuestForUser(user));
+        } catch (NotFoundException e){
+            LOGGER.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 }

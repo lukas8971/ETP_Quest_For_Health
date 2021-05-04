@@ -6,17 +6,17 @@ import {Quest} from "../../dto/quest";
 import {QuestService} from "../../service/quest.service";
 import {CreateDoctorQuest} from "../../dto/createDoctorQuest";
 import {ErrorDialogComponent} from "../error-dialog/error-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import * as moment from "moment";
 import {Duration} from "moment";
-import { Location } from '@angular/common'
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-create-doctor-quest',
-  templateUrl: './create-doctor-quest.component.html',
-  styleUrls: ['./create-doctor-quest.component.css']
+  templateUrl: './create-doctor-quest-dialog.component.html',
+  styleUrls: ['./create-doctor-quest-dialog.component.css']
 })
-export class CreateDoctorQuestComponent implements OnInit {
+export class CreateDoctorQuestDialog implements OnInit {
 
   doctor: any;
 
@@ -43,7 +43,7 @@ export class CreateDoctorQuestComponent implements OnInit {
   password = '';
 
 
-  constructor(private route: ActivatedRoute,  private dialog: MatDialog, private questService: QuestService, private location: Location) {
+  constructor(public dialogRef: MatDialogRef<CreateDoctorQuestDialog>, private route: ActivatedRoute, private dialog: MatDialog, private questService: QuestService, private location: Location) {
   }
 
   ngOnInit(): void {
@@ -61,12 +61,16 @@ export class CreateDoctorQuestComponent implements OnInit {
     let createDoctorQuest: CreateDoctorQuest = {credentials: credentials, quest: quest};
     this.questService.createDoctorQuest(createDoctorQuest).subscribe(
       (quest : Quest) => {
-        this.location.back();
+        this.dialogRef.close();
       },
       error => {
         this.defaultServiceErrorHandling(error);
       });
   }
+
+
+
+
 
   /**
    * Shows an error message if an error occurs

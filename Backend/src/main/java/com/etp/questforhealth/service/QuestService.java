@@ -1,6 +1,7 @@
 package com.etp.questforhealth.service;
 
 import com.etp.questforhealth.entity.AcceptedQuest;
+import com.etp.questforhealth.entity.CompletedQuest;
 import com.etp.questforhealth.entity.CreateDoctorQuest;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -34,14 +35,35 @@ public interface QuestService {
      * @param questId id of the quest
      */
      boolean acceptQuest(int userId, int questId);
-     /*
+     /**
      * Saves the Quest in the persistence.
      *
      * @param quest The quest to be saved.
      * @return The saved quest with an id.
      * @throws ValidationException If the quest ist not valid.
      */
-    public Quest createQuest(CreateDoctorQuest quest) throws ValidationException;
+     Quest createQuest(CreateDoctorQuest quest) throws ValidationException;
+
+    /**
+     * Returns all repetitive quests which are due for the user
+     * @param userId id of the User
+     * @return
+     */
+    List<Quest> getAllQuestsDueForUser(int userId);
+
+    /**
+     * Gets all repetitive Quests the user has missed
+     * @param userId the id of the user for which to check
+     * @return A list of all quests the user missed
+     */
+    List<Quest> getAllMissedQuestsForUser (int userId);
+
+    /**
+     * Returns all one-time quests which the user has accepted but not yet finished.
+     * @param userId the id of the User
+     * @return a list of all quests which the user accepted and are one-time
+     */
+    List<Quest> getAllOpenOneTimeQuestsForUser(int userId);
 
     /**
      * Returns all the available doctor quests for a user.
@@ -83,4 +105,8 @@ public interface QuestService {
      * @throws IllegalArgumentException if the given data is forbidden.
      */
     boolean addAssignedDoctorQuestForUser(AcceptedQuest acceptedQuest);
+
+    List<AcceptedQuest> getAllAcceptedQuestForUser(int user);
+
+    List<CompletedQuest> getAllCompletedQuestForUser(int user);
 }

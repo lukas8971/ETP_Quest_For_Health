@@ -5,6 +5,8 @@ import {User} from '../dto/user';
 import {environment} from '../../environments/environment';
 import {Credentials} from "../dto/credentials";
 import {Doctor} from "../dto/doctor";
+import {UserQuest} from "../dto/userQuest";
+import {UserQuests} from "../dto/userQuests";
 
 const baseUri = environment.backendUrl + '/users';
 
@@ -38,6 +40,16 @@ export class UserService {
   createUser(user: User): Observable<User>{
   console.log('createUser');
   return this.httpClient.post<User>(baseUri, user);
+  }
+
+  completeQuest(userQuest: UserQuest): Observable<User>{
+    console.log('completeQuest('+ userQuest + ')');
+    return this.httpClient.post<User>(baseUri + '/completeQuest', userQuest);
+  }
+
+  dismissMissedQuests(userQuests: UserQuests): Observable<User>{
+    console.log('dismissMissedQuest('+userQuests+')');
+    return this.httpClient.post<User>(baseUri + '/dismissQuests', userQuests);
   }
 
   /**

@@ -5,13 +5,13 @@ import {PatientDoctorQuestComponent} from './component/patient-doctor-quest/pati
 import {DoctorComponent} from './component/doctor/doctor.component';
 import {DoctorLogoutComponent} from './component/doctor-logout/doctor-logout.component';
 import {AuthGuardDoctorService} from './service/auth-guard-doctor.service';
-import {CreateCharacterComponent} from './component/create-character/create-character.component';
-import {UserLoginComponent} from './component/user-login/user-login.component';
-import {UserOverviewComponent} from './component/user-overview/user-overview.component';
-import {AuthGuardUserService} from './service/auth-guard-user.service';
-import {UserProfileComponent} from './component/user-profile/user-profile.component';
-import {UserBrowseQuestsComponent} from './component/user-browse-quests/user-browse-quests.component';
-import {CreateDoctorQuestComponent} from './component/create-doctor-quest/create-doctor-quest.component';
+import {CreateCharacterComponent} from "./component/create-character/create-character.component";
+import {UserLoginComponent} from "./component/user-login/user-login.component";
+import {UserOverviewComponent} from "./component/user-overview/user-overview.component";
+import {AuthGuardUserService} from "./service/auth-guard-user.service";
+import {UserProfileComponent} from "./component/user-profile/user-profile.component";
+import {UserBrowseQuestsComponent} from "./component/user-browse-quests/user-browse-quests.component";
+import {CreateDoctorQuestDialog} from "./component/create-doctor-quest/create-doctor-quest-dialog.component";
 import {ShopComponent} from './component/shop/shop.component';
 
 const routes: Routes = [
@@ -24,8 +24,8 @@ const routes: Routes = [
   {path: 'users/overview', component: UserOverviewComponent, canActivate: [AuthGuardUserService]},
   {path: 'users/profile', component: UserProfileComponent, canActivate: [AuthGuardUserService]},
   {path: 'users/browseQuests', component: UserBrowseQuestsComponent, canActivate: [AuthGuardUserService]},
-  {path: 'doctors/createquest', component: CreateDoctorQuestComponent, canActivate: [AuthGuardDoctorService]},
   {path: 'shop', component: ShopComponent, canActivate: [AuthGuardUserService]}
+  {path: 'doctors/createquest', component: CreateDoctorQuestDialog, canActivate: [AuthGuardDoctorService]}
 ];
 
 @NgModule({

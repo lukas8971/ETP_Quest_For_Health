@@ -77,24 +77,24 @@ public interface TestData {
 
     static User getNewUserWithName(int id) { return new User(id, "Andrew", "Adams"); }
 
-    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,1,400,35,"SuperSecretPassword", null,1); }
+    static User getNewWorkingUser(){return new User(0,"Hans-Peter", "Berger", "Rudolf", 0,1,400,"SuperSecretPassword", null,1,0); }
 
-    static User getNewWorkingUserDifferentCharacter(){return new User(0,"H.P.", "Baxxter", "Scooter", 9000,1,400,0,"OnlyIKnowHowMuchTheFishIs", null,1); }
+    static User getNewWorkingUserDifferentCharacter(){return new User(0,"H.P.", "Baxxter", "Scooter", 9000,1,400,"OnlyIKnowHowMuchTheFishIs", null,1, 0); }
 
-    static User getNewWorkingUserDifferentCharacter2(){return new User(0,"H.P.", "Baxxter", "Scooter2", 9000,1,400,0,"OnlyIKnowHowMuchTheFishIs", null,1); }
+    static User getNewWorkingUserDifferentCharacter2(){return new User(0,"H.P.", "Baxxter", "Scooter2", 9000,1,400,"OnlyIKnowHowMuchTheFishIs", null,1, 0); }
 
-    static User getNewWorkingUserDifferentCharacter3(){return new User(0,"H.P.", "Baxxter", "Scooter3", 9000,1,400,0,"OnlyIKnowHowMuchTheFishIs", null,1); }
+    static User getNewWorkingUserDifferentCharacter3(){return new User(0,"H.P.", "Baxxter", "Scooter3", 9000,1,400,"OnlyIKnowHowMuchTheFishIs", null,1, 0); }
 
-    static User getNewWorkingUserDifferentCharacter4(){return new User(0,"H.P.", "Baxxter", "Scooter4", 9000,1,400,0,"OnlyIKnowHowMuchTheFishIs", null,1); }
+    static User getNewWorkingUserDifferentCharacter4(){return new User(0,"H.P.", "Baxxter", "Scooter4", 9000,1,400,"OnlyIKnowHowMuchTheFishIs", null,1, 0); }
 
-    static User getNewWorkingUserDifferentCharacter5(){return new User(0,"H.P.", "Baxxter", "Scooter5", 9000,1,400,0,"OnlyIKnowHowMuchTheFishIs", null,1); }
+    static User getNewWorkingUserDifferentCharacter5(){return new User(0,"H.P.", "Baxxter", "Scooter5", 9000,1,400,"OnlyIKnowHowMuchTheFishIs", null,1, 0); }
 
-    static User getNewWorkingUserDifferentCharacter6(){return new User(0,"H.P.", "Baxxter", "Scooter6", 9000,1,400,0,"OnlyIKnowHowMuchTheFishIs", null,1); }
+    static User getNewWorkingUserDifferentCharacter6(){return new User(0,"H.P.", "Baxxter", "Scooter6", 9000,1,400,"OnlyIKnowHowMuchTheFishIs", null,1, 0); }
 
     static List<User> getNWorkingUsers(int n){
         List<User> retVal = new ArrayList<User>();
         for(int i=0; i<n; i++){
-            retVal.add(new User(0,"Hans-Peter"+i, "Berger"+i, "Rudolf"+i, 0,1,400,i,"SuperSecretPassword"+i, null,1));
+            retVal.add(new User(0,"Hans-Peter"+i, "Berger"+i, "Rudolf"+i, 0,1,400,"SuperSecretPassword"+i, null,1,i));
         }
         return retVal;
     }
