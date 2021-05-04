@@ -87,4 +87,16 @@ public class EquipmentDto {
     public int hashCode() {
         return Objects.hash(id, name, description, price, strength, type);
     }
+
+    @Override
+    public String toString() {
+        return "EquipmentDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", strength=" + strength +
+                ", type=" + type + "'" +
+                '}';
+    }
 }

@@ -1,5 +1,6 @@
 package com.etp.questforhealth.unit.service;
 
+import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.entity.CreateDoctorQuest;
 import com.etp.questforhealth.entity.Quest;
@@ -7,7 +8,7 @@ import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.QuestDao;
 import com.etp.questforhealth.service.QuestService;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,10 +33,9 @@ public class QuestServiceTest {
     @Autowired
     QuestDao questDao;
 
-
-    @AfterEach
-    public void tearDownDBData(){
-        questDao.rollbackChanges();
+    @BeforeAll
+    public static void testData(){
+        DatabaseTestData.insertTestData();
     }
 
     @Test

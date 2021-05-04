@@ -14,8 +14,6 @@ public interface UserDao {
 
     User createUser(User user) throws PersistenceException;
 
-    void rollbackChanges();
-
     /**
      * Gets all users from a doctor from the persistent data store.
      * @param doctor that treats patients.
@@ -76,4 +74,13 @@ public interface UserDao {
      */
     User changeUserGoldAndExp (User user, int expChange, int goldChange);
 
+
+    /**
+     * Changes the gold of a user
+     * @param id of the user to change the gold
+     * @param changeValue number of gold that should be changed (can be either positive or negative)
+     * @return true if change was successful
+     * @throws PersistenceException if something went wrong
+     */
+    boolean changeUserGold(int id, int changeValue);
 }

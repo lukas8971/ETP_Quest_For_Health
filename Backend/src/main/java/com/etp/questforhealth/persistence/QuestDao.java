@@ -104,9 +104,6 @@ public interface QuestDao {
     */
    boolean addAssignedDoctorQuestForUser(AcceptedQuest acceptedQuest);
 
-
-   void rollbackChanges();
-
    /**
     * Checks if an accepted quest is already accepted by a user.
     * @param acceptedQuest AcceptedQuest object that should be checked.

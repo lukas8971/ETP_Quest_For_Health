@@ -11,10 +11,10 @@ public class UserDto {
     private int characterStrength;
     private int characterLevel;
     private int characterExp;
+    private int characterGold;
     private String password;
     private String email;
     private int storyChapter;
-    private int characterGold;
 
     public UserDto(){
 
@@ -32,6 +32,7 @@ public class UserDto {
         this.characterStrength = characterStrength;
         this.characterLevel = characterLevel;
         this.characterExp = characterExp;
+        this.characterGold = characterGold;
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
@@ -159,10 +160,10 @@ public class UserDto {
                 ", characterStrength=" + characterStrength +
                 ", characterLevel=" + characterLevel +
                 ", characterExp=" + characterExp +
+                ", characterGold=" + characterGold +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", storyChapter=" + storyChapter +
-                ", characterGold=" + characterGold +
                 '}';
     }
 }

@@ -27,3 +27,5 @@ Backend/target/
 Frontend/quest-for-health/dist/
 
 Frontend/quest-for-health/package-lock.json
+
+Backend/log/

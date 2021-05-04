@@ -1,5 +1,6 @@
 package com.etp.questforhealth.unit.endpoint;
 
+import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.endpoint.QuestEndpoint;
 import com.etp.questforhealth.endpoint.dto.CreateDoctorQuestDto;
@@ -8,6 +9,7 @@ import com.etp.questforhealth.endpoint.dto.QuestDto;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.persistence.QuestDao;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,10 +36,9 @@ public class QuestEndpointTest {
     @Autowired
     QuestDao questDao;
 
-
-    @AfterEach
-    public void tearDownDBData(){
-        questDao.rollbackChanges();
+    @BeforeAll
+    public static void testData(){
+        DatabaseTestData.insertTestData();
     }
 
     @Test

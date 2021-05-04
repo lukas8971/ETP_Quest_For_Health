@@ -26,13 +26,18 @@ import { CreateCharacterComponent } from './component/create-character/create-ch
 import { UserLoginComponent } from './component/user-login/user-login.component';
 import {MissedQuestsDialog, UserOverviewComponent} from './component/user-overview/user-overview.component';
 import { UserProfileComponent } from './component/user-profile/user-profile.component';
-import {MatGridListModule} from "@angular/material/grid-list";
-import {MatExpansionModule} from "@angular/material/expansion";
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-browse-quests.component';
-import {MatSortModule} from "@angular/material/sort";
-import {MatRadioModule} from "@angular/material/radio";
-import {MatListModule} from "@angular/material/list";
+import {MatSortModule} from '@angular/material/sort';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatListModule} from '@angular/material/list';
 import { CreateDoctorQuestDialog } from './component/create-doctor-quest/create-doctor-quest-dialog.component';
+import { EquippedItemComponent } from './component/equipped-item/equipped-item.component';
+import { UserEquipmentComponent } from './component/user-equipment/user-equipment.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { EquipmentComponentComponent } from './component/equipment-component/equipment-component.component';
+import { ShopComponent } from './component/shop/shop.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +54,11 @@ import { CreateDoctorQuestDialog } from './component/create-doctor-quest/create-
     UserProfileComponent,
     UserBrowseQuestsComponent,
     CreateDoctorQuestDialog,
-    MissedQuestsDialog
+    MissedQuestsDialog,
+    EquippedItemComponent,
+    UserEquipmentComponent,
+    EquipmentComponentComponent,
+    ShopComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,10 +79,11 @@ import { CreateDoctorQuestDialog } from './component/create-doctor-quest/create-
     MatCardModule,
     MatInputModule,
     MatGridListModule,
-    MatExpansionModule,
-    MatSortModule,
+    MatListModule,
     MatRadioModule,
-    MatListModule
+    MatSortModule,
+    MatExpansionModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

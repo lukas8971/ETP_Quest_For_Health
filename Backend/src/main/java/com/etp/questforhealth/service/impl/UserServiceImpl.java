@@ -126,6 +126,7 @@ public class UserServiceImpl implements UserService {
         user.setCharacterStrength(0);
         user.setCharacterLevel(1);
         user.setCharacterExp(0);
+        user.setCharacterGold(0);
         user.setStoryChapter(1);
         user.setPassword(get_SHA_512_SecurePassword(user.getPassword()));
         try {
@@ -135,12 +136,6 @@ public class UserServiceImpl implements UserService {
         catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
         }
-    }
-
-    @Override
-    public void rollbackChanges() {
-        LOGGER.trace("rollbackChanges()");
-        userDao.rollbackChanges();
     }
 
     private static String get_SHA_512_SecurePassword(String passwordToHash){
@@ -162,4 +157,14 @@ public class UserServiceImpl implements UserService {
         return generatedPassword;
     }
 
+    @Override
+    public boolean changeUserGold(int id, int changeValue) {
+        LOGGER.trace("changeUserGold({}, {})", id, changeValue);
+        try{
+            validator.validateUserGold(id, changeValue);
+            return userDao.changeUserGold(id, changeValue);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
 }

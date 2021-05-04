@@ -84,6 +84,7 @@ public class UserEndpoint {
         try{
             return userMapper.entityToDto(userService.completeQuest(userQuest.getUser(), userQuest.getQuest()));
         } catch (ServiceException e){
+            LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }
     }
@@ -94,6 +95,7 @@ public class UserEndpoint {
         try{
             return userMapper.entityToDto(userService.dismissMissedQuests(userQuests.getUser(), userQuests.getQuests()));
         } catch (ServiceException e){
+            LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }
     }
@@ -108,6 +110,7 @@ public class UserEndpoint {
             LOGGER.warn(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(),e);
         } catch (ServiceException e){
+            LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }
     }
@@ -121,9 +124,5 @@ public class UserEndpoint {
             LOGGER.error("Wrong username or password!");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         }
-    }
-
-    public void rollbackChanges(){
-        userService.rollbackChanges();;
     }
 }

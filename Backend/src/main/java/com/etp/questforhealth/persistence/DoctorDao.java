@@ -42,9 +42,4 @@ public interface DoctorDao {
      * @return true if a relationship exists.
      */
     boolean checkIfDoctorUserRelationshipExists(int doctor, int user);
-
-    /**
-     * Rollback for changes made during testing.
-     */
-    void rollbackChanges();
 }

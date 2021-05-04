@@ -13,7 +13,11 @@ public class Equipment {
     private EquipmentType type;
 
     public Equipment(int id, String name, String description, int price, int strength, EquipmentType type) {
+        this(name, description, price, strength, type);
         this.id = id;
+    }
+
+    public Equipment(String name, String description, int price, int strength, EquipmentType type) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -85,5 +89,17 @@ public class Equipment {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, price, strength, type);
+    }
+
+    @Override
+    public String toString() {
+        return "Equipment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", strength=" + strength +
+                ", type='" + type + "'" +
+                '}';
     }
 }

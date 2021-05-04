@@ -129,8 +129,8 @@ export class UserOverviewComponent implements OnInit {
     console.log(error);
     this.snackBar.open('Could not load quests, please try again later', 'Ok');
   }
-  public selectQuest(quest: Quest){
-    this.selectedQuest =quest
+  public selectQuest(quest: Quest): void {
+    this.selectedQuest = quest;
   }
 
   public finishQuest(){

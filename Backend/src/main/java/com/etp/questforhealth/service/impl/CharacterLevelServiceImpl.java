@@ -37,11 +37,6 @@ public class CharacterLevelServiceImpl implements CharacterLevelService {
             return characterLevelDao.getCharacterLevelByLevel(id);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
-        }    }
-
-    @Override
-    public void rollbackChanges() {
-        LOGGER.trace("rollbackChanges()");
-        characterLevelDao.rollbackChanges();
+        }
     }
 }

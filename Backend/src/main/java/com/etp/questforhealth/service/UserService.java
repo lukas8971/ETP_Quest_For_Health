@@ -6,6 +6,7 @@ import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
+import com.etp.questforhealth.exception.ValidationException;
 
 import java.util.List;
 
@@ -14,8 +15,6 @@ public interface UserService {
     List<User> getAll();
 
     User createUser(User user) throws ServiceException;
-
-    void rollbackChanges();
 
     /**
      * Gets all users that are in treatment at a specific doctor
@@ -56,4 +55,13 @@ public interface UserService {
      */
     User dismissMissedQuests(User user, List<Quest> missedQuests);
 
+    /**
+     * Changes the gold of a user
+     * @param id of the user to change the gold
+     * @param changeValue number of gold that should be changed (can be either positive or negative)
+     * @return true if change was successful
+     * @throws RuntimeException if something went wrong
+     * @throws ValidationException if the data is not valid
+     */
+    boolean changeUserGold(int id, int changeValue);
 }
