@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateDoctorQuestComponent } from './create-doctor-quest.component';
+import { CreateDoctorQuestDialog } from './create-doctor-quest-dialog.component';
 
 describe('CreateDoctorQuestComponent', () => {
-  let component: CreateDoctorQuestComponent;
-  let fixture: ComponentFixture<CreateDoctorQuestComponent>;
+  let component: CreateDoctorQuestDialog;
+  let fixture: ComponentFixture<CreateDoctorQuestDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateDoctorQuestComponent ]
+      declarations: [ CreateDoctorQuestDialog ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateDoctorQuestComponent);
+    fixture = TestBed.createComponent(CreateDoctorQuestDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -29,10 +29,11 @@ import { UserProfileComponent } from './component/user-profile/user-profile.comp
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { UserBrowseQuestsComponent } from './component/user-browse-quests/user-browse-quests.component';
-import { CreateDoctorQuestComponent } from './component/create-doctor-quest/create-doctor-quest.component';
 import {MatSortModule} from "@angular/material/sort";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatListModule} from "@angular/material/list";
+import { CreateDoctorQuestDialog } from './component/create-doctor-quest/create-doctor-quest-dialog.component';
+import {AutosizeModule} from "ngx-autosize";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,7 @@ import {MatListModule} from "@angular/material/list";
     UserOverviewComponent,
     UserProfileComponent,
     UserBrowseQuestsComponent,
-    CreateDoctorQuestComponent,
+    CreateDoctorQuestDialog
     MissedQuestsDialog
   ],
   imports: [
@@ -71,6 +72,7 @@ import {MatListModule} from "@angular/material/list";
     MatInputModule,
     MatGridListModule,
     MatExpansionModule,
+    AutosizeModule
     MatSortModule,
     MatRadioModule,
     MatListModule

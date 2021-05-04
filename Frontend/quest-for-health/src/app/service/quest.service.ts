@@ -5,6 +5,7 @@ import {Quest} from '../dto/quest';
 import {environment} from '../../environments/environment';
 import {AcceptedQuest} from '../dto/accepted-quest';
 import {CreateDoctorQuest} from "../dto/createDoctorQuest";
+import {CompletedQuest} from "../dto/completed-quest";
 
 const baseUri = environment.backendUrl + '/quests';
 
@@ -83,9 +84,41 @@ export class QuestService {
     acceptParams = acceptParams.set('quest', String(quest));
     return this.httpClient.get<boolean>(baseUri + '/accept?' + acceptParams);
   }
+
+  /**
+   * Creates a new doctor-quest in the backend.
+   * @param createDoctorQuest the doctor-quest to create with credentials.
+   */
   createDoctorQuest(createDoctorQuest: CreateDoctorQuest): Observable<Quest> {
     console.log('createDoctorQuest(' + createDoctorQuest + ')');
     return this.httpClient.post<Quest>(baseUri +'/', createDoctorQuest);
+  }
+
+  /**
+   * Gets all accepted quests for a user.
+   * @param user the user to get the quests for
+   */
+  getAcceptedQuestsForUser(user: number):Observable<AcceptedQuest[]> {
+    console.log('getAcceptedQuestsForUser('+user+')');
+    return this.httpClient.get<AcceptedQuest[]>(baseUri + '/accepted/' + user);
+  }
+
+  /**
+   * Gets all completed quests for a user.
+   * @param user the user to get the quests for
+   */
+  getCompletedQuestsForUser(user: number):Observable<CompletedQuest[]> {
+    console.log('getCompletedQuestsForUser('+user+')');
+    return this.httpClient.get<CompletedQuest[]>(baseUri + '/completed/' + user);
+  }
+
+  /**
+   * Gets a Quest by it's id.
+   * @param id the id of the quest
+   */
+  getQuestById(id: number):Observable<Quest> {
+    console.log('getQuestById({})',id);
+    return this.httpClient.get<Quest>(baseUri + '/' + id);
   }
 
   getAllQuestsDueForUser(user:number): Observable<Quest[]>{

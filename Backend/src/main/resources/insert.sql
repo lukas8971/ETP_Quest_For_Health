@@ -21,7 +21,17 @@ values (4, 2, 1, 0),
 
 insert into user_accepted_quest(user, quest, accepted_on)
 VALUES (4, 6, '2021-04-19'),
-       (2, 7, '2021-04-19');
+       (2, 7, '2021-04-19'),
+       (6, 1, '2021-02-10'),
+       (6, 5, '2021-04-18');
+
+insert into user_completed_quest(user, quest, completed_on)
+VALUES (4, 6, '2021-03-17'),
+       (3, 4, '2021-04-10'),
+       (3, 4, '2021-04-3'),
+       (6, 2, '2021-05,03'),
+       (6, 6, '2021-04-23');
+
 
 
 insert into story_chapter (name, description, strength_requirement)

@@ -1,0 +1,89 @@
+
+<div class="mat-dialog-container">
+  <h1>Create New Doctor-Quest</h1>
+  <mat-dialog-content>
+    <form [formGroup]="questForm" (ngSubmit)="createDoctorQuest()">
+        <mat-grid-list cols="2" rowHeight="3:1" class="my-grid-list">
+
+          <mat-grid-tile>
+            <mat-form-field>
+            <mat-label>Quest Name</mat-label>
+            <input matInput [(ngModel)]="name" formControlName="name" id="name" placeholder="Quest Name">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Experience Points Reward</mat-label>
+              <input matInput placeholder="100" type="number" min="0" [(ngModel)]="exp_reward"
+                     formControlName="exp_reward" id="exp_reward">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Gold Coins Reward</mat-label>
+              <input matInput placeholder="10" type="number" min="0" [(ngModel)]="gold_reward"
+                     formControlName="gold_reward" id="gold_reward">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Repetition Cycle - Days</mat-label>
+              <input matInput placeholder="Insert days" type="number" min="0"
+                     [(ngModel)]="repetition_cycle_days"
+                     formControlName="repetition_cycle_days" id="repetition_cycle_days">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Experience Points Penalty</mat-label>
+              <input matInput placeholder="0" type="number" min="0" [(ngModel)]="exp_penalty"
+                     formControlName="exp_penalty" id="exp_penalty">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Gold Coins Penalty</mat-label>
+              <input matInput placeholder="0" type="number" min="0" [(ngModel)]="gold_penalty"
+                     formControlName="gold_penalty" id="gold_penalty">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="2">
+            <mat-form-field>
+              <mat-label>Description</mat-label>
+              <textarea matInput class="my-text-area"
+                        placeholder="This is a new Doctor-Quest." [(ngModel)]="description"
+                        formControlName="description"
+                        id="description" required></textarea>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <label>Your Login E-Mail Address</label>
+              <input matInput [(ngModel)]="email" type="email" formControlName="email" required>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <label>Your Login Password</label>
+              <input matInput [(ngModel)]="password" type="password" formControlName="password" required>
+            </mat-form-field>
+          </mat-grid-tile>
+
+
+          <mat-grid-tile colspan="2">
+            <button mat-raised-button color="primary" type="submit">Create</button>
+          </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+  </mat-dialog-content>
+</div>
+
+
