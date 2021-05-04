@@ -1,10 +1,13 @@
 package com.etp.questforhealth.service.impl;
 
+import com.etp.questforhealth.entity.CharacterLevel;
 import com.etp.questforhealth.entity.Credentials;
+import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
+import com.etp.questforhealth.persistence.CharacterLevelDao;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.Validator;
@@ -23,12 +26,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final UserDao userDao;
+    private final CharacterLevelDao characterLevelDao;
     private final Validator validator;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, Validator validator) {
+    public UserServiceImpl(UserDao userDao, Validator validator, CharacterLevelDao characterLevelDao) {
         this.userDao = userDao;
         this.validator = validator;
+        this.characterLevelDao = characterLevelDao;
     }
 
 
@@ -61,6 +66,55 @@ public class UserServiceImpl implements UserService {
         try{
             return userDao.checkLogin(cred);
         } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public User completeQuest(User user, Quest quest) {
+        LOGGER.trace("completeQuest({},{})", user.toString(), quest.toString());
+        try{
+            userDao.completeQuest(user.getId(), quest.getId(), true);
+            CharacterLevel currentLevel = characterLevelDao.getCharacterLevelById(user.getCharacterLevel());
+            User updatedUser = userDao.changeUserGoldAndExp(user, quest.getExp_reward(), quest.getGold_reward());
+            CharacterLevel nextLevel = characterLevelDao.getCharacterLevelByExp(updatedUser.getCharacterExp());
+            if(!(currentLevel.equals(nextLevel))){
+                updatedUser.setCharacterStrength(updatedUser.getCharacterStrength() + (nextLevel.getTotal_strength() - currentLevel.getTotal_strength()));
+                updatedUser.setCharacterLevel(nextLevel.getId());
+                userDao.updateUser(user);
+            }
+            return updatedUser;
+        }catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public User dismissMissedQuests(User user, List<Quest> missedQuests) {
+        LOGGER.trace("dismissMissedQuests({},{})", user.toString(), missedQuests.toString());
+        try{
+            int goldPenalty = 0;
+            int expPenalty = 0;
+            for(Quest quest: missedQuests){
+                goldPenalty +=quest.getGold_penalty();
+                expPenalty +=quest.getExp_penalty();
+                userDao.completeQuest(user.getId(), quest.getId(), false);
+            }
+            //user can't have debt
+            if (goldPenalty > user.getCharacterGold()) goldPenalty = user.getCharacterGold();
+            if (expPenalty > user.getCharacterExp()) expPenalty = user.getCharacterExp();
+            CharacterLevel currentLevel = characterLevelDao.getCharacterLevelById(user.getCharacterLevel());
+            User updatedUser = userDao.changeUserGoldAndExp(user, -goldPenalty,-expPenalty);
+            CharacterLevel newLevel = characterLevelDao.getCharacterLevelByExp(updatedUser.getCharacterExp());
+            if(!(currentLevel.equals(newLevel))){
+                //set user-Level
+                updatedUser.setCharacterLevel(characterLevelDao.getCharacterLevelByExp(updatedUser.getCharacterExp()).getId());
+                updatedUser.setCharacterStrength(updatedUser.getCharacterStrength() + ( newLevel.getTotal_strength() - currentLevel.getTotal_strength()));
+                userDao.updateUser(user);
+            }
+
+            return updatedUser;
+        } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
         }
     }

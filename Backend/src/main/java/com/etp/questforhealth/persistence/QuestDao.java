@@ -56,6 +56,21 @@ public interface QuestDao {
     */
    List<Quest> getAllUserAvailableDoctorQuests(int user, int doctor);
 
+    /**
+     * Returns all repetitive quests which are due for the user
+     * @param userId id of the User
+     * @return a list of all quests which are due for the user
+     */
+   List<Quest> getAllQuestsDueForUser(int userId);
+
+
+   /**
+    * Returns all one-time quests which the user has accepted but not yet finished.
+    * @param userId the id of the User
+    * @return a list of all quests which the user accepted and are one-time
+    */
+    List<Quest> getAllOpenOneTimeQuestsForUser(int userId);
+
    /**
     * Returns all the assigned doctor quests for a user
     * @param user to assign quests to
@@ -73,6 +88,13 @@ public interface QuestDao {
     * @throws PersistenceException if something went wrong.
     */
    boolean deleteAssignedDoctorQuestForUser(int quest, int user);
+
+    /**
+     * Gets all repetitive Quests the user has missed
+     * @param userId the id of the user for which to check
+     * @return A list of all quests the user missed
+     */
+   List<Quest> getAllMissedQuestsForUser (int userId);
 
    /**
     * Adds a new assigned doctor quest for a patient

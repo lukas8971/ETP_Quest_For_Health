@@ -9,4 +9,5 @@ export interface User{
   email: string;
   storyChapter:number;
   characterExp:number;
+  characterGold:number;
 }

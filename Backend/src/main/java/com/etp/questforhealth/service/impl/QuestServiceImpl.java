@@ -7,6 +7,7 @@ import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.persistence.QuestDao;
+import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.DoctorService;
 import com.etp.questforhealth.service.QuestService;
 
@@ -82,6 +83,37 @@ public class QuestServiceImpl implements QuestService {
 
         questValidator.validateQuest(quest);
         return questDao.createQuest(quest);
+    }
+
+    @Override
+    public List<Quest> getAllQuestsDueForUser(int userId) {
+        LOGGER.trace("getAllQuestsDueForUser({})", userId);
+        try{
+            return questDao.getAllQuestsDueForUser(userId);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllMissedQuestsForUser(int userId) {
+        LOGGER.trace("getAllMissedQuestsForUser({})", userId);
+        try{
+            List<Quest> missedQuests = questDao.getAllMissedQuestsForUser(userId);
+            return missedQuests;
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public List<Quest> getAllOpenOneTimeQuestsForUser(int userId) {
+        LOGGER.trace("getAllOpenOneTimeQuestsForUser({})", userId);
+        try{
+            return questDao.getAllOpenOneTimeQuestsForUser(userId);
+        }catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
     }
 
     @Override

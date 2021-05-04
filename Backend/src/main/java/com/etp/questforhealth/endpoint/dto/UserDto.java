@@ -14,6 +14,7 @@ public class UserDto {
     private String password;
     private String email;
     private int storyChapter;
+    private int characterGold;
 
     public UserDto(){
 
@@ -25,7 +26,7 @@ public class UserDto {
         this.lastname = lastname;
     }
 
-    public UserDto(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, String password, String email, int storyChapter) {
+    public UserDto(int id, String firstname, String lastname, String characterName, int characterStrength, int characterLevel, int characterExp, String password, String email, int storyChapter, int characterGold) {
         this(id, firstname, lastname);
         this.characterName = characterName;
         this.characterStrength = characterStrength;
@@ -34,6 +35,7 @@ public class UserDto {
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
+        this.characterGold = characterGold;
     }
 
     public int getId() {
@@ -116,26 +118,35 @@ public class UserDto {
         this.characterLevel = characterLevel;
     }
 
+    public int getCharacterGold() {
+        return characterGold;
+    }
+
+    public void setCharacterGold(int characterGold) {
+        this.characterGold = characterGold;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDto user = (UserDto) o;
-        return id == user.id &&
-                characterStrength == user.characterStrength &&
-                characterLevel == user.characterLevel &&
-                characterExp == user.characterExp &&
-                storyChapter == user.storyChapter &&
-                Objects.equals(firstname, user.firstname) &&
-                Objects.equals(lastname, user.lastname) &&
-                Objects.equals(characterName, user.characterName) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(email, user.email);
+        UserDto userDto = (UserDto) o;
+        return id == userDto.id &&
+                characterStrength == userDto.characterStrength &&
+                characterLevel == userDto.characterLevel &&
+                characterExp == userDto.characterExp &&
+                storyChapter == userDto.storyChapter &&
+                characterGold == userDto.characterGold &&
+                Objects.equals(firstname, userDto.firstname) &&
+                Objects.equals(lastname, userDto.lastname) &&
+                Objects.equals(characterName, userDto.characterName) &&
+                Objects.equals(password, userDto.password) &&
+                Objects.equals(email, userDto.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterExp, password, email, storyChapter);
+        return Objects.hash(id, firstname, lastname, characterName, characterStrength, characterLevel, characterExp, password, email, storyChapter, characterGold);
     }
 
     @Override
@@ -146,11 +157,12 @@ public class UserDto {
                 ", lastname='" + lastname + '\'' +
                 ", characterName='" + characterName + '\'' +
                 ", characterStrength=" + characterStrength +
-                ", characterLevel =" + characterLevel +
+                ", characterLevel=" + characterLevel +
                 ", characterExp=" + characterExp +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", storyChapter=" + storyChapter +
+                ", characterGold=" + characterGold +
                 '}';
     }
 }

@@ -133,6 +133,42 @@ public class QuestEndpoint {
     }
 
     /**
+     * Gets all repetitive due quests for User
+     * @param id to get due quests for user
+     * @return a list of all repetitive quests for the user
+     */
+    @GetMapping(value="/dueQuests/{id}")
+    @ResponseBody
+    public List<QuestDto> getAllQuestsDueForUser(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/dueQuests/{}", id);
+        return questMapper.entityToDto(questService.getAllQuestsDueForUser(id));
+    }
+
+    /**
+     * Gets all missed repetitive quests for User
+     * @param id to get due quests for user
+     * @return a list of all missed quests for the user
+     */
+    @GetMapping(value="/missedQuests/{id}")
+    @ResponseBody
+    public List<QuestDto> getAllMissedQuestsForUser(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/missedQuests/{}", id);
+        return questMapper.entityToDto(questService.getAllMissedQuestsForUser(id));
+    }
+
+    /**
+     * Gets all one-time open quests for User
+     * @param id to get open quests for user
+     * @return a list of all open one-time quests for the user
+     */
+    @GetMapping(value="/openOneTimeQuests/{id}")
+    @ResponseBody
+    public List<QuestDto> getAllOpenOneTimeQuestsForUser(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/");
+        return questMapper.entityToDto(questService.getAllOpenOneTimeQuestsForUser(id));
+    }
+
+    /**
      * Gets all the quests assigned from a doctor to a user
      * @param user to assigned quests to
      * @param doctor who is assigning quests to a user

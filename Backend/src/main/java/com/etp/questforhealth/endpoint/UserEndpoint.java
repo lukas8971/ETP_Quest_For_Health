@@ -5,7 +5,10 @@ import com.etp.questforhealth.endpoint.dto.DoctorDto;
 import com.etp.questforhealth.endpoint.dto.UserDto;
 import com.etp.questforhealth.endpoint.mapper.CredentialsMapper;
 import com.etp.questforhealth.endpoint.mapper.UserMapper;
+import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.entity.UserQuest;
+import com.etp.questforhealth.entity.UserQuests;
 import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ServiceException;
@@ -71,6 +74,27 @@ public class UserEndpoint {
         } catch (NotFoundException e){
             LOGGER.error("Could not find user with id {} " + e, id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find user",e);
+        }
+    }
+
+    @PostMapping(value="/completeQuest")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto completeQuest(@RequestBody UserQuest userQuest){
+        LOGGER.info("POST" + BASE_URL + "/completeQuest");
+        try{
+            return userMapper.entityToDto(userService.completeQuest(userQuest.getUser(), userQuest.getQuest()));
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
+        }
+    }
+    @PostMapping(value="/dismissQuests")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto dismissQuest(@RequestBody UserQuests userQuests){
+        LOGGER.info("POST" + BASE_URL + "/dismissQuests");
+        try{
+            return userMapper.entityToDto(userService.dismissMissedQuests(userQuests.getUser(), userQuests.getQuests()));
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }
     }
 

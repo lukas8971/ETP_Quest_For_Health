@@ -7,5 +7,12 @@ public interface CharacterLevelDao {
 
     CharacterLevel getCharacterLevelByLevel(int id);
 
+    /**
+     * Gets the character level a user would have if he has the provided exp
+     * @param exp the exp
+     * @return the CharacterLevel
+     */
+    CharacterLevel getCharacterLevelByExp (int exp);
+
     void rollbackChanges();
 }

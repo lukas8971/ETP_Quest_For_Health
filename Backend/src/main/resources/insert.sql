@@ -10,7 +10,8 @@ INSERT INTO quest (id, name, description, exp_reward, gold_reward, repetition_cy
     (5,'Created by Steinhardt', 'Doc Quest 2', 5, 3, TIME('24:00:00')),
     (6,'Assigned to User 4', 'Created by Steinhardt', 1, 1, TIME('48:00:00')),
     (7,'Assigned to User 2', 'Created by Test Doc', 2, 5, NULL),
-    (8,'Test Doc not assigned', 'Test Doc Inc', 20, 7, NULL);
+    (8,'Test Doc not assigned', 'Test Doc Inc', 20, 7, NULL),
+    (9,'Do 50 Pushups', 'Gonna get those gainz', 10,3,TIME('72:00:00'));
 
 insert into doctor_quest (id, doctor, exp_penalty, gold_penalty)
 values (4, 2, 1, 0),
@@ -51,13 +52,13 @@ insert into doctor(id,firstname,lastname,email,password) values
     (2,'Gerald','Steinhardt','sig@na.nz','BesterProf'),
     (3,'Anton','Alfred','a-a@doc.at','pass');
 
-insert into user(id,firstname,lastname,character_name, character_strength, character_level,character_exp,password,story_chapter) values
-    (1,'Alex','Apple','Attila',3,1,12,'unknackbar',1),
-    (2,'Berta','Binder','Batman',26,2,40,'Joker',2),
-    (3,'Carla','Cloud','Crash',58,5,153,'crappy',3),
-    (4,'Donkey','Kong','Diddy',28,3,153,'Country',2),
-    (5,'Edmund','Ende','Eddy',5,1,2,'Vogelnest',1),
-    (6,'Florian','Flocke','FiNCH',1,1,0,'Fehlzündung',1);
+insert into user(id,firstname,lastname,character_name, character_strength, character_level,character_exp,password,story_chapter,character_gold) values
+    (1,'Alex','Apple','Attila',3,1,12,'unknackbar',1,0),
+    (2,'Berta','Binder','Batman',26,2,40,'Joker',2,0),
+    (3,'Carla','Cloud','Crash',58,5,153,'crappy',3,0),
+    (4,'Donkey','Kong','Diddy',28,3,153,'Country',2,0),
+    (5,'Edmund','Ende','Eddy',5,1,2,'Vogelnest',1,0),
+    (6,'Florian','Flocke','FiNCH',1,1,0,'Fehlzündung',1,0);
 
 insert into doctor_has_patients(doctor, user) values
     (2,1),

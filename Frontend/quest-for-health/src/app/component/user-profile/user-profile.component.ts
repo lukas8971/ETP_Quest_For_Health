@@ -23,6 +23,7 @@ export class UserProfileComponent implements OnInit {
   rightHandEquipment: any;
   leftHandEquipment: any;
   legsEquipment: any;
+  currentLevel: any;
 
   constructor(private equipmentService: EquipmentService, private chararacterLevelService: CharacterLevelService,private userService: UserService, private snackBar: MatSnackBar) {
   }
@@ -46,6 +47,8 @@ export class UserProfileComponent implements OnInit {
           (d: CharacterLevel) => {
             this.nextLevel = d;
             this.neededExp =d.neededExp-this.user.characterExp;
+            this.currentLevel = c;
+
           }
         )
       }, error => {
