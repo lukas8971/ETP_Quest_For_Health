@@ -124,6 +124,7 @@ export class PatientDoctorQuestComponent implements OnInit {
           this.resetValues();
           this.getAvailablePatientDoctorQuests(this.doctor.id, this.patient.id);
           this.getAssignedPatientDoctorQuests(this.doctor.id, this.patient.id);
+          this.getPatientQuestHistory(this.patient.id);
         }
         else{
           this.dialog.open(ErrorDialogComponent, {

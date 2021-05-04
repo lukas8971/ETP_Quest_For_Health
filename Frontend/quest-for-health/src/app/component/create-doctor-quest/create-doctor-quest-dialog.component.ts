@@ -10,7 +10,6 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import * as moment from "moment";
 import {Duration} from "moment";
 import { Location } from '@angular/common';
-import {AutosizeModule} from "ngx-autosize";
 
 @Component({
   selector: 'app-create-doctor-quest',

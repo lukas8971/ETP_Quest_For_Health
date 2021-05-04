@@ -33,7 +33,6 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatListModule} from "@angular/material/list";
 import { CreateDoctorQuestDialog } from './component/create-doctor-quest/create-doctor-quest-dialog.component';
-import {AutosizeModule} from "ngx-autosize";
 
 @NgModule({
   declarations: [
@@ -49,7 +48,7 @@ import {AutosizeModule} from "ngx-autosize";
     UserOverviewComponent,
     UserProfileComponent,
     UserBrowseQuestsComponent,
-    CreateDoctorQuestDialog
+    CreateDoctorQuestDialog,
     MissedQuestsDialog
   ],
   imports: [
@@ -72,7 +71,6 @@ import {AutosizeModule} from "ngx-autosize";
     MatInputModule,
     MatGridListModule,
     MatExpansionModule,
-    AutosizeModule
     MatSortModule,
     MatRadioModule,
     MatListModule

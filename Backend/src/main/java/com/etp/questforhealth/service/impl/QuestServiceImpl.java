@@ -29,7 +29,6 @@ public class QuestServiceImpl implements QuestService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final QuestDao questDao;
-    private final UserDao userDao;
 
     private final QuestValidator questValidator;
     private final Validator validator;
@@ -43,7 +42,6 @@ public class QuestServiceImpl implements QuestService {
         this.questValidator = questValidator;
         this.validator = validator;
         this.doctorService = doctorService;
-        this.userDao = userDao;
 
         this.userService = userService;
     }
@@ -102,12 +100,6 @@ public class QuestServiceImpl implements QuestService {
         LOGGER.trace("getAllMissedQuestsForUser({})", userId);
         try{
             List<Quest> missedQuests = questDao.getAllMissedQuestsForUser(userId);
-            //Insert quests into completed-table but mark them as uncompleted so that the user only gets notified once
-            /*for (Quest q: missedQuests){
-                userDao.completeQuest(userId,q.getId(),false);
-            }
-
-             */
             return missedQuests;
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
