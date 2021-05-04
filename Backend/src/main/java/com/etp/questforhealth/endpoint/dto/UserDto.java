@@ -15,7 +15,6 @@ public class UserDto {
     private String password;
     private String email;
     private int storyChapter;
-    private int characterGold;
 
     public UserDto(){
 
@@ -87,10 +86,6 @@ public class UserDto {
     public void setCharacterExp(int characterExp) {
         this.characterExp = characterExp;
     }
-
-    public int getCharacterGold() { return characterGold; }
-
-    public void setCharacterGold(int characterGold) { this.characterGold = characterGold; }
 
     public String getPassword() {
         return password;
@@ -169,7 +164,6 @@ public class UserDto {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", storyChapter=" + storyChapter +
-                ", characterGold=" + characterGold +
                 '}';
     }
 }

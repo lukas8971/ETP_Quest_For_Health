@@ -14,7 +14,6 @@ public class User {
     private String password;
     private String email;
     private int storyChapter;
-    private int characterGold;
 
     public User(){
 
@@ -88,10 +87,6 @@ public class User {
     public void setCharacterExp(int characterExp) {
         this.characterExp = characterExp;
     }
-
-    public int getCharacterGold() { return characterGold; }
-
-    public void setCharacterGold(int characterGold) { this.characterGold = characterGold; }
 
     public String getPassword() {
         return password;

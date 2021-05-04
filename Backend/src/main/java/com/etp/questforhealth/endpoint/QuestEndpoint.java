@@ -116,6 +116,7 @@ public class QuestEndpoint {
         try{
              return questService.acceptQuest(user,quest);
         } catch (ServiceException e){
+            LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept quest", e);
         }
     }

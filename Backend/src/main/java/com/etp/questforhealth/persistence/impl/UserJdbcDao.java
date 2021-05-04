@@ -234,7 +234,6 @@ public class UserJdbcDao implements UserDao {
                 rs.getInt("character_strength"),
                 rs.getInt("character_level"),
                 rs.getInt("character_exp"),
-                rs.getInt("character_gold"),
                 rs.getString("password"),
                 rs.getString("email"),
                 rs.getInt("story_chapter"),
