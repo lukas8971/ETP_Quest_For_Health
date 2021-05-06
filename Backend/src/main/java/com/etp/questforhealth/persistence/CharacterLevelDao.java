@@ -13,6 +13,4 @@ public interface CharacterLevelDao {
      * @return the CharacterLevel
      */
     CharacterLevel getCharacterLevelByExp (int exp);
-
-    void rollbackChanges();
 }

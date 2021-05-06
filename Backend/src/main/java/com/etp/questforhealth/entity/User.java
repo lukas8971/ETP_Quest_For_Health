@@ -10,10 +10,10 @@ public class User {
     private int characterStrength;
     private int characterLevel;
     private int characterExp;
+    private int characterGold;
     private String password;
     private String email;
     private int storyChapter;
-    private int characterGold;
 
     public User(){
 
@@ -27,6 +27,7 @@ public class User {
         this.characterStrength = characterStrength;
         this.characterLevel = characterLevel;
         this.characterExp = characterExp;
+        this.characterGold = characterGold;
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
@@ -136,6 +137,7 @@ public class User {
                 characterStrength == user.characterStrength &&
                 characterLevel == user.characterLevel &&
                 characterExp == user.characterExp &&
+                characterGold == user.characterGold &&
                 storyChapter == user.storyChapter &&
                 characterGold == user.characterGold &&
                 Objects.equals(firstname, user.firstname) &&
@@ -160,10 +162,10 @@ public class User {
                 ", characterStrength=" + characterStrength +
                 ", characterLevel=" + characterLevel +
                 ", characterExp=" + characterExp +
+                ", characterGold=" + characterGold +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", storyChapter=" + storyChapter +
-                ", gold=" + characterGold +
                 '}';
     }
 }

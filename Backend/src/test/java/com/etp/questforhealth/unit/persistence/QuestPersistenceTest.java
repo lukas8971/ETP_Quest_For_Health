@@ -1,9 +1,10 @@
 package com.etp.questforhealth.unit.persistence;
 
+import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.persistence.QuestDao;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +28,9 @@ public class QuestPersistenceTest {
     @Autowired
     QuestDao questDao;
 
-
-    @AfterEach
-    public void tearDownDBData(){
-        questDao.rollbackChanges();
+    @BeforeAll
+    public static void testData(){
+        DatabaseTestData.insertTestData();
     }
 
     @Test

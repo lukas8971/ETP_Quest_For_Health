@@ -77,6 +77,22 @@ public class UserEndpoint {
         }
     }
 
+    /**
+     * Returns the strength of a user
+     * @param id of the user to get its strength
+     * @return the strength of a user
+     */
+    @GetMapping(value="/{id}/strength")
+    public int getUserStrength(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/{}/strength",id);
+        try{
+            return userService.getUserStrength(id);
+        } catch (NotFoundException e){
+            LOGGER.error("Could not find user with id {} " + e, id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find user",e);
+        }
+    }
+
     @PostMapping(value="/completeQuest")
     @ResponseStatus(HttpStatus.OK)
     public UserDto completeQuest(@RequestBody UserQuest userQuest){
@@ -84,6 +100,7 @@ public class UserEndpoint {
         try{
             return userMapper.entityToDto(userService.completeQuest(userQuest.getUser(), userQuest.getQuest()));
         } catch (ServiceException e){
+            LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }
     }
@@ -94,6 +111,7 @@ public class UserEndpoint {
         try{
             return userMapper.entityToDto(userService.dismissMissedQuests(userQuests.getUser(), userQuests.getQuests()));
         } catch (ServiceException e){
+            LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }
     }
@@ -108,6 +126,7 @@ public class UserEndpoint {
             LOGGER.warn(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(),e);
         } catch (ServiceException e){
+            LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
         }
     }
@@ -121,9 +140,5 @@ public class UserEndpoint {
             LOGGER.error("Wrong username or password!");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         }
-    }
-
-    public void rollbackChanges(){
-        userService.rollbackChanges();;
     }
 }

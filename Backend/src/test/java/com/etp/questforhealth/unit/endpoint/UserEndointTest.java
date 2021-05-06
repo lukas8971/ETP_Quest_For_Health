@@ -1,10 +1,12 @@
 package com.etp.questforhealth.unit.endpoint;
 
+import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.endpoint.UserEndpoint;
 import com.etp.questforhealth.endpoint.dto.UserDto;
 import com.etp.questforhealth.entity.User;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,25 +31,25 @@ public class UserEndointTest {
     @Autowired
     UserEndpoint userEndpoint;
 
-    @AfterEach
-    public void tearDownDBData(){
-        userEndpoint.rollbackChanges();
+    @BeforeAll
+    public static void testData(){
+        DatabaseTestData.insertTestData();
     }
 
     @Test
-    @DisplayName("Requesting an empty user list should return null")
-    public void requestingEmptyUserList_shouldReturnNull() {
-        assertNull(userEndpoint.getAll());
+    @DisplayName("Requesting a initial user list should return null")
+    public void requestingUserList_shouldReturnNotNull() {
+        assertNotNull(userEndpoint.getAll());
     }
 
     @Test
-    @DisplayName("Requesting all users in the database should return a list with 5 users")
+    @DisplayName("Requesting all users in the database should return a list with 5+6 users")
     public void requestUserList_shouldWork(){
         for (User u: TestData.getNWorkingUsers(5) ){
             userEndpoint.createUser(u);
         }
         List<UserDto> userList = userEndpoint.getAll();
-        assertEquals(5, userList.size());
+        assertEquals(5+6, userList.size()); // +6 because of initial test data
 
     }
 

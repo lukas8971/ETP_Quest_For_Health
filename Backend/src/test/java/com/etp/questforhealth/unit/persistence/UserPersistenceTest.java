@@ -1,25 +1,24 @@
 package com.etp.questforhealth.unit.persistence;
 
+import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.UserDao;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -27,18 +26,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ActiveProfiles("test")
 public class UserPersistenceTest {
 
-    @AfterEach
-    public void tearDownDBData(){
-        userDao.rollbackChanges();
-    }
-
     @Autowired
     UserDao userDao;
 
+    @BeforeAll
+    public static void testData(){
+        DatabaseTestData.insertTestData();
+    }
+
     @Test
-    @DisplayName("Requesting an empty user list should return null")
+    @DisplayName("Requesting an initial user list should return not null")
     public void requestingEmptyUserList_shouldReturnNull() {
-        assertEquals(new ArrayList<>(), userDao.getAll());
+        assertNotNull(userDao.getAll());
     }
 
     @Test

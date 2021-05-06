@@ -1,0 +1,14 @@
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS character_level;
+DROP TABLE IF EXISTS doctor;
+DROP TABLE IF EXISTS doctor_has_patients;
+DROP TABLE IF EXISTS doctor_quest;
+DROP TABLE IF EXISTS equipment;
+DROP TABLE IF EXISTS quest;
+DROP TABLE IF EXISTS story_chapter;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS user_accepted_quest;
+DROP TABLE IF EXISTS user_completed_quest;
+DROP TABLE IF EXISTS user_has_equipment;
+DROP TABLE IF EXISTS user_wears_equipment;
+SET FOREIGN_KEY_CHECKS=1;

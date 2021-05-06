@@ -76,17 +76,6 @@ public class CharacterLevelJdbcDao implements CharacterLevelDao {
         throw new NotFoundException("Could not find level with " + exp + " or less exp in the database.");
     }
 
-    @Override
-    public void rollbackChanges() {
-        LOGGER.trace("rollbackChanges()");
-        try {
-            questForHealthConn.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     private CharacterLevel mapRow(ResultSet rs) throws SQLException {
         LOGGER.trace("mapRow({})", rs);
         return new CharacterLevel(rs.getInt("id"),

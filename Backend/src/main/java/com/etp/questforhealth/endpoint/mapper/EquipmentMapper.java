@@ -15,4 +15,9 @@ public class EquipmentMapper {
         LOGGER.trace("entityToDto({})", equipment.toString());
         return new EquipmentDto(equipment.getId(),equipment.getName(),equipment.getDescription(),equipment.getPrice(),equipment.getStrength(),equipment.getType());
     }
+
+    public Equipment dtoToEntity(EquipmentDto equipmentDto){
+        LOGGER.trace("dtoToEntity({})", equipmentDto);
+        return new Equipment(equipmentDto.getId(),equipmentDto.getName(),equipmentDto.getDescription(),equipmentDto.getPrice(),equipmentDto.getStrength(),equipmentDto.getType());
+    }
 }

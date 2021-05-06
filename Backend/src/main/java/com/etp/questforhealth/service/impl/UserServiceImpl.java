@@ -2,13 +2,16 @@ package com.etp.questforhealth.service.impl;
 
 import com.etp.questforhealth.entity.CharacterLevel;
 import com.etp.questforhealth.entity.Credentials;
+import com.etp.questforhealth.entity.Equipment;
 import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.CharacterLevelDao;
+import com.etp.questforhealth.persistence.EquipmentDao;
 import com.etp.questforhealth.persistence.UserDao;
+import com.etp.questforhealth.service.EquipmentService;
 import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.Validator;
 import org.slf4j.Logger;
@@ -28,12 +31,14 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final CharacterLevelDao characterLevelDao;
     private final Validator validator;
+    private final EquipmentService equipmentService;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, Validator validator, CharacterLevelDao characterLevelDao) {
+    public UserServiceImpl(UserDao userDao, Validator validator, CharacterLevelDao characterLevelDao, EquipmentService equipmentService) {
         this.userDao = userDao;
         this.validator = validator;
         this.characterLevelDao = characterLevelDao;
+        this.equipmentService = equipmentService;
     }
 
 
@@ -54,6 +59,22 @@ public class UserServiceImpl implements UserService {
         LOGGER.trace("getOneById({})", id);
         try {
             return userDao.getOneById(id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int getUserStrength(int id){
+        LOGGER.trace("getUserStrength({})", id);
+        try{
+            User u = userDao.getOneById(id);
+            List<Equipment> equipments = equipmentService.getWornEquipmentFromUserId(id);
+            int st = u.getCharacterStrength();
+            for (Equipment e: equipments) {
+                st += e.getStrength();
+            }
+            return st;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
@@ -126,6 +147,7 @@ public class UserServiceImpl implements UserService {
         user.setCharacterStrength(0);
         user.setCharacterLevel(1);
         user.setCharacterExp(0);
+        user.setCharacterGold(0);
         user.setStoryChapter(1);
         user.setPassword(get_SHA_512_SecurePassword(user.getPassword()));
         try {
@@ -135,12 +157,6 @@ public class UserServiceImpl implements UserService {
         catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
         }
-    }
-
-    @Override
-    public void rollbackChanges() {
-        LOGGER.trace("rollbackChanges()");
-        userDao.rollbackChanges();
     }
 
     private static String get_SHA_512_SecurePassword(String passwordToHash){
@@ -162,4 +178,14 @@ public class UserServiceImpl implements UserService {
         return generatedPassword;
     }
 
+    @Override
+    public boolean changeUserGold(int id, int changeValue) {
+        LOGGER.trace("changeUserGold({}, {})", id, changeValue);
+        try{
+            validator.validateUserGold(id, changeValue);
+            return userDao.changeUserGold(id, changeValue);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
 }

@@ -1,9 +1,9 @@
 package com.etp.questforhealth.persistence.impl;
 
 import com.etp.questforhealth.entity.Credentials;
-import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.InvalidLoginException;
+import com.etp.questforhealth.exception.NotEnoughGoldException;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.persistence.UserDao;
@@ -56,7 +56,7 @@ public class UserJdbcDao implements UserDao {
         LOGGER.trace("createUser({})", user.toString());
         makeJDBCConnection();
         try {
-            String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp,character_gold)" +
+            String query = "Insert into " + TABLE_NAME + " (firstname, lastname, character_name, password, email, story_chapter, character_level,character_strength, character_exp, character_gold)" +
                     " values (?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement pstmtnt = questForHealthConn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmtnt.setString(1, user.getFirstname());
@@ -80,16 +80,6 @@ public class UserJdbcDao implements UserDao {
             throw new PersistenceException("Error while inserting user in Database", e);
         }
         return user;
-    }
-
-    @Override
-    public void rollbackChanges() {
-        LOGGER.trace("rollbackChanges()");
-        try {
-            questForHealthConn.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -251,6 +241,24 @@ public class UserJdbcDao implements UserDao {
         );
     }
 
+    @Override
+    public boolean changeUserGold(int id, int changeValue){
+        LOGGER.trace("changeUserGold({}, {})", id, changeValue);
+        makeJDBCConnection();
+        try{
+            User u = getOneById(id);
+            int newGold = u.getCharacterGold() + changeValue;
+            if (newGold < 0) throw new NotEnoughGoldException("The amount of gold can't get negative!");
+            String sql = "UPDATE " + TABLE_NAME + " SET character_gold = ? WHERE id = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmnt.setInt(1, newGold);
+            pstmnt.setInt(2, id);
+            int rowsAffected = pstmnt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 
     public void makeJDBCConnection() {
         LOGGER.trace("makeJDBCConnection()");
