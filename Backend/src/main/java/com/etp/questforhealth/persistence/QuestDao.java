@@ -96,6 +96,7 @@ public interface QuestDao {
      */
    List<Quest> getAllMissedQuestsForUser (int userId);
 
+
    /**
     * Adds a new assigned doctor quest for a patient
     * @param acceptedQuest the quest that should be added

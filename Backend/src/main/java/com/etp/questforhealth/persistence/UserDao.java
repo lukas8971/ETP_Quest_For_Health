@@ -6,6 +6,8 @@ import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface UserDao {
@@ -47,7 +49,7 @@ public interface UserDao {
      * @param complete true if the user completed the quest, false if the quest's deadline is over
      * @return  true if successful
      */
-    boolean completeQuest(int userId, int questId, boolean complete);
+    boolean completeQuest(int userId, int questId, boolean complete, LocalDate completed_on);
 
     /**
      * Checks if a User with the specified username exist.

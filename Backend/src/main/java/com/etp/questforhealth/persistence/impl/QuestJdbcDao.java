@@ -236,7 +236,7 @@ public class QuestJdbcDao implements QuestDao {
                     "  select ucq.quest from user_completed_quest ucq " +
                     "\tinner join quest q on q.id = ucq.quest " +
                     "\twhere ucq.user = ?  " +
-                    "  \tAND ADDTIME(ucq.completed_on, q.repetition_cycle) > CURRENT_DATE " +
+                    "  \tAND ucq.completed_on >= CURRENT_DATE " +
                     "  ) and uaq.user = ? " +
                     "  \tand q.repetition_cycle IS NOT NULL " +
                     "    group by q.id, q.name, q.description, q.exp_reward, q.gold_reward, q.repetition_cycle " +

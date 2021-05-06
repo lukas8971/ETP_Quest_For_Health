@@ -23,6 +23,8 @@ import java.lang.invoke.MethodHandles;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -95,7 +97,7 @@ public class UserServiceImpl implements UserService {
     public User completeQuest(User user, Quest quest) {
         LOGGER.trace("completeQuest({},{})", user.toString(), quest.toString());
         try{
-            userDao.completeQuest(user.getId(), quest.getId(), true);
+            userDao.completeQuest(user.getId(), quest.getId(), true, quest.getDueDate() != null ? quest.getDueDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(): LocalDate.now());
             CharacterLevel currentLevel = characterLevelDao.getCharacterLevelById(user.getCharacterLevel());
             User updatedUser = userDao.changeUserGoldAndExp(user, quest.getExp_reward(), quest.getGold_reward());
             CharacterLevel nextLevel = characterLevelDao.getCharacterLevelByExp(updatedUser.getCharacterExp());
@@ -119,7 +121,7 @@ public class UserServiceImpl implements UserService {
             for(Quest quest: missedQuests){
                 goldPenalty +=quest.getGold_penalty();
                 expPenalty +=quest.getExp_penalty();
-                userDao.completeQuest(user.getId(), quest.getId(), false);
+                userDao.completeQuest(user.getId(), quest.getId(), false, LocalDate.now().minusDays(1));
             }
             //user can't have debt
             if (goldPenalty > user.getCharacterGold()) goldPenalty = user.getCharacterGold();
