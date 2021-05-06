@@ -6,7 +6,6 @@ import com.etp.questforhealth.entity.Equipment;
 import com.etp.questforhealth.entity.enums.mapper.EquipmentTypeMapper;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.persistence.EquipmentDao;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

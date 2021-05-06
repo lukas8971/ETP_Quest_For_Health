@@ -99,8 +99,7 @@ public class QuestServiceImpl implements QuestService {
     public List<Quest> getAllMissedQuestsForUser(int userId) {
         LOGGER.trace("getAllMissedQuestsForUser({})", userId);
         try{
-            List<Quest> missedQuests = questDao.getAllMissedQuestsForUser(userId);
-            return missedQuests;
+            return questDao.getAllMissedQuestsForUser(userId);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(),e);
         }
