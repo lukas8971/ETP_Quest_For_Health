@@ -119,15 +119,18 @@ public class UserServiceImpl implements UserService {
             int goldPenalty = 0;
             int expPenalty = 0;
             for(Quest quest: missedQuests){
-                goldPenalty +=quest.getGold_penalty();
-                expPenalty +=quest.getExp_penalty();
+                //Check for overflow
+                if((goldPenalty + quest.getGold_penalty())>0) goldPenalty +=quest.getGold_penalty();
+                else goldPenalty = Integer.MAX_VALUE;
+                if((expPenalty + quest.getExp_penalty())>0) expPenalty +=quest.getExp_penalty();
+                else expPenalty = Integer.MAX_VALUE;
                 userDao.completeQuest(user.getId(), quest.getId(), false, LocalDate.now().minusDays(1));
             }
             //user can't have debt
             if (goldPenalty > user.getCharacterGold()) goldPenalty = user.getCharacterGold();
             if (expPenalty > user.getCharacterExp()) expPenalty = user.getCharacterExp();
             CharacterLevel currentLevel = characterLevelDao.getCharacterLevelById(user.getCharacterLevel());
-            User updatedUser = userDao.changeUserGoldAndExp(user, -goldPenalty,-expPenalty);
+            User updatedUser = userDao.changeUserGoldAndExp(user, -expPenalty,-goldPenalty);
             CharacterLevel newLevel = characterLevelDao.getCharacterLevelByExp(updatedUser.getCharacterExp());
             if(!(currentLevel.equals(newLevel))){
                 //set user-Level

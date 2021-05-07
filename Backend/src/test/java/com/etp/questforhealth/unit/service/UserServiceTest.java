@@ -2,10 +2,13 @@ package com.etp.questforhealth.unit.service;
 
 import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
+import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
+import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +29,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class UserServiceTest {
 
-    @BeforeAll
-    public static void testData(){
+    @BeforeEach
+    public void testData(){
         DatabaseTestData.insertTestData();
     }
 
@@ -54,7 +58,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Changing the gold amount of a user to still be positive should not throw any exception")
-    public void chaningUserGold_shouldNotThrow(){
+    public void changingUserGold_shouldNotThrow(){
         assertDoesNotThrow(() -> {
             User u = userService.createUser(TestData.getNewWorkingUserDifferentCharacter());
             assertNotNull(u);
@@ -62,4 +66,131 @@ public class UserServiceTest {
             assertEquals(userService.getOneById(u.getId()).getCharacterGold(), 500000);
         });
     }
+
+    @Test
+    @DisplayName("Completing a valid Quest with a valid user should work")
+    public void completeQuest_shouldWork(){
+        User user = userService.getOneById(1);
+        int gold = user.getCharacterGold();
+        int exp = user.getCharacterExp();
+        User updatedUser = userService.completeQuest(user, TestData.getNewStandardQuest(1)); // Id is one because that one already exists
+        assertAll(
+                ()-> assertTrue(gold < updatedUser.getCharacterGold()),
+                ()-> assertTrue(exp < updatedUser.getCharacterExp())
+        );
+    }
+
+    @Test
+    @DisplayName("Completing a valid Quest as an invalid user should throw a ServiceException")
+    public void completeQuest_invalidUser_shouldThrowServiceException(){
+        User user = TestData.getNewWorkingUser();
+        user.setId(-1);
+        assertThrows(ServiceException.class, () -> userService.completeQuest(user, TestData.getNewStandardQuest(1)));
+    }
+
+    @Test
+    @DisplayName ("Completing an invalid Quest should throw a ServiceException")
+    public void completeQuest_invalidQuest_shouldThrowServiceException(){
+        User user = userService.getOneById(1);
+        assertThrows(ServiceException.class, () -> userService.completeQuest(user, TestData.getNewStandardQuest(-1)));
+    }
+
+    @Test
+    @DisplayName ("Completing a Quest with max. exp should lead to a level-up")
+    public void completeQuest_levelUp_shouldWork(){
+        User user = userService.getOneById(1);
+        int characterLevel = user.getCharacterLevel();
+        Quest quest = TestData.getNewStandardQuest(1);
+        quest.setExp_reward(Integer.MAX_VALUE-user.getCharacterExp()); //to prevent overflow
+        User updatedUser = userService.completeQuest(user,quest);
+        assertNotEquals(characterLevel, updatedUser.getCharacterGold());
+    }
+
+    @Test
+    @DisplayName("Dismissing missed Quests with valid user and valid Quests should work")
+    public void dismissMissedQuests_shouldWork(){
+        User user = userService.getOneById(1);
+        int gold = user.getCharacterGold();
+        int exp = user.getCharacterExp();
+        List<Quest> missedQuests = new ArrayList<>();
+        Quest quest1 = TestData.getNewStandardQuest(1);
+        quest1.setExp_penalty(10);
+        quest1.setGold_penalty(5);
+        Quest quest2 = TestData.getNewStandardQuest(2);
+        quest2.setExp_penalty(20);
+        quest2.setGold_penalty(10);
+        missedQuests.add(quest1);
+        missedQuests.add(quest2);
+        User updatedUser = userService.dismissMissedQuests(user, missedQuests);
+        assertAll(
+                () -> assertTrue(gold > updatedUser.getCharacterGold()),
+                () -> assertTrue(exp > updatedUser.getCharacterExp())
+        );
+    }
+    @Test
+    @DisplayName("Dismissing missed Quests with a higher exp and gold penalty should set user's gold and exp to 0")
+    public void dismissMissedQuests_noExpOrGoldDebt_shouldWork(){
+        User user = userService.getOneById(1);
+        List<Quest> missedQuests = new ArrayList<>();
+        Quest quest1 = TestData.getNewStandardQuest(1);
+        quest1.setExp_penalty(Integer.MAX_VALUE);
+        quest1.setGold_penalty(Integer.MAX_VALUE);
+        Quest quest2 = TestData.getNewStandardQuest(2);
+        quest2.setExp_penalty(Integer.MAX_VALUE);
+        quest2.setGold_penalty(Integer.MAX_VALUE);
+        missedQuests.add(quest1);
+        missedQuests.add(quest2);
+        User updatedUser = userService.dismissMissedQuests(user, missedQuests);
+        assertAll(
+                () -> assertEquals(0,updatedUser.getCharacterGold()),
+                () -> assertEquals(0,updatedUser.getCharacterExp())
+        );
+    }
+
+    @Test
+    @DisplayName("Dismissing missed Quests as an invalid user should throw a ServiceException")
+    public void dismissMissedQuests_invalidUser_shouldThrowServiceException(){
+        User user = userService.getOneById(1);
+        user.setId(-1);
+        List<Quest> missedQuests = new ArrayList<>();
+        Quest quest1 = TestData.getNewStandardQuest(1);
+        Quest quest2 = TestData.getNewStandardQuest(2);
+        missedQuests.add(quest1);
+        missedQuests.add(quest2);
+        assertThrows(ServiceException.class, () -> userService.dismissMissedQuests(user, missedQuests));
+    }
+
+    @Test
+    @DisplayName("Dismissing invalid Quests  should throw a ServiceException")
+    public void dismissMissedQuests_invalidQuests_shouldThrowServiceException(){
+        User user = userService.getOneById(1);
+        user.setId(-1);
+        List<Quest> missedQuests = new ArrayList<>();
+        Quest quest1 = TestData.getNewStandardQuest(-1);
+        Quest quest2 = TestData.getNewStandardQuest(-2);
+        missedQuests.add(quest1);
+        missedQuests.add(quest2);
+        assertThrows(ServiceException.class, () -> userService.dismissMissedQuests(user, missedQuests));
+    }
+
+    @Test
+    @DisplayName("Dismissing Quests with a high enough exp penalty should result in a level-down")
+    public void dismissMissedQuests_levelDown_shouldWork(){
+        User user = userService.getOneById(1);
+        int newLevel= 2;
+        user.setCharacterLevel(newLevel);
+        List<Quest> missedQuests = new ArrayList<>();
+        Quest quest1 = TestData.getNewStandardQuest(1);
+        quest1.setExp_penalty(Integer.MAX_VALUE);
+        quest1.setGold_penalty(Integer.MAX_VALUE);
+        Quest quest2 = TestData.getNewStandardQuest(2);
+        quest2.setExp_penalty(Integer.MAX_VALUE);
+        quest2.setGold_penalty(Integer.MAX_VALUE);
+        missedQuests.add(quest1);
+        missedQuests.add(quest2);
+        User updatedUser = userService.dismissMissedQuests(user, missedQuests);
+        assertNotEquals(newLevel, updatedUser.getCharacterLevel());
+    }
+
+
 }
