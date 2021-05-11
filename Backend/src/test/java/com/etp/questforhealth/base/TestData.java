@@ -106,4 +106,23 @@ public interface TestData {
     static Equipment getNewEquipmentWOid(int price, int strength, EquipmentType type){
         return new Equipment("UnitTest Equipment", "This should never be worn!", price, strength, type);
     }
+
+    /**
+     * Doctor Data
+     */
+    static Doctor getExistingDoctorTestDoc1() {
+        return new Doctor(1, "Test", "Doc", "e.m@il.com", "QWERT1234");
+    }
+
+    static Doctor getExistingDoctorGeraldSteinhardt2() {
+        return new Doctor(2, "Gerald", "Steinhardt", "sig@na.nz", "BesterProf");
+    }
+
+    static Doctor getExistingDoctorAntonAlfred3() {
+        return new Doctor(3, "Anton", "Alfred", "a-a@doc.at", "pass");
+    }
+
+    static Doctor getNotExistingDoctor4() {
+        return new Doctor(4, "Wrong", "Doctor", "wrong@doc.tor", "hardToGuess");
+    }
 }

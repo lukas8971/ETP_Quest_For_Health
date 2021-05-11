@@ -532,5 +532,22 @@ public class QuestJdbcDao implements QuestDao {
         return aq;
     }
 
-
+    @Override
+    public Integer getDoctorIdOfQuest(int questId) {
+        LOGGER.trace("getDoctorIdOfQuest({})", questId);
+        try{
+            final String query = "SELECT doctor FROM doctor_quest WHERE id = ?";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1,questId);
+            ResultSet rs = pstmnt.executeQuery();
+            if(rs != null){
+                if(rs.next()){
+                    return rs.getInt("doctor");
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 }

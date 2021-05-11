@@ -115,4 +115,11 @@ public interface QuestDao {
     List<AcceptedQuest> getAllAcceptedQuestForUser(int user);
 
     List<CompletedQuest> getAllCompletedQuestForUser(int user);
+
+    /**
+     * Gets the doctor id of a quest
+     * @param questId id of the quest
+     * @return the id of the doctor, or null if its not a doctor quest
+     */
+    Integer getDoctorIdOfQuest(int questId);
 }

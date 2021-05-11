@@ -42,4 +42,13 @@ public interface DoctorDao {
      * @return true if a relationship exists.
      */
     boolean checkIfDoctorUserRelationshipExists(int doctor, int user);
+
+    /**
+     * Creates a new doctor user relationship
+     * @param doctorId id of the doctor
+     * @param userId id of the user
+     * @return true if worked
+     * @throws PersistenceException if something went wrong
+     */
+    boolean assignNewPatient(int doctorId, int userId);
 }
