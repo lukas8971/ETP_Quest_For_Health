@@ -142,6 +142,7 @@ public class QuestServiceImpl implements QuestService {
     public boolean deleteAssignedDoctorQuestForUser(int quest, int user){
         LOGGER.trace("deleteAssignedDoctorQuestForUser({}, {})", quest, user);
         try {
+            validator.validateDeleteDoctorQuest(quest, user);
             return questDao.deleteAssignedDoctorQuestForUser(quest, user);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);
@@ -153,6 +154,7 @@ public class QuestServiceImpl implements QuestService {
         LOGGER.trace("addAssignedDoctorQuestForUser({})", acceptedQuest);
         try {
             validator.validateAcceptedQuest(acceptedQuest);
+            validator.validateAcceptedDoctorQuest(acceptedQuest);
             return questDao.addAssignedDoctorQuestForUser(acceptedQuest);
         } catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);

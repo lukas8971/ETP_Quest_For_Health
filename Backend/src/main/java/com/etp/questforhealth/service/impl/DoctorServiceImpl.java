@@ -6,6 +6,7 @@ import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.persistence.DoctorDao;
 import com.etp.questforhealth.service.DoctorService;
+import com.etp.questforhealth.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,13 @@ import java.util.List;
 public class DoctorServiceImpl implements DoctorService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final DoctorDao doctorDao;
+    private final Validator validator;
 
     @Autowired
-    public DoctorServiceImpl(DoctorDao doctorDao){this.doctorDao = doctorDao;}
+    public DoctorServiceImpl(DoctorDao doctorDao, Validator validator){
+        this.doctorDao = doctorDao;
+        this.validator = validator;
+    }
 
     @Override
     public Doctor checkLogin(Credentials credentials) {
@@ -43,6 +48,17 @@ public class DoctorServiceImpl implements DoctorService {
         LOGGER.trace("getOneById({})", id);
         try {
             return doctorDao.getOneById(id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public boolean assignNewPatient(int doctorId, int userId) {
+        LOGGER.trace("assignNewPatient({}, {})", doctorId, userId);
+        validator.validateNewUserDoctorRelationship(doctorId, userId);
+        try {
+            return doctorDao.assignNewPatient(doctorId, userId);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
