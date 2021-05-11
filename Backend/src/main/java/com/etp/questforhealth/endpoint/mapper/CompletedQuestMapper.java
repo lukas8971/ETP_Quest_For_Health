@@ -19,7 +19,7 @@ public class CompletedQuestMapper {
 
     public CompletedQuestDto entityToDto(CompletedQuest entity){
         LOGGER.trace("entityToDto({})",entity);
-        return new CompletedQuestDto(entity.getQuest() , entity.getUser(), entity.getCompletedOn());
+        return new CompletedQuestDto(entity.getQuest() , entity.getUser(), entity.getCompletedOn(), entity.isCompleted());
     }
 
     public List<CompletedQuestDto> entityToDto(List<CompletedQuest> entities) {

@@ -10,9 +10,9 @@ import {QuestService} from '../../service/quest.service';
 import {Quest} from '../../dto/quest';
 import {AcceptedQuest} from '../../dto/accepted-quest';
 import {MatTableDataSource} from '@angular/material/table';
-import {CreateDoctorQuest} from "../../dto/createDoctorQuest";
 import {CreateDoctorQuestDialog} from "../create-doctor-quest/create-doctor-quest-dialog.component";
 import {CompletedQuest} from "../../dto/completed-quest";
+import {HistoryQuest} from "../../entity/history-quest";
 
 @Component({
   selector: 'app-patient-doctor-quest',
@@ -27,16 +27,20 @@ export class PatientDoctorQuestComponent implements OnInit {
   assignedQuests: any[] = [];
   availableQuests: any[] = [];
   history: HistoryQuest[] = [];
+  accepted: HistoryQuest[] = []
 
   showAvailable = false;
   showAssigned = false;
+  history_loaded = false;
 
   dataSourceAssigned = new MatTableDataSource(this.assignedQuests);
   dataSourceAvailable = new MatTableDataSource(this.availableQuests);
   dataSourceHistory = new MatTableDataSource(this.history);
+  dataSourceAccepted = new MatTableDataSource(this.accepted);
 
   questHeader = ['name', 'description', 'id'];
-  historyHeader = ['name', 'description', 'accept_date','complete_date']
+  historyHeader = ['name', 'description', 'complete_date', 'completed'];
+  acceptedHeader = ['name', 'description', 'accept_date'];
 
   showHistory=false;
 
@@ -83,6 +87,7 @@ export class PatientDoctorQuestComponent implements OnInit {
   public applyFilterHistory(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceHistory.filter = filterValue.trim().toLowerCase();
+    this.dataSourceAccepted.filter = filterValue.trim().toLowerCase();
   }
 
   /**
@@ -150,7 +155,10 @@ export class PatientDoctorQuestComponent implements OnInit {
     this.showAssigned = false;
     this.history = [];
     this.dataSourceHistory = new MatTableDataSource(this.history);
+    this.accepted = [];
+    this.dataSourceAccepted = new MatTableDataSource(this.accepted);
     this.showHistory = false;
+    this.history_loaded = false;
   }
 
   /**
@@ -267,7 +275,7 @@ export class PatientDoctorQuestComponent implements OnInit {
           this.questService.getQuestById(aq.quest).subscribe(
             (q: Quest) => {
               let hq: HistoryQuest = {quest:q, acceptedOn:aq.acceptedOn, }
-              this.history.push(hq);
+              this.accepted.push(hq);
             }
           )
         }
@@ -280,11 +288,18 @@ export class PatientDoctorQuestComponent implements OnInit {
             for (let cq of completed){
               this.questService.getQuestById(cq.quest).subscribe(
                 (q: Quest) => {
-                  let hq: HistoryQuest = {quest:q, completedOn:cq.completedOn, }
-                  this.history.push(hq);
+                  /*let acId: number = this.history.findIndex(x => x.quest.id === cq.quest);
+                  if(acId >= 0) {
+                    this.history[acId].completedOn = cq.completedOn;
+                    this.history[acId].completed = cq.completed;
+                  } else { */
+                    let hq: HistoryQuest = {quest: q, completedOn: cq.completedOn, completed: cq.completed}
+                    this.history.push(hq);
+                  //}
                 }
               )
             }
+            this.history_loaded = true;
           },
           error => {
             this.defaultServiceErrorHandling(error);
@@ -295,12 +310,6 @@ export class PatientDoctorQuestComponent implements OnInit {
         this.defaultServiceErrorHandling(error);
       }
     );
-  }
-}
 
-interface HistoryQuest {
-    quest: Quest;
-    acceptedOn?: Date;
-    completedOn?: Date;
-    //completed?: boolean;
+  }
 }
