@@ -79,6 +79,33 @@ public class Validator {
     }
 
     /**
+     * Checks if a user is able to be assigned to a doctor quest
+     * @param acceptedQuest the quest to be assigned
+     */
+    public void validateAcceptedDoctorQuest(AcceptedQuest acceptedQuest) {
+        Integer doctorId = questDao.getDoctorIdOfQuest(acceptedQuest.getQuest());
+        if (doctorId == null) throw new ValidationException("Requested quest is not a doctor created quest!");
+        boolean rel = doctorDao.checkIfDoctorUserRelationshipExists(doctorId, acceptedQuest.getUser());
+        if (!rel) throw new ValidationException("User is not in treatment at this doctor!");
+    }
+
+    /**
+     * Checks if a doctor quest is assigned to a user
+     * And if the doctor user relationship exists
+     * @param quest id of the quest
+     * @param user id of the user
+     */
+    public void validateDeleteDoctorQuest(int quest, int user){
+        validateExistingUser(user);
+        Integer doctorId = questDao.getDoctorIdOfQuest(quest);
+        if (doctorId == null) throw new ValidationException("Quest to remove is not a doctor quest!");
+        boolean rel = doctorDao.checkIfDoctorUserRelationshipExists(doctorId, user);
+        if (!rel) throw new ValidationException("User is not in treatment at this doctor!");
+        boolean accepted = questDao.checkIfQuestAlreadyAccepted(new AcceptedQuest(quest, user, null));
+        if (!accepted) throw new ValidationException("Can not remove not accepted quest!");
+    }
+
+    /**
      * Validates an existing user via its id
      * @param user id of the user to check
      */
@@ -199,5 +226,18 @@ public class Validator {
         validateExistingUser(userId);
         User u = userDao.getOneById(userId);
         if (u.getCharacterGold() + changeValue < 0) throw new ValidationException("Can not get a negative amount of gold!");
+    }
+
+    /**
+     * Checks if a new doctor user relatinoship is valid
+     * @param doctorId id of the doctor
+     * @param userId id of the user
+     */
+    public void validateNewUserDoctorRelationship(int doctorId, int userId) {
+        LOGGER.trace("validateNewUserDoctorRelationship({}, {})", doctorId, userId);
+        validateExistingDoctor(doctorId);
+        validateExistingUser(userId);
+        boolean alreadyExists = doctorDao.checkIfDoctorUserRelationshipExists(doctorId, userId);
+        if (alreadyExists) throw new ValidationException("This patient is already treated by the doctor!");
     }
 }

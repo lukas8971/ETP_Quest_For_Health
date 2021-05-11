@@ -498,7 +498,7 @@ public class QuestJdbcDao implements QuestDao {
         List<CompletedQuest> list = new ArrayList<CompletedQuest>();
 
         try {
-            final String query = "SELECT * FROM user_completed_quest WHERE user = ?";
+            final String query = "SELECT * FROM user_completed_quest WHERE user = ? ORDER BY completed_on ASC";
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
             pstmnt.setInt(1,user);
             ResultSet rs = pstmnt.executeQuery();
@@ -528,9 +528,26 @@ public class QuestJdbcDao implements QuestDao {
         aq.setQuest(rs.getInt("quest"));
         aq.setUser(rs.getInt("user"));
         aq.setCompletedOn(rs.getDate("completed_on").toLocalDate());
-        //aq.setCompleted(rs.getBoolean("completed"));
+        aq.setCompleted(rs.getBoolean("completed"));
         return aq;
     }
 
-
+    @Override
+    public Integer getDoctorIdOfQuest(int questId) {
+        LOGGER.trace("getDoctorIdOfQuest({})", questId);
+        try{
+            final String query = "SELECT doctor FROM doctor_quest WHERE id = ?";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1,questId);
+            ResultSet rs = pstmnt.executeQuery();
+            if(rs != null){
+                if(rs.next()){
+                    return rs.getInt("doctor");
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 }

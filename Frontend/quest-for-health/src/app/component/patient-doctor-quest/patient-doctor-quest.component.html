@@ -2,18 +2,18 @@
 
 
 <div class="center" style="min-width: 1200px">
-
-
   <mat-card class="mat-elevation-z2">
-    <mat-card-title-group>
 
-      <button mat-raised-button color="info" (click)="showPatientHistory()">
+    <mat-card-title-group>
+      <button *ngIf="!history_loaded" mat-stroked-button color="info">
+        <div *ngIf="!showHistory">Show History</div>
+        <div *ngIf="showHistory">Hide History</div></button>
+      <button *ngIf="history_loaded" mat-raised-button color="info" (click)="showPatientHistory()">
       <div *ngIf="!showHistory">Show History</div>
       <div *ngIf="showHistory">Hide History</div>
       </button>
       <mat-card-title>Patient Quests for {{patient.firstname}} {{patient.lastname}}</mat-card-title>
     </mat-card-title-group>
-
     <div class="center">
       <div *ngIf="showHistory">
         <mat-card class="mat-elevation-z2">
@@ -21,11 +21,13 @@
             <mat-card-subtitle>Quest History</mat-card-subtitle>
           </mat-card-title-group>
           <mat-card-content>
-            <mat-form-field style="width: 100%">
+            <!-- <mat-form-field style="width: 100%">
               <mat-label>Filter</mat-label>
               <input matInput (keyup)="applyFilterHistory($event)" placeholder="Search" #inputAssigned>
-            </mat-form-field>
-            <table mat-table [dataSource]="dataSourceHistory" style="width: 100%">
+            </mat-form-field> -->
+            <div class="scroller">
+            <h4 style="padding-top: 5px">Active Quests</h4>
+            <table mat-table [dataSource]="dataSourceAccepted" style="width: 100%">
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Name</th>
                 <td mat-cell *matCellDef="let quest"> {{quest.quest.name}} </td>
@@ -38,12 +40,36 @@
                 <th mat-header-cell *matHeaderCellDef> Accepted On</th>
                 <td mat-cell *matCellDef="let quest"> {{quest.acceptedOn}} </td>
               </ng-container>
+              <tr mat-header-row *matHeaderRowDef="acceptedHeader"></tr>
+              <tr mat-row *matRowDef="let row; columns: acceptedHeader" ></tr>
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td *ngIf="inputAssigned.value === ''" class="mat-cell" colspan="3">No quests</td>
+                <td *ngIf="inputAssigned.value !== ''" class="mat-cell" colspan="3">No data matching the filter
+                  "{{inputAssigned.value}}"
+                </td>
+              </tr>
+            </table>
+            <h4 style="padding-top: 10px">Completed Quests</h4>
+            <table mat-table [dataSource]="dataSourceHistory" style="width: 100%">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let quest"> {{quest.quest.name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let quest"> {{quest.quest.description}} </td>
+              </ng-container>
               <ng-container matColumnDef="complete_date">
                 <th mat-header-cell *matHeaderCellDef>Completed On</th>
                 <td mat-cell *matCellDef="let quest">{{quest.completedOn}}</td>
               </ng-container>
+              <ng-container matColumnDef="completed">
+                <th mat-header-cell *matHeaderCellDef>Completed</th>
+                <td mat-cell *matCellDef="let quest"><ng-container *ngIf="quest.completed"> <mat-icon>done</mat-icon></ng-container> <ng-container *ngIf="!quest.completed"><mat-icon>block</mat-icon></ng-container> </td>
+              </ng-container>
               <tr mat-header-row *matHeaderRowDef="historyHeader"></tr>
-              <tr mat-row *matRowDef="let row; columns: historyHeader"></tr>
+              <tr mat-row *matRowDef="let row; columns: historyHeader" ></tr>
               <!-- Row shown when there is no matching data. -->
               <tr class="mat-row" *matNoDataRow>
                 <td *ngIf="inputAssigned.value === ''" class="mat-cell" colspan="4">No quests</td>
@@ -52,7 +78,7 @@
                 </td>
               </tr>
             </table>
-
+            </div>
           </mat-card-content>
         </mat-card>
       </div>
@@ -65,6 +91,7 @@
             <mat-label>Filter</mat-label>
             <input matInput (keyup)="applyFilterAssign($event)" placeholder="Search" #inputAssigned>
           </mat-form-field>
+          <div class="scroller">
           <table mat-table *ngIf="showAssigned" [dataSource]="dataSourceAssigned" style="width: 100%">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Name</th>
@@ -90,6 +117,7 @@
               </td>
             </tr>
           </table>
+          </div>
         </mat-card>
       </div>
       <div style="width: 20px"></div>
@@ -103,6 +131,7 @@
             <mat-label>Filter</mat-label>
             <input matInput (keyup)="applyFilterAvailable($event)" placeholder="Search" #inputAvailable>
           </mat-form-field>
+          <div class="scroller">
           <table mat-table *ngIf="showAvailable" [dataSource]="dataSourceAvailable" style="width: 100%">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Name</th>
@@ -128,6 +157,7 @@
               </td>
             </tr>
           </table>
+          </div>
         </mat-card>
       </div>
 

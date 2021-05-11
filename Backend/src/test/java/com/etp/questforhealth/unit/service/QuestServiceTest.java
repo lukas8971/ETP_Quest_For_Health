@@ -2,12 +2,17 @@ package com.etp.questforhealth.unit.service;
 
 import com.etp.questforhealth.base.DatabaseTestData;
 import com.etp.questforhealth.base.TestData;
+import com.etp.questforhealth.entity.AcceptedQuest;
 import com.etp.questforhealth.entity.CreateDoctorQuest;
+import com.etp.questforhealth.entity.Doctor;
 import com.etp.questforhealth.entity.Quest;
+import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.QuestDao;
+import com.etp.questforhealth.service.DoctorService;
 import com.etp.questforhealth.service.QuestService;
+import com.etp.questforhealth.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Duration;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,6 +38,10 @@ public class QuestServiceTest {
     QuestService questService;
     @Autowired
     QuestDao questDao;
+    @Autowired
+    UserService userService;
+    @Autowired
+    DoctorService doctorService;
 
     @BeforeAll
     public static void testData(){
@@ -134,5 +144,52 @@ public class QuestServiceTest {
         Quest quest = questService.createQuest(cdq);
         assertEquals(Duration.parse("P7D"), quest.getRepetition_cycle());
         assertEquals(Duration.parse("P7D"), quest.getRepetition_cycle());
+    }
+
+    @Test
+    @DisplayName("Having a doctor user relationship and assigning quests to that user should not throw anything")
+    public void assigningQuest_doctorUserRelationship_shouldNotThrow() {
+        User u = TestData.getNewWorkingUser();
+        Doctor d = TestData.getExistingDoctorTestDoc1();
+        User savedUser = userService.createUser(u);
+        assertNotNull(savedUser);
+        assertTrue(doctorService.assignNewPatient(d.getId(), savedUser.getId()));
+        AcceptedQuest acceptedQuest = new AcceptedQuest(7, savedUser.getId(), LocalDate.now());
+        assertTrue(questService.addAssignedDoctorQuestForUser(acceptedQuest));
+    }
+
+    @Test
+    @DisplayName("Adding a doctor quest for a user that is not in treatment at a doctor should throw ValidationException")
+    public void assigningDoctorQuest_noRelatinoship_shouldThrowValidationException() {
+        User u = TestData.getNewWorkingUserDifferentCharacter();
+        Doctor d = TestData.getExistingDoctorTestDoc1();
+        User savedUser = userService.createUser(u);
+        assertNotNull(savedUser);
+        AcceptedQuest acceptedQuest = new AcceptedQuest(7, savedUser.getId(), LocalDate.now());
+        assertThrows(ValidationException.class, () -> questService.addAssignedDoctorQuestForUser(acceptedQuest));
+    }
+
+    @Test
+    @DisplayName("Adding the same doctor quest to a user twice should throw ValidationException")
+    public void addingSameDocotorQuestTwice_sameUser_shouldThrowValidationException(){
+        User u = TestData.getNewWorkingUserDifferentCharacter2();
+        Doctor d = TestData.getExistingDoctorGeraldSteinhardt2();
+        User savedUser = userService.createUser(u);
+        assertNotNull(savedUser);
+        assertTrue(doctorService.assignNewPatient(d.getId(), savedUser.getId()));
+        AcceptedQuest acceptedQuest = new AcceptedQuest(4, savedUser.getId(), LocalDate.now());
+        assertDoesNotThrow(() -> questService.addAssignedDoctorQuestForUser(acceptedQuest));
+        assertThrows(ValidationException.class, () -> questService.addAssignedDoctorQuestForUser(acceptedQuest));
+    }
+
+    @Test
+    @DisplayName("Removig not assigned quest from user should throw ValidationException")
+    public void removingNotAssignedDoctorQuest_shouldThrowValidationException() {
+        User u = TestData.getNewWorkingUserDifferentCharacter3();
+        Doctor d = TestData.getExistingDoctorGeraldSteinhardt2();
+        User savedUser = userService.createUser(u);
+        assertNotNull(savedUser);
+        assertTrue(doctorService.assignNewPatient(d.getId(), savedUser.getId()));
+        assertThrows(ValidationException.class, () -> questService.deleteAssignedDoctorQuestForUser(4, savedUser.getId()));
     }
 }

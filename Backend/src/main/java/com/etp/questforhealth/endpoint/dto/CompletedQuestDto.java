@@ -7,14 +7,15 @@ public class CompletedQuestDto {
     private int quest;
     private int user;
     private LocalDate completedOn;
-    // boolean completed;
+    boolean completed;
 
     public CompletedQuestDto(){}
 
-    public CompletedQuestDto(int quest, int user, LocalDate completedOn) {
+    public CompletedQuestDto(int quest, int user, LocalDate completedOn, boolean completed) {
         this.quest = quest;
         this.user = user;
         this.completedOn = completedOn;
+        this.completed = completed;
     }
 
     public int getQuest() {
@@ -41,17 +42,21 @@ public class CompletedQuestDto {
         this.completedOn = completedOn;
     }
 
+    public boolean isCompleted() { return completed; }
+
+    public void setCompleted(boolean completed) { this.completed = completed; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompletedQuestDto that = (CompletedQuestDto) o;
-        return quest == that.quest && user == that.user && Objects.equals(completedOn, that.completedOn);
+        return quest == that.quest && user == that.user && completed == that.completed && Objects.equals(completedOn, that.completedOn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(quest, user, completedOn);
+        return Objects.hash(quest, user, completedOn, completed);
     }
 
     @Override
@@ -60,6 +65,7 @@ public class CompletedQuestDto {
                 "quest=" + quest +
                 ", user=" + user +
                 ", completedOn=" + completedOn +
+                ", completed=" + completed +
                 '}';
     }
 }
