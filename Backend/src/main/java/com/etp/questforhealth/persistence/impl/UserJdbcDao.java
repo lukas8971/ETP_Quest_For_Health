@@ -14,7 +14,9 @@ import org.springframework.stereotype.Repository;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -145,16 +147,17 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public boolean completeQuest(int userId, int questId, boolean complete) {
+    public boolean completeQuest(int userId, int questId, boolean complete, LocalDate completed_on) {
         LOGGER.trace("completeQuest({},{})", userId,questId);
         makeJDBCConnection();
         try {
             String query ="insert into user_completed_quest(user,quest,completed_on,completed) "+
-                    "values (?,?,CURRENT_DATE,?)";
+                    "values (?,?,?,?)";
             PreparedStatement preparedStatement = questForHealthConn.prepareStatement(query);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2,questId);
-            preparedStatement.setBoolean(3,complete);
+            preparedStatement.setDate(3,java.sql.Date.valueOf(completed_on));
+            preparedStatement.setBoolean(4,complete);
             int val  = preparedStatement.executeUpdate();
             return val > 0;
         } catch (SQLException e){

@@ -39,6 +39,7 @@ export class UserOverviewComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.currentDate.setHours(0,0,0,0,);
     this.loadQuests()
     this.loadUser();
   }
@@ -102,7 +103,6 @@ export class UserOverviewComponent implements OnInit {
       (q: Quest[]) => {
         this.oneTimeQuests = q;
         this.oneTimeDatSource = new MatTableDataSource<Quest>(q);
-        console.log(q);
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
@@ -117,6 +117,8 @@ export class UserOverviewComponent implements OnInit {
 
   getDifference(date: string): number {
     let d1 = new Date(date);
+    console.log(d1);
+    console.log(this.currentDate)
     return this.millisecondsToDays(d1.getTime()-this.currentDate.getTime());
   }
 
