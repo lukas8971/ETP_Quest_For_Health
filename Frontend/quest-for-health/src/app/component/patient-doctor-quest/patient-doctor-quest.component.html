@@ -14,7 +14,6 @@
       </button>
       <mat-card-title>Patient Quests for {{patient.firstname}} {{patient.lastname}}</mat-card-title>
     </mat-card-title-group>
-
     <div class="center">
       <div *ngIf="showHistory">
         <mat-card class="mat-elevation-z2">
@@ -22,10 +21,11 @@
             <mat-card-subtitle>Quest History</mat-card-subtitle>
           </mat-card-title-group>
           <mat-card-content>
-            <mat-form-field style="width: 100%">
+            <!-- <mat-form-field style="width: 100%">
               <mat-label>Filter</mat-label>
               <input matInput (keyup)="applyFilterHistory($event)" placeholder="Search" #inputAssigned>
-            </mat-form-field>
+            </mat-form-field> -->
+            <div class="scroller">
             <h4 style="padding-top: 5px">Active Quests</h4>
             <table mat-table [dataSource]="dataSourceAccepted" style="width: 100%">
               <ng-container matColumnDef="name">
@@ -78,7 +78,7 @@
                 </td>
               </tr>
             </table>
-
+            </div>
           </mat-card-content>
         </mat-card>
       </div>
@@ -91,6 +91,7 @@
             <mat-label>Filter</mat-label>
             <input matInput (keyup)="applyFilterAssign($event)" placeholder="Search" #inputAssigned>
           </mat-form-field>
+          <div class="scroller">
           <table mat-table *ngIf="showAssigned" [dataSource]="dataSourceAssigned" style="width: 100%">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Name</th>
@@ -116,6 +117,7 @@
               </td>
             </tr>
           </table>
+          </div>
         </mat-card>
       </div>
       <div style="width: 20px"></div>
@@ -129,6 +131,7 @@
             <mat-label>Filter</mat-label>
             <input matInput (keyup)="applyFilterAvailable($event)" placeholder="Search" #inputAvailable>
           </mat-form-field>
+          <div class="scroller">
           <table mat-table *ngIf="showAvailable" [dataSource]="dataSourceAvailable" style="width: 100%">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Name</th>
@@ -154,6 +157,7 @@
               </td>
             </tr>
           </table>
+          </div>
         </mat-card>
       </div>
 

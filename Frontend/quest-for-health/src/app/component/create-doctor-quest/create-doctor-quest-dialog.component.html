@@ -54,9 +54,9 @@
           </mat-grid-tile>
 
           <mat-grid-tile [colspan]="2" [rowspan]="2">
-            <mat-form-field>
+            <mat-form-field class="my-text-area">
               <mat-label>Description</mat-label>
-              <textarea matInput class="my-text-area"
+              <textarea matInput style = "height: 15vh"
                         placeholder="This is a new Doctor-Quest." [(ngModel)]="description"
                         formControlName="description"
                         id="description" required></textarea>
