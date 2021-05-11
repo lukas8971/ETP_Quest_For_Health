@@ -498,7 +498,7 @@ public class QuestJdbcDao implements QuestDao {
         List<CompletedQuest> list = new ArrayList<CompletedQuest>();
 
         try {
-            final String query = "SELECT * FROM user_completed_quest WHERE user = ?";
+            final String query = "SELECT * FROM user_completed_quest WHERE user = ? ORDER BY completed_on ASC";
             PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
             pstmnt.setInt(1,user);
             ResultSet rs = pstmnt.executeQuery();
@@ -528,7 +528,7 @@ public class QuestJdbcDao implements QuestDao {
         aq.setQuest(rs.getInt("quest"));
         aq.setUser(rs.getInt("user"));
         aq.setCompletedOn(rs.getDate("completed_on").toLocalDate());
-        //aq.setCompleted(rs.getBoolean("completed"));
+        aq.setCompleted(rs.getBoolean("completed"));
         return aq;
     }
 
