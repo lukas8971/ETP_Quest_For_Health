@@ -141,4 +141,17 @@ public class UserEndpoint {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         }
     }
+
+    /**
+     * Checks if a user is possbile to get to the next chapter
+     * Also updates the chapter if a user is possible to do so
+     * @param id of the user
+     * @return true if possible AND updated
+     */
+    @GetMapping(value = "/checkStory/{id}")
+    public boolean checkUserForNextStoryAndUpdate(@PathVariable("id") int id) {
+        LOGGER.info("GET " + BASE_URL + "/checkStory/{}",id);
+        User u = new User(id);
+        return userService.checkUserForNextStoryAndUpdate(u);
+    }
 }

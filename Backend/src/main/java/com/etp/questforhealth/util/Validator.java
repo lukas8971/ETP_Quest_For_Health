@@ -4,11 +4,14 @@ package com.etp.questforhealth.util;
 import com.etp.questforhealth.entity.*;
 import com.etp.questforhealth.entity.enums.mapper.EquipmentTypeMapper;
 import com.etp.questforhealth.exception.NotEnoughGoldException;
+import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.DoctorDao;
 import com.etp.questforhealth.persistence.EquipmentDao;
 import com.etp.questforhealth.persistence.QuestDao;
+import com.etp.questforhealth.persistence.StoryChapterDao;
 import com.etp.questforhealth.persistence.UserDao;
+import com.etp.questforhealth.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +27,15 @@ public class Validator {
     private final DoctorDao doctorDao;
     private final UserDao userDao;
     private final EquipmentDao equipmentDao;
+    private final StoryChapterDao storyDao;
 
     @Autowired
-    public Validator(QuestDao questDao, DoctorDao doctorDao, UserDao userDao, EquipmentDao equipmentDao){
+    public Validator(QuestDao questDao, DoctorDao doctorDao, UserDao userDao, EquipmentDao equipmentDao, StoryChapterDao storyDao){
         this.questDao = questDao;
         this.doctorDao = doctorDao;
         this.userDao = userDao;
         this.equipmentDao = equipmentDao;
+        this.storyDao = storyDao;
     }
   
       public void validateNewUser (User user){
@@ -239,5 +244,80 @@ public class Validator {
         validateExistingUser(userId);
         boolean alreadyExists = doctorDao.checkIfDoctorUserRelationshipExists(doctorId, userId);
         if (alreadyExists) throw new ValidationException("This patient is already treated by the doctor!");
+    }
+
+    /**
+     * Checks if a story chapter is valid
+     * @param storyChapter that should be checked
+     * @param user that requested
+     */
+    public void validateStoryChapter(StoryChapter storyChapter, User user) {
+        LOGGER.trace("validateStoryChapter({}, {})", storyChapter, user);
+        validateExistingUser(user.getId());
+        if (storyChapter.getId() < 0) throw new ValidationException("Id of a story chapter can not be smaller than 0!");
+        StoryChapter sc = storyDao.getOneById(storyChapter.getId());
+        User u = userDao.getOneById(user.getId());
+        List<Equipment> equipments = equipmentDao.getWornEquipmentFromUserId(u.getId());
+        int st = u.getCharacterStrength();
+        for (Equipment e: equipments) {
+            st += e.getStrength();
+        }
+        if (sc.getStrength_requirement() > st) throw new ValidationException("The strength requirements for this story is higher than your strength!");
+    }
+
+    /**
+     * Checks if the previous story chapter can be loaded
+     * @param storyChapter that should be checked
+     * @param user that requested
+     */
+    public void validatePrevStoryChapter(StoryChapter storyChapter, User user) {
+        LOGGER.trace("validatePrevStoryChapter({}, {})", storyChapter, user);
+        if (storyChapter.getPrev_chapter() == null) throw new ValidationException("This is already the first chapter!");
+        validateStoryChapter(storyDao.getOneById(storyChapter.getPrev_chapter()), user);
+    }
+
+    /**
+     * Checks if the next story chapter can be loaded
+     * @param storyChapter that should be checked
+     */
+    public void validateNextStoryChapter(StoryChapter storyChapter) {
+        LOGGER.trace("validatePrevStoryChapter({})", storyChapter);
+        if (storyChapter.getNext_chapter() == null) throw new ValidationException("This is already the last chapter!");
+    }
+
+    /**
+     * Checks if the previous story chapter can be loaded
+     * @param storyChapter that should be checked
+     */
+    public void validatePrevStoryChapter(StoryChapter storyChapter) {
+        LOGGER.trace("validatePrevStoryChapter({})", storyChapter);
+        if (storyChapter.getPrev_chapter() == null) throw new ValidationException("This is the first chapter!");
+    }
+
+    /**
+     * Checks for the next chapter of a user
+     * @param user that requested
+     */
+    public void validateNextStoryChapter(User user) {
+        LOGGER.trace("validateNextStoryChapter({})", user);
+        User u = userDao.getOneById(user.getId());
+        StoryChapter sc = storyDao.getOneById(user.getStoryChapter());
+        if (sc.getNext_chapter() == null) throw new ValidationException("You already reached the last chapter!");
+        StoryChapter next = storyDao.getOneById(sc.getNext_chapter());
+        List<Equipment> equipments = equipmentDao.getWornEquipmentFromUserId(u.getId());
+        int st = u.getCharacterStrength();
+        for (Equipment e: equipments) {
+            st += e.getStrength();
+        }
+        if (st < next.getStrength_requirement()) {
+            throw new ValidationException("You do not have enough strength to get to the next chapter!");
+        }
+    }
+
+    public void validatePrevStoryChapter(User user) {
+        LOGGER.trace("validatePrevStoryChapter({})", user);
+        User u = userDao.getOneById(user.getId());
+        StoryChapter sc = storyDao.getOneById(user.getStoryChapter());
+        if (sc.getPrev_chapter() == null) throw new ValidationException("This is the first chapter!");
     }
 }

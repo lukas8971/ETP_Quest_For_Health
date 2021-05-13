@@ -71,4 +71,19 @@ public interface UserService {
      * @throws ValidationException if the data is not valid
      */
     boolean changeUserGold(int id, int changeValue);
+
+    /**
+     * Sets the user to the next story chapter
+     * @param user that gets to the next story
+     * @return true if worked
+     */
+    boolean setNextStoryChapter(User user);
+
+    /**
+     * Checks if a user has enough strength to get to the next chapter
+     * and updates if possible
+     * @param user of which the strength changed
+     * @return true if next chapter is reached
+     */
+    boolean checkUserForNextStoryAndUpdate(User user);
 }
