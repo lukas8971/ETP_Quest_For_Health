@@ -13,6 +13,7 @@ import {UserProfileComponent} from './component/user-profile/user-profile.compon
 import {UserBrowseQuestsComponent} from './component/user-browse-quests/user-browse-quests.component';
 import {CreateDoctorQuestDialog} from './component/create-doctor-quest/create-doctor-quest-dialog.component';
 import {ShopComponent} from './component/shop/shop.component';
+import {StoryComponent} from './component/story/story.component';
 
 const routes: Routes = [
   {path: 'doctors/overview', component: DoctorOverviewComponent, canActivate: [AuthGuardDoctorService]},
@@ -25,7 +26,8 @@ const routes: Routes = [
   {path: 'users/profile', component: UserProfileComponent, canActivate: [AuthGuardUserService]},
   {path: 'users/browseQuests', component: UserBrowseQuestsComponent, canActivate: [AuthGuardUserService]},
   {path: 'shop', component: ShopComponent, canActivate: [AuthGuardUserService]},
-  {path: 'doctors/createquest', component: CreateDoctorQuestDialog, canActivate: [AuthGuardDoctorService]}
+  {path: 'doctors/createquest', component: CreateDoctorQuestDialog, canActivate: [AuthGuardDoctorService]},
+  {path: 'story', component: StoryComponent, canActivate: [AuthGuardUserService]},
 ];
 
 @NgModule({

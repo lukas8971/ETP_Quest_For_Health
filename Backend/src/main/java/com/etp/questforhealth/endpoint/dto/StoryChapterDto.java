@@ -6,9 +6,9 @@ public class StoryChapterDto {
     private int id;
     private String name;
     private String description;
-    private int strength_requirement;
-    private Integer prev_chapter;
-    private Integer next_chapter;
+    private int strengthRequirement;
+    private Integer prevChapter;
+    private Integer nextChapter;
 
     public int getId() {
         return id;
@@ -34,39 +34,39 @@ public class StoryChapterDto {
         this.description = description;
     }
 
-    public int getStrength_requirement() {
-        return strength_requirement;
+    public int getStrengthRequirement() {
+        return strengthRequirement;
     }
 
-    public void setStrength_requirement(int strength_requirement) {
-        this.strength_requirement = strength_requirement;
+    public void setStrengthRequirement(int strengthRequirement) {
+        this.strengthRequirement = strengthRequirement;
     }
 
-    public Integer getPrev_chapter() {
-        return prev_chapter;
+    public Integer getPrevChapter() {
+        return prevChapter;
     }
 
-    public void setPrev_chapter(Integer prev_chapter) {
-        this.prev_chapter = prev_chapter;
+    public void setPrevChapter(Integer prevChapter) {
+        this.prevChapter = prevChapter;
     }
 
-    public Integer getNext_chapter() {
-        return next_chapter;
+    public Integer getNextChapter() {
+        return nextChapter;
     }
 
-    public void setNext_chapter(Integer next_chapter) {
-        this.next_chapter = next_chapter;
+    public void setNextChapter(Integer next_chapter) {
+        this.nextChapter = nextChapter;
     }
 
     public StoryChapterDto() {}
 
-    public StoryChapterDto(int id, String name, String description, int strength_requirement, Integer prev_chapter, Integer next_chapter) {
+    public StoryChapterDto(int id, String name, String description, int strengthRequirement, Integer prevChapter, Integer nextChapter) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.strength_requirement = strength_requirement;
-        this.prev_chapter = prev_chapter;
-        this.next_chapter = next_chapter;
+        this.strengthRequirement = strengthRequirement;
+        this.prevChapter = prevChapter;
+        this.nextChapter = nextChapter;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class StoryChapterDto {
         if (o == null || getClass() != o.getClass()) return false;
         StoryChapterDto that = (StoryChapterDto) o;
         return id == that.id
-                && strength_requirement == that.strength_requirement
+                && strengthRequirement == that.strengthRequirement
                 && name.equals(that.name)
                 && description.equals(that.description);
                 /*&& prev_chapter.equals(that.prev_chapter)
@@ -84,7 +84,7 @@ public class StoryChapterDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, strength_requirement, prev_chapter, next_chapter);
+        return Objects.hash(id, name, description, strengthRequirement, prevChapter, nextChapter);
     }
 
     @Override
@@ -93,9 +93,9 @@ public class StoryChapterDto {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", strength_requirement=" + strength_requirement +
-                ", prev_chapter=" + prev_chapter +
-                ", next_chapter=" + next_chapter +
+                ", strengthRequirement=" + strengthRequirement +
+                ", prevChapter=" + prevChapter +
+                ", nextChapter=" + nextChapter +
                 '}';
     }
 }

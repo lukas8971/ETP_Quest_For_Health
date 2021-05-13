@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {EquipmentService} from '../../service/equipment.service';
 import {UserEquipment} from '../../dto/user-equipment';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {UserService} from '../../service/user.service';
 
 @Component({
   selector: 'app-equipment-component',
@@ -26,7 +27,8 @@ export class EquipmentComponentComponent implements OnInit {
   equipmentColumns = ['name', 'price', 'strength'];
   dataSource = new MatTableDataSource(this.equipment);
 
-  constructor(private dialog: MatDialog, private equipmentService: EquipmentService, private snackBar: MatSnackBar) {
+  constructor(private dialog: MatDialog, private equipmentService: EquipmentService, private snackBar: MatSnackBar,
+              private userService: UserService) {
     this.userId = Number(sessionStorage.getItem('userId'));
   }
 
@@ -94,6 +96,22 @@ export class EquipmentComponentComponent implements OnInit {
   }
 
   /**
+   * Checks the chapter of a user and updates it if the strength is high enough
+   */
+  private checkUserForNextStoryAndUpdate(): void {
+    console.log('checkUserForNextStoryAndUpdate');
+    this.userService.checkUserForNextStoryAndUpdate(this.userId).subscribe(
+      (up: boolean) => {
+        if (up) {
+          this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
+        }
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+
+  /**
    * Equips the new item after buying
    * @param e equipment that should be equipped
    */
@@ -102,6 +120,7 @@ export class EquipmentComponentComponent implements OnInit {
     this.equipmentService.equipItem(this.userId, e).subscribe(
       (eq: Equipment) => {
         this.snackBar.open('You now own and wear ' + eq.name + '!', 'Great');
+        this.checkUserForNextStoryAndUpdate();
       }, error => {
         this.defaultServiceErrorHandling(error);
       }

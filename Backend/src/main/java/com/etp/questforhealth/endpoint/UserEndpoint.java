@@ -119,7 +119,7 @@ public class UserEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody User user){
-        LOGGER.info("POST " + BASE_URL);
+        LOGGER.info("POST " + BASE_URL + " " + user);
         try{
             return userMapper.entityToDto(userService.createUser(user));
         } catch(ValidationException e){
@@ -143,7 +143,7 @@ public class UserEndpoint {
     }
 
     /**
-     * Checks if a user is possbile to get to the next chapter
+     * Checks if a user is possible to get to the next chapter
      * Also updates the chapter if a user is possible to do so
      * @param id of the user
      * @return true if possible AND updated

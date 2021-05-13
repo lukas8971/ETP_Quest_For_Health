@@ -33,9 +33,9 @@ public class StoryChapterMapper {
                 storyChapterDto.getId(),
                 storyChapterDto.getName(),
                 storyChapterDto.getDescription(),
-                storyChapterDto.getStrength_requirement(),
-                storyChapterDto.getPrev_chapter(),
-                storyChapterDto.getNext_chapter()
+                storyChapterDto.getStrengthRequirement(),
+                storyChapterDto.getPrevChapter(),
+                storyChapterDto.getNextChapter()
         );
     }
 
