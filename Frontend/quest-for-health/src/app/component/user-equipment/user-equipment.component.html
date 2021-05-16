@@ -2,7 +2,7 @@
 <app-equipped-item *ngIf="equipped" equipmentId="{{equippedEquipment.id}}" (changedEvent)="itemChanged()"></app-equipped-item>
 <app-equipped-item *ngIf="!equipped" equipmentId="-1" (changedEvent)="itemChanged()"></app-equipped-item>
 
-<div class="side-margin">
+<div class="side-margin" style="background: blue">
   <table style="width: 100%">
     <tr>
       <td> <!-- Thats a little trick in order to keep table size consistent when switching quests -->

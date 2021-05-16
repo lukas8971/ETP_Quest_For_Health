@@ -11,3 +11,12 @@
   height: 50vh;
   overflow-y: scroll;
 }
+
+.scroller2{
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.my-transparent{
+  background: rgba(255,255,255,0.8);
+}

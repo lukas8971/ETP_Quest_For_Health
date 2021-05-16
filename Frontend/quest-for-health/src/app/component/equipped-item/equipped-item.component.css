@@ -1,7 +1,12 @@
-.side-margin{
-  margin-left: 10%;
-  margin-right: 10%;
-}
+
 tr.equipTable:hover {
   background: whitesmoke;
+}
+
+.even{
+  background-color: #c8aafc;
+}
+
+.odd{
+  background-color: #8f70c6;
 }

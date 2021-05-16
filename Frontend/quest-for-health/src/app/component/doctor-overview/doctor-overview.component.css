@@ -3,3 +3,7 @@
   justify-content: center;
   min-width: 400px;
 }
+
+.my-transparent{
+  background: rgba(255,255,255,0.8);
+}

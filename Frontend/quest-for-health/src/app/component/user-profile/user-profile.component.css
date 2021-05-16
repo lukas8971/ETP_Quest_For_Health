@@ -4,5 +4,33 @@
 }
 .info{
   position: absolute;
-  left: 5px;
+  left: 1vw;
+}
+
+.value {
+  position: absolute;
+  left: 10vw;
+}
+
+.button {
+  position: absolute;
+  left: 20vw;
+}
+
+.even{
+  background-color: #c8aafc;
+}
+
+.odd{
+  background-color: #8f70c6;
+}
+
+.background {
+  height: 100%;
+  background: rgb(103,58,183);
+  background: linear-gradient(180deg, rgba(103,58,183,1) 20%, rgba(255,215,64,1) 100%);
+}
+
+.my-transparent{
+  background: rgba(255,255,255,0.8);
 }

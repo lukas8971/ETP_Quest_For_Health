@@ -13,6 +13,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {CreateDoctorQuestDialog} from "../create-doctor-quest/create-doctor-quest-dialog.component";
 import {CompletedQuest} from "../../dto/completed-quest";
 import {HistoryQuest} from "../../entity/history-quest";
+import {MatAccordion} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-patient-doctor-quest',
@@ -43,6 +44,7 @@ export class PatientDoctorQuestComponent implements OnInit {
   acceptedHeader = ['name', 'description', 'accept_date'];
 
   showHistory=false;
+  panelOpenState=false;
 
   constructor(private doctorService: DoctorService, private userService: UserService,
               private dialog: MatDialog, private questService: QuestService, private route: ActivatedRoute, private router: Router) {
