@@ -4,9 +4,9 @@ tr.equipTable:hover {
 }
 
 .even{
-  background-color: #c8aafc;
+  background-color: rgba(200,170,252,0.8);
 }
 
 .odd{
-  background-color: #8f70c6;
+  background-color: rgba(143,112,198,0.7);
 }

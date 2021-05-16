@@ -1,9 +1,9 @@
-<div class="odd">
-  <table class="odd" style="width: 100%">
+<div class="my-transparent">
+  <table class="my-transparent" style="width: 22.8vw">
     <tr>
       <td> <!-- Thats a little trick in order to keep table size consistent when switching quests -->
-        <mat-card class="mat-elevation-z4 odd">
-          <div *ngIf="equipped">
+        <mat-card class="mat-elevation-z4 even">
+          <ng-container *ngIf="equipped">
             <mat-card-title-group>
               <mat-card-title style="font-size: 14px">Currently {{equipped.name}} is equipped</mat-card-title>
             </mat-card-title-group>
@@ -11,21 +11,17 @@
               <p>
                 {{equipped.description}}
               </p>
-              <p><b>Strength</b><br>
-                {{equipped.strength}} st
-              </p>
+              <p><b>Strength </b>{{equipped.strength}} st
+                <button mat-stroked-button class="odd" (click)="unequip()" style="font-size: 14px; margin-left: 10vw"> Unequip this </button> </p>
             </mat-card-content>
-            <mat-card-actions style="font-size: 12px">
-              <button mat-stroked-button (click)="unequip()"> Unequip this </button>
-            </mat-card-actions>
-          </div>
+          </ng-container>
 
-          <div *ngIf="!worn" style="font-size: 12px">
+          <ng-container *ngIf="!worn">
             <mat-card-title-group>
               <mat-card-title style="font-size: 14px">Currently nothing equipped</mat-card-title>
             </mat-card-title-group>
-            Nothing equipped! Equip items or buy new items in the shop!
-          </div>
+            <p style="font-size: 12px">Nothing equipped! Equip items you own or buy new items in the shop!</p>
+          </ng-container>
         </mat-card>
       </td>
     </tr>
