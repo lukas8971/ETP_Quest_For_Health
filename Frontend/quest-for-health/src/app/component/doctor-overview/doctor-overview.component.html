@@ -1,6 +1,6 @@
-<div *ngIf="doctorLoaded">
+<div *ngIf="doctorLoaded" class="center" style="color: whitesmoke; font-size: 20px">
   <br>
-  <h3>Welcome back {{doctor.firstname}} {{doctor.lastname}}!</h3>
+  <p>Welcome back {{doctor.firstname}} {{doctor.lastname}}!</p>
   <br>
 </div>
 
@@ -8,7 +8,7 @@
 
 <div class="center">
   <div *ngIf="success">
-    <mat-card class="mat-elevation-z2">
+    <mat-card class="mat-elevation-z2 my-transparent">
       <mat-card-title>Your Patients</mat-card-title>
       <mat-form-field style="width: 100%">
         <mat-label>Filter</mat-label>
