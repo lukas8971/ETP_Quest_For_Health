@@ -117,6 +117,7 @@ export class EquipmentComponentComponent implements OnInit {
       (eq: Equipment[]) => {
         this.equipment = eq;
         this.dataSource = new MatTableDataSource(this.equipment);
+        this.selectedEquipment = eq[0];
       },
       error => {
         this.defaultServiceErrorHandling(error);

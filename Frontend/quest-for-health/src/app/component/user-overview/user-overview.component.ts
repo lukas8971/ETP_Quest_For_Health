@@ -9,6 +9,8 @@ import {User} from "../../dto/user";
 import {UserQuest} from "../../dto/userQuest";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {UserQuests} from "../../dto/userQuests";
+import {MatInputModule} from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @Component({
   selector: 'app-user-overview',
@@ -112,6 +114,7 @@ export class UserOverviewComponent implements OnInit {
   public applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.repDataSource.filter = filterValue.trim().toLowerCase();
+    this.oneTimeDatSource.filter = filterValue.trim().toLowerCase();
   }
 
 

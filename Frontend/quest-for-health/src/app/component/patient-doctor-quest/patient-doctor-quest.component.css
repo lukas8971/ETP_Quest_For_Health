@@ -8,6 +8,15 @@
 }
 
 .scroller{
-  height: 50vh;
+  height: 55vh;
   overflow-y: scroll;
+}
+
+.scroller2{
+  height: 61.4vh;
+  overflow-y: scroll;
+}
+
+.my-transparent{
+  background: rgba(255,255,255,0.8);
 }

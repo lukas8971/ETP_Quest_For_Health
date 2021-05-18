@@ -1,16 +1,18 @@
 .form{
-  margin-top: 10vh;
-  margin-left: 10%;
-  margin-right: 10%;
-  height: 100vh;
+  padding-top: 15vh;
+  height: 30vh;
+  margin-left: 25%;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 50%;
   alignment: center;
 }
 .mat-form-field{
-  margin-left: 10%;
+  margin-left: 5%;
   width: 100%;
   max-width:400px;
 
+}
+.my-transparent{
+  background: rgba(255,255,255,0.7);
 }
