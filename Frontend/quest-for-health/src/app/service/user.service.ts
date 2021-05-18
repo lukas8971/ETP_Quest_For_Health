@@ -7,6 +7,7 @@ import {Credentials} from "../dto/credentials";
 import {Doctor} from "../dto/doctor";
 import {UserQuest} from "../dto/userQuest";
 import {UserQuests} from "../dto/userQuests";
+import {StoryChapter} from '../dto/story-chapter';
 
 const baseUri = environment.backendUrl + '/users';
 
@@ -68,5 +69,15 @@ export class UserService {
   checkLogin(cred: Credentials): Observable<User>{
     console.log('Login');
     return this.httpClient.post<User>(baseUri + '/login', JSON.stringify(cred), this.httpOption);
+  }
+
+  /**
+   * Checks if its possible for a user to get to the next chapter
+   * AND if its possible, the chapter will update
+   * @param userId of the user
+   */
+  checkUserForNextStoryAndUpdate(userId: number): Observable<boolean>{
+    console.log('getPreviousChapterOfUser(' + userId + ')');
+    return this.httpClient.get<boolean>(baseUri + '/checkStory/' + userId);
   }
 }

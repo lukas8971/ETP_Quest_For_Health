@@ -4,6 +4,7 @@ import com.etp.questforhealth.entity.CharacterLevel;
 import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.Equipment;
 import com.etp.questforhealth.entity.Quest;
+import com.etp.questforhealth.entity.StoryChapter;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
@@ -12,6 +13,7 @@ import com.etp.questforhealth.persistence.CharacterLevelDao;
 import com.etp.questforhealth.persistence.EquipmentDao;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.EquipmentService;
+import com.etp.questforhealth.service.StoryChapterService;
 import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.Validator;
 import org.slf4j.Logger;
@@ -34,13 +36,15 @@ public class UserServiceImpl implements UserService {
     private final CharacterLevelDao characterLevelDao;
     private final Validator validator;
     private final EquipmentService equipmentService;
+    private final StoryChapterService storyService;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, Validator validator, CharacterLevelDao characterLevelDao, EquipmentService equipmentService) {
+    public UserServiceImpl(UserDao userDao, Validator validator, CharacterLevelDao characterLevelDao, EquipmentService equipmentService, StoryChapterService storyService) {
         this.userDao = userDao;
         this.validator = validator;
         this.characterLevelDao = characterLevelDao;
         this.equipmentService = equipmentService;
+        this.storyService = storyService;
     }
 
 
@@ -189,6 +193,38 @@ public class UserServiceImpl implements UserService {
         try{
             validator.validateUserGold(id, changeValue);
             return userDao.changeUserGold(id, changeValue);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public boolean setNextStoryChapter(User user) {
+        LOGGER.trace("setNetStoryChapter({})", user);
+        try{
+            User u = userDao.getOneById(user.getId());
+            validator.validateNextStoryChapter(u);
+            StoryChapter sc = storyService.getNextChapter(u);
+            u.setStoryChapter(sc.getId());
+            return userDao.updateUser(u);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public boolean checkUserForNextStoryAndUpdate(User user){
+        LOGGER.trace("checkUserForNextStory({})", user);
+        try{
+            User u = userDao.getOneById(user.getId());
+            try {
+                validator.validateNextStoryChapter(u);
+            } catch (ValidationException e) {
+                return false;
+            }
+            StoryChapter sc = storyService.getNextChapter(u);
+            u.setStoryChapter(sc.getId());
+            return userDao.updateUser(u);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

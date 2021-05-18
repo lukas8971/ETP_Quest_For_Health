@@ -2,6 +2,7 @@ package com.etp.questforhealth.persistence;
 
 import com.etp.questforhealth.entity.Credentials;
 import com.etp.questforhealth.entity.Doctor;
+import com.etp.questforhealth.entity.StoryChapter;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.exception.PersistenceException;

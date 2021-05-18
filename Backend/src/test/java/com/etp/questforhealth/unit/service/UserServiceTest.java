@@ -6,6 +6,7 @@ import com.etp.questforhealth.entity.Quest;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
+import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,8 @@ public class UserServiceTest {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserDao userDao;
 
     @Test
     @DisplayName("Requesting an initial user list should return not null")
@@ -192,5 +195,49 @@ public class UserServiceTest {
         assertNotEquals(newLevel, updatedUser.getCharacterLevel());
     }
 
+    @Test
+    @DisplayName("Set next chapter on user on the last chapter should throw ValidationException")
+    public void setNextChapter_userLastChapter_shouldThrowValidationException() {
+        assertThrows(ValidationException.class, () ->
+                userService.setNextStoryChapter(TestData.getDbUser3())
+        );
+    }
 
+    @Test
+    @DisplayName("Set next chapter on user but with not enough strength should throw ValidationException")
+    public void setNextChapter_notEnoughStrength_shouldThrowValidationException() {
+        assertThrows(ValidationException.class, () ->
+                userService.setNextStoryChapter(TestData.getDbUser1())
+        );
+    }
+
+    @Test
+    @DisplayName("Set next chapter on user with enough strength does not throw")
+    public void setNextChapter_enoughStrength_notThrows() {
+        User u = TestData.getDbUser2();
+        u.setCharacterStrength(200);
+        userDao.updateUser(u);
+        assertDoesNotThrow(() ->
+                userService.setNextStoryChapter(u)
+        );
+        User _u = userService.getOneById(u.getId());
+        assertEquals(TestData.getDbUser2().getStoryChapter() + 1, _u.getStoryChapter());
+    }
+
+    @Test
+    @DisplayName("Check for update on story chapter on user with last chapter should return false")
+    public void checkForNextChapter_userLastChapter_shouldReturnFalse() {
+        assertFalse(userService.checkUserForNextStoryAndUpdate(TestData.getDbUser3()));
+    }
+
+    @Test
+    @DisplayName("Check for update on story chapter on user with enough strength should return true")
+    public void checkForNextChapter_userEnoughStrength_shouldReturnTrue() {
+        User u = TestData.getDbUser5();
+        u.setCharacterStrength(200);
+        userDao.updateUser(u);
+        assertTrue(userService.checkUserForNextStoryAndUpdate(u));
+        User _u = userService.getOneById(u.getId());
+        assertEquals(TestData.getDbUser5().getStoryChapter() + 1 ,_u.getStoryChapter());
+    }
 }

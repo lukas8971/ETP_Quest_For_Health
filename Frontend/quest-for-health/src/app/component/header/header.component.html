@@ -17,6 +17,9 @@
     <button mat-button routerLink="/shop" class="button">Shop</button>
   </span>
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/story" class="button">Story</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/users/browseQuests" class="button">Find new Quests</button>
   </span>
   <div style="width: 5px"></div>

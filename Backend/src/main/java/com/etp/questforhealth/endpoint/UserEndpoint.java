@@ -119,7 +119,7 @@ public class UserEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody User user){
-        LOGGER.info("POST " + BASE_URL);
+        LOGGER.info("POST " + BASE_URL + " " + user);
         try{
             return userMapper.entityToDto(userService.createUser(user));
         } catch(ValidationException e){
@@ -140,5 +140,18 @@ public class UserEndpoint {
             LOGGER.error("Wrong username or password!");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         }
+    }
+
+    /**
+     * Checks if a user is possible to get to the next chapter
+     * Also updates the chapter if a user is possible to do so
+     * @param id of the user
+     * @return true if possible AND updated
+     */
+    @GetMapping(value = "/checkStory/{id}")
+    public boolean checkUserForNextStoryAndUpdate(@PathVariable("id") int id) {
+        LOGGER.info("GET " + BASE_URL + "/checkStory/{}",id);
+        User u = new User(id);
+        return userService.checkUserForNextStoryAndUpdate(u);
     }
 }

@@ -1,0 +1,34 @@
+<br><br>
+
+<div *ngIf="loaded">
+  <div>
+    <mat-card >
+      <div fxLayout="row" fxLayoutGap="10">
+        <div fxFlex="12%" fxLayoutAlign="left">
+          <label><br>
+            <button [disabled]="displayChapter.prevChapter <= 0" mat-stroked-button (click)="prev()" style="width: 100%"><mat-icon>arrow_back</mat-icon></button>
+          </label>
+        </div>
+        <div fxFlex="76%" fxLayoutAlign="center">
+          <mat-form-field appearance="fill">
+            <mat-label>Choose chapter</mat-label>
+            <mat-select [(value)]="displayChapter.name" (valueChange)="changed($event)">
+              <mat-option *ngFor="let chap of previousChapters" [value]="chap.name">
+                {{chap.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxFlex="12%" fxLayoutAlign="right">
+          <label><label *ngIf="showRequired"> Missing: {{required}} st</label><br>
+            <button [disabled]="showRequired" mat-stroked-button (click)="next()" style="width: 100%"><mat-icon>arrow_forward</mat-icon></button>
+          </label>
+        </div>
+      </div>
+      <br><br>
+      <div fxLayout="row" [style.margin-left]="'80px'" [style.margin-right]="'80px'">
+        {{displayChapter.description}}
+      </div>
+    </mat-card>
+  </div>
+</div>

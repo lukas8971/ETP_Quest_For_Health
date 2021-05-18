@@ -38,6 +38,9 @@ import { UserEquipmentComponent } from './component/user-equipment/user-equipmen
 import {MatTabsModule} from '@angular/material/tabs';
 import { EquipmentComponentComponent } from './component/equipment-component/equipment-component.component';
 import { ShopComponent } from './component/shop/shop.component';
+import { StoryComponent } from './component/story/story.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,7 @@ import { ShopComponent } from './component/shop/shop.component';
     UserEquipmentComponent,
     EquipmentComponentComponent,
     ShopComponent,
+    StoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,6 +88,8 @@ import { ShopComponent } from './component/shop/shop.component';
     MatSortModule,
     MatExpansionModule,
     MatTabsModule,
+    FlexLayoutModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

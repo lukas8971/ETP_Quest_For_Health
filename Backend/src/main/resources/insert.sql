@@ -37,14 +37,12 @@ VALUES (1, 1, '2021-03-17', TRUE),
 
 
 
-insert into story_chapter (name, description, strength_requirement)
-values ('Chapter 1: The Beginning',
-        'You find yourself in a dark inn nearby the old Gramsworth-Castle. Rumors has it that the former baron of this land has issued a bounty on a terrifying monster which threatens his land. As a young adventurer,
-        desperately searching for money and glory,
-        you decided to take on the bounty and start to make yourself a name',
-        0),
-       ('Chapter 2: Start of the Journey', 'You loaf around the inn, sipping on your ale before calling it a day, when suddenly a bunch of worn out, clearly shocked men storm in. Their looks are anything but pleasant, and so is their smell. Hastily, one of them shouts: "Make room, clear the table and get some alcohol!". Quite perplexed, the people of the nearest table got up and cleared the table while the barkeeper hastily grabbed the next-best bottle of rum. Just what was going on here?', 25),
-       ('Chapter 3: What happened?', 'Intriqued by all the ruckus', 54);
+insert into story_chapter (id, name, description, strength_requirement, prev_chapter, next_chapter)
+values (1, 'Chapter 1: The Beginning',
+        'You find yourself in a dark inn nearby the old Gramsworth-Castle. Rumors has it that the former baron of this land has issued a bounty on a terrifying monster which threatens his land. As a young adventurer, desperately searching for money and glory, you decided to take on the bounty and start to make yourself a name',
+        0, null, 2),
+       (2, 'Chapter 2: Start of the Journey', 'You loaf around the inn, sipping on your ale before calling it a day, when suddenly a bunch of worn out, clearly shocked men storm in. Their looks are anything but pleasant, and so is their smell. Hastily, one of them shouts: "Make room, clear the table and get some alcohol!". Quite perplexed, the people of the nearest table got up and cleared the table while the barkeeper hastily grabbed the next-best bottle of rum. Just what was going on here?', 25, 1, 3),
+       (3, 'Chapter 3: What happened?', 'Intriqued by all the ruckus', 54, 2, null);
 
 insert into character_level (total_strength, needed_exp, level, rank) values
 (0,0,1,'Beginner'),

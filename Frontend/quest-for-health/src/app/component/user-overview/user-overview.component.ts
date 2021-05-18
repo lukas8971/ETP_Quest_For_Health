@@ -148,6 +148,7 @@ export class UserOverviewComponent implements OnInit {
         this.snackBar.open('Quest completed!', 'OK');
         if(u.characterLevel !== this.user.characterLevel){
           this.snackBar.open('You leveled up!', 'Great!');
+          this.checkUserForNextStoryAndUpdate();
         }this.user = u;
         this.repDataSource.data = this.repDataSource.data.filter(item => item !== this.selectedQuest);
         this.oneTimeDatSource.data = this.oneTimeDatSource.data.filter(item => item !== this.selectedQuest);
@@ -156,6 +157,22 @@ export class UserOverviewComponent implements OnInit {
         this.defaultServiceErrorHandling(error);
       }
     )
+  }
+
+  /**
+   * Checks the chapter of a user and updates it if the strength is high enough
+   */
+  private checkUserForNextStoryAndUpdate(): void {
+    console.log('checkUserForNextStoryAndUpdate');
+    this.userService.checkUserForNextStoryAndUpdate(this.user.id).subscribe(
+      (up: boolean) => {
+        if (up) {
+          this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
+        }
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
   }
 
 }

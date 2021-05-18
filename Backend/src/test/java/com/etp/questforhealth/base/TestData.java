@@ -99,6 +99,21 @@ public interface TestData {
         return retVal;
     }
 
+    static User getDbUser1() {
+        return new User(1, "Alex", "Apple", "Attila", 3, 1, 12, "unknackbar", "", 1, 3);
+    }
+
+    static User getDbUser2() {
+        return new User(2, "Berta", "Binder", "Batman", 26, 2, 40, "Joker", "", 2, 92);
+    }
+
+    static User getDbUser3() {
+        return new User(3, "Carla", "Cloud", "Crash", 58, 5, 153, "crappy", "", 3, 11);
+    }
+
+    static User getDbUser5() {
+        return new User(5, "Edmund", "Ende", "Eddy", 5, 1, 2, "Vogelnest", "", 1, 48);
+    }
 
     /**
      * Equipment Data
@@ -124,5 +139,35 @@ public interface TestData {
 
     static Doctor getNotExistingDoctor4() {
         return new Doctor(4, "Wrong", "Doctor", "wrong@doc.tor", "hardToGuess");
+    }
+
+    /**
+     * Story Chapter Data
+     */
+    static StoryChapter getFirstStory() {
+        return new StoryChapter(1,
+                "Chapter 1: The Beginning",
+                "You find yourself in a dark inn nearby the old Gramsworth-Castle. Rumors has it that the former baron of this land has issued a bounty on a terrifying monster which threatens his land. As a young adventurer, desperately searching for money and glory, you decided to take on the bounty and start to make yourself a name",
+                0,
+                null,
+                2);
+    }
+
+    static StoryChapter getSecondChapter() {
+        return new StoryChapter(2,
+                "Chapter 2: Start of the Journey",
+                "Ja, da kommt noch was.",
+                25,
+                1,
+                3);
+    }
+
+    static StoryChapter getThirdChapter() {
+        return new StoryChapter(3,
+                "Chapter 3: The wrong way?",
+                "----?",
+                54,
+                2,
+                null);
     }
 }
