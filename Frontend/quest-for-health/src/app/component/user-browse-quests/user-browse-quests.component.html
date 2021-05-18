@@ -1,5 +1,5 @@
-<div class="side-margin">
-  <mat-card class="mat-elevation-z2 my-transparent">
+<div class="side-margin" style="padding-top: 1vw;">
+  <mat-card class="mat-elevation-z2 my-transparent" style="height: 35vw;">
   <table style="width: 100%">
   <tr>
     <td> <!-- Thats a little trick in order to keep table size consistent when switching quests -->
@@ -7,6 +7,7 @@
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
       </mat-form-field>
+      <div style="overflow-y: scroll; height: 31vw">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="min-width: 400px; width: 100%">
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -27,7 +28,7 @@
             <div *ngIf="momentToDays(quest.repetition_cycle) === '0'"> Never </div>
           </td>
         </ng-container>
-        <tr  mat-header-row *matHeaderRowDef="questColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="questColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: questColumns"
             class="questTable"
             (click)="selectQuest(row)"
@@ -38,34 +39,17 @@
           <td *ngIf="input.value !== ''"class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
         </tr>
       </table>
+      </div>
     </td>
-    <td *ngIf="selectedQuest" style="width: 30%">
+    <td *ngIf="selectedQuest" style="width: 25%; padding-left: 1vw">
+      <h1>{{selectedQuest.name}}</h1>
+      <p style="padding-bottom: 1vw">{{selectedQuest.description}}</p>
+      <b style="font-size: 20px">Rewards</b><br>
       <table>
         <tr>
-          <td colspan="2"><h1>{{selectedQuest.name}}</h1></td>
-        </tr>
-        <tr>
-          <td colspan="2">{{selectedQuest.description}}</td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <h2>Rewards</h2>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <b>{{selectedQuest.exp_reward}}</b> experience points
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <b>{{selectedQuest.gold_reward}}</b> gold
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button mat-stroked-button (click)="acceptQuest()">Accept</button>
-          </td>
+          <td style="padding-right: 0.8vw"><b>{{selectedQuest.exp_reward}}</b> Experience Points</td>
+          <td style="padding-right: 1.5vw"><b>{{selectedQuest.gold_reward}}</b> Gold</td>
+          <td><button mat-stroked-button (click)="acceptQuest()">Accept</button></td>
         </tr>
       </table>
     </td>

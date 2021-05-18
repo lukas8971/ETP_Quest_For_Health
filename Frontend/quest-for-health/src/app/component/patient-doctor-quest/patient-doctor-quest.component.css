@@ -8,12 +8,12 @@
 }
 
 .scroller{
-  height: 50vh;
+  height: 55vh;
   overflow-y: scroll;
 }
 
 .scroller2{
-  max-height: 300px;
+  height: 61.4vh;
   overflow-y: scroll;
 }
 

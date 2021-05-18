@@ -16,7 +16,7 @@
       <mat-card-title>Patient Quests for {{patient.firstname}} {{patient.lastname}}</mat-card-title>
     </mat-card-title-group>
     <div class="center">
-      <div *ngIf="showHistory">
+      <div *ngIf="showHistory" >
         <mat-card class="mat-elevation-z2">
           <mat-card-title-group>
             <mat-card-subtitle>Quest History</mat-card-subtitle>
@@ -28,8 +28,8 @@
             </mat-form-field> -->
 
             <mat-accordion>
-
-              <mat-expansion-panel style="max-height: 300px">
+              <div class="scroller2">
+              <mat-expansion-panel>
                 <mat-expansion-panel-header>
                   <mat-panel-title>Accepted Quests</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -62,7 +62,7 @@
 
 
               <mat-expansion-panel (opened)="panelOpenState = true"
-                                   (closed)="panelOpenState = false" style="max-height: 300px">
+                                   (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
                   <mat-panel-title>Completed Quests</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -103,13 +103,16 @@
                     </tr>
                   </div>
                 </table>
-              </mat-expansion-panel>
 
+              </mat-expansion-panel>
+              </div>
 
             </mat-accordion>
+
           </mat-card-content>
         </mat-card>
       </div>
+      <div *ngIf="showHistory" style="width: 20px"></div>
       <div class="center-small">
         <mat-card class="mat-elevation-z4">
           <mat-card-title-group>

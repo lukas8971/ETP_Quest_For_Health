@@ -8,6 +8,7 @@
             <mat-label>Filter</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
           </mat-form-field>
+          <div style="overflow-y: scroll; height: 23vw">
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="min-width: 400px; width: 100%">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -29,8 +30,10 @@
               <td *ngIf="input.value !== ''" class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
             </tr>
           </table>
+          </div>
         </mat-card>
       </td>
+      <div style="margin-left: 1vw;"></div>
       <td *ngIf="selectedEquipment" style="width: 30%">
         <mat-card class="mat-elevation-z4">
           <mat-card-title-group>
@@ -40,15 +43,24 @@
             <p>
               {{selectedEquipment.description}}
             </p>
-            <p><b>Strength</b><br>
-              {{selectedEquipment.strength}} st
-            </p>
-            <p><b>Price</b><br>
-              {{selectedEquipment.price}} gold
-            </p>
+            <table>
+              <tr>
+              <th style="padding-right: 3vw">
+                Strength
+              </th>
+                <th>
+                  Price
+                </th>
+              </tr>
+              <tr>
+                <td>{{selectedEquipment.strength}} st</td>
+                <td>{{selectedEquipment.price}} Gold </td>
+              </tr>
+            </table>
+
           </mat-card-content>
           <mat-card-actions>
-            <button mat-stroked-button (click)="buy(selectedEquipment.id)"> Buy </button>
+            <button mat-stroked-button style="margin-left: 8.2vw" (click)="buy(selectedEquipment.id)"> Buy </button>
             <button mat-stroked-button (click)="buyAndEquip(selectedEquipment.id)"> Buy & Equip </button>
           </mat-card-actions>
         </mat-card>
