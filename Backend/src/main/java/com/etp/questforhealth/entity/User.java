@@ -31,13 +31,16 @@ public class User {
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
-        this.characterGold = characterGold;
     }
 
     public User (int id, String firstname, String lastname){
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
+    }
+
+    public User(int id) {
+        this.id = id;
     }
 
     public int getId() {

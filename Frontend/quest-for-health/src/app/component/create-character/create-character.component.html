@@ -1,7 +1,9 @@
 <form class="form" [formGroup]="form">
-<mat-card class="mat-card">
+<mat-card class="mat-card my-transparent">
     <mat-card-header>
-    <mat-card-title>Create new Character</mat-card-title>
+      <mat-card-title-group>
+        <mat-card-title style="text-align: center; padding-left: 2vw">Create new Character</mat-card-title>
+      </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
   <p>
@@ -41,7 +43,7 @@
   </mat-form-field>
   </p>
       <p>
-        <button [disabled]="user.password == '' || passwordRepeat ==  '' ||passwordRepeat != user.password" type="submit" mat-raised-button color="primary" style="margin-left: 10%" (click)=createCharacter()>Create</button>
+        <button [disabled]="user.password == '' || passwordRepeat ==  '' ||passwordRepeat != user.password" type="submit" mat-raised-button color="primary" style="margin-left: 47%" (click)=createCharacter()>Create</button>
       </p>
     </mat-card-content>
   </mat-card>

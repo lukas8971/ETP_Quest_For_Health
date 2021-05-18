@@ -32,6 +32,7 @@ export class UserBrowseQuestsComponent implements OnInit {
       (q: Quest[]) => {
         this.quests = q;
         this.dataSource = new MatTableDataSource<Quest>(q);
+        this.selectedQuest = q[0];
         console.log(q);
       }, error => {
         this.defaultServiceErrorHandling(error);

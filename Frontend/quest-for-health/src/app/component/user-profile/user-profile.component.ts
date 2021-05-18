@@ -114,6 +114,23 @@ export class UserProfileComponent implements OnInit {
     this.userService.getUserStrength(this.user.id).subscribe(
       (s: number) => {
         this.strength = s;
+        this.checkUserForNextStoryAndUpdate();
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+
+  /**
+   * Checks the chapter of a user and updates it if the strength is high enough
+   */
+  private checkUserForNextStoryAndUpdate(): void {
+    console.log('checkUserForNextStoryAndUpdate');
+    this.userService.checkUserForNextStoryAndUpdate(this.user.id).subscribe(
+      (up: boolean) => {
+        if (up) {
+          this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
+        }
       }, error => {
         this.defaultServiceErrorHandling(error);
       }

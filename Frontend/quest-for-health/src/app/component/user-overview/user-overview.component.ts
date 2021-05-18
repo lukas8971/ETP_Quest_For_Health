@@ -9,6 +9,8 @@ import {User} from "../../dto/user";
 import {UserQuest} from "../../dto/userQuest";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {UserQuests} from "../../dto/userQuests";
+import {MatInputModule} from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @Component({
   selector: 'app-user-overview',
@@ -112,6 +114,7 @@ export class UserOverviewComponent implements OnInit {
   public applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.repDataSource.filter = filterValue.trim().toLowerCase();
+    this.oneTimeDatSource.filter = filterValue.trim().toLowerCase();
   }
 
 
@@ -145,6 +148,7 @@ export class UserOverviewComponent implements OnInit {
         this.snackBar.open('Quest completed!', 'OK');
         if(u.characterLevel !== this.user.characterLevel){
           this.snackBar.open('You leveled up!', 'Great!');
+          this.checkUserForNextStoryAndUpdate();
         }this.user = u;
         this.repDataSource.data = this.repDataSource.data.filter(item => item !== this.selectedQuest);
         this.oneTimeDatSource.data = this.oneTimeDatSource.data.filter(item => item !== this.selectedQuest);
@@ -153,6 +157,22 @@ export class UserOverviewComponent implements OnInit {
         this.defaultServiceErrorHandling(error);
       }
     )
+  }
+
+  /**
+   * Checks the chapter of a user and updates it if the strength is high enough
+   */
+  private checkUserForNextStoryAndUpdate(): void {
+    console.log('checkUserForNextStoryAndUpdate');
+    this.userService.checkUserForNextStoryAndUpdate(this.user.id).subscribe(
+      (up: boolean) => {
+        if (up) {
+          this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
+        }
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
   }
 
 }

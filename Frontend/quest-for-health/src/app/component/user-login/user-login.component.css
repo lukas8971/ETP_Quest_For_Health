@@ -9,8 +9,12 @@
 }
 
 .login-container{
-  height: 100vh;
+  height: 70vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.my-transparent{
+  background: rgba(255,255,255,0.7);
 }
