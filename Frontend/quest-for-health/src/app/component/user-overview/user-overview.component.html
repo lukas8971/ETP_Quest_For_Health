@@ -8,9 +8,10 @@
     <tr>
       <td> <!-- Thats a little trick in order to keep table size consistent when switching quests -->
         <div *ngIf="radioButtonQuests === 'OneTime'">
+
         <mat-form-field style="width: 100%">
-          <mat-label style="color: whitesmoke">Filter</mat-label>
-          <input style="color: whitesmoke" (keyup)="applyFilter($event)" placeholder="Search" #input>
+          <mat-label>Filter</mat-label>
+          <input matNativeControl (keyup)="applyFilter($event)" placeholder="Search" #input>
         </mat-form-field>
         <table mat-table [dataSource]="oneTimeDatSource" matSort class="mat-elevation-z8 " style="min-width: 400px; width: 100%">
           <ng-container matColumnDef="name">
@@ -40,7 +41,7 @@
         <div *ngIf="radioButtonQuests === 'Repetitive'">
           <mat-form-field style="width: 100%">
             <mat-label>Filter</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+            <input matNativeControl (keyup)="applyFilter($event)" placeholder="Search" #input>
           </mat-form-field>
           <table mat-table [dataSource]="repDataSource" matSort class="mat-elevation-z8" style="min-width: 400px; width: 100%">
             <ng-container matColumnDef="name">
