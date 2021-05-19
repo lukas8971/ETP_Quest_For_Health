@@ -63,6 +63,15 @@ public interface StoryChapterService {
     StoryChapter getNextStoryOfUser(User user);
 
     /**
+     * Gets the next story chapter information of a user
+     * @param user that requested
+     * @return the next chapter
+     * @throws RuntimeException if something went wrong
+     * @throws ValidationException if the data is wrong
+     */
+    StoryChapter getNextChapterInfo(User user);
+
+    /**
      * Gets all the previous chapters
      * @param user that requested
      * @return all the previous chapters

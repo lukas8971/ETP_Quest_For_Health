@@ -52,6 +52,15 @@ export class StoryService {
   }
 
   /**
+   * Gets the next chapter of a user
+   * @param userId of the user
+   */
+  getNextChapterInfoOfUser(userId: number): Observable<StoryChapter>{
+    console.log('getNextChapterInfoOfUser(' + userId + ')');
+    return this.httpClient.get<StoryChapter>(baseUri + '/nextInfo/' + userId);
+  }
+
+  /**
    * Gets the previous chapter of a user
    * @param userId of the user
    */

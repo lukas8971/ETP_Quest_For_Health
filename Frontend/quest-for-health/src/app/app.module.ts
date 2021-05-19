@@ -41,6 +41,8 @@ import { ShopComponent } from './component/shop/shop.component';
 import { StoryComponent } from './component/story/story.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatSelectModule} from '@angular/material/select';
+import { UserInfoComponent } from './component/user-info/user-info.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,7 @@ import {MatSelectModule} from '@angular/material/select';
     EquipmentComponentComponent,
     ShopComponent,
     StoryComponent,
+    UserInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,6 +93,7 @@ import {MatSelectModule} from '@angular/material/select';
     MatTabsModule,
     FlexLayoutModule,
     MatSelectModule,
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

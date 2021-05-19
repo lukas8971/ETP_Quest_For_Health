@@ -38,3 +38,4 @@
     <button mat-button (click)="logOut()" routerLink="/" style="margin-right: 50px"><mat-icon style="font-size: 30px">logout</mat-icon></button>
   </span>
 </mat-toolbar>
+<app-user-info [user]="user" *ngIf="userLoginService.isUserLoggedIn()" class="my-transparent"></app-user-info>

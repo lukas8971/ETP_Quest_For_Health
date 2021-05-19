@@ -26,4 +26,8 @@ export class CharacterLevelService {
     console.log('getCharacterLevelByLevel');
     return this.httpClient.get<CharacterLevel>(baseUri + '/level/' + level);
   }
+  getCharacterNextLevel(id: number): Observable<CharacterLevel> {
+    console.log('getCharacterNextLevel');
+    return this.httpClient.get<CharacterLevel>(baseUri + '/next/' + id);
+  }
 }

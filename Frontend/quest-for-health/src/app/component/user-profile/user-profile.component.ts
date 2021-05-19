@@ -6,6 +6,7 @@ import {CharacterLevelService} from '../../service/character-level.service';
 import {CharacterLevel} from '../../dto/character-level';
 import {EquipmentService} from '../../service/equipment.service';
 import {Equipment} from '../../dto/equipment';
+import {HeaderInfoService} from '../../service/header-info.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -35,7 +36,7 @@ export class UserProfileComponent implements OnInit {
   strength = 0;
 
   constructor(private equipmentService: EquipmentService, private chararacterLevelService: CharacterLevelService,
-              private userService: UserService, private snackBar: MatSnackBar) {
+              private userService: UserService, private snackBar: MatSnackBar, private headerInfoService: HeaderInfoService) {
   }
 
   loadUser(): void{
@@ -131,6 +132,21 @@ export class UserProfileComponent implements OnInit {
         if (up) {
           this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
         }
+        this.getUserForHeader();
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+
+  /**
+   * Gets the user for the header info component
+   */
+  private getUserForHeader(): void {
+    console.log('getUserForHeader');
+    this.userService.getUserById(this.user.id).subscribe(
+      (user: User) => {
+        this.headerInfoService.setUser(user);
       }, error => {
         this.defaultServiceErrorHandling(error);
       }

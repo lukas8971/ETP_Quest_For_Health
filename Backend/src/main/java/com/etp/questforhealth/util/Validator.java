@@ -301,7 +301,7 @@ public class Validator {
     public void validateNextStoryChapter(User user) {
         LOGGER.trace("validateNextStoryChapter({})", user);
         User u = userDao.getOneById(user.getId());
-        StoryChapter sc = storyDao.getOneById(user.getStoryChapter());
+        StoryChapter sc = storyDao.getOneById(u.getStoryChapter());
         if (sc.getNext_chapter() == null) throw new ValidationException("You already reached the last chapter!");
         StoryChapter next = storyDao.getOneById(sc.getNext_chapter());
         List<Equipment> equipments = equipmentDao.getWornEquipmentFromUserId(u.getId());
@@ -312,6 +312,30 @@ public class Validator {
         if (st < next.getStrength_requirement()) {
             throw new ValidationException("You do not have enough strength to get to the next chapter!");
         }
+    }
+
+    /**
+     * Checks for the next chapter of a user
+     * @param user that requested
+     */
+    public void validateNextStoryInfo(User user) {
+        LOGGER.trace("validateNextStoryInfo({})", user);
+        StoryChapter sc = storyDao.getOneById(user.getStoryChapter());
+        if (sc.getNext_chapter() == null) throw new ValidationException("You already reached the last chapter!");
+        StoryChapter next = storyDao.getOneById(sc.getNext_chapter());
+        if (next == null) throw new ValidationException("There is no next level");
+    }
+
+    /**
+     * Checks for the next chapter of a user
+     * @param user that requested
+     */
+    public void validateNextUserStoryChapter(User user) {
+        LOGGER.trace("validateNextUserStoryChapter({})", user);
+        User u = userDao.getOneById(user.getId());
+        StoryChapter sc = storyDao.getOneById(user.getStoryChapter());
+        if (sc.getNext_chapter() == null) throw new ValidationException("You already reached the last chapter!");
+        StoryChapter next = storyDao.getOneById(sc.getNext_chapter());
     }
 
     public void validatePrevStoryChapter(User user) {

@@ -6,6 +6,7 @@ import {ErrorDialogComponent} from '../component/error-dialog/error-dialog.compo
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ErrorData} from '../entity/error-data';
+import {HeaderInfoService} from './header-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthenticationUserService {
 
   err: ErrorData | undefined;
 
-  constructor(private userService: UserService, private dialog: MatDialog, private router: Router) { }
+  constructor(private userService: UserService, private dialog: MatDialog, private router: Router,
+              private headerInfoService: HeaderInfoService) { }
 
   authenticate(cred: Credentials): void {
     if (cred !== null && cred !== undefined) {
@@ -22,6 +24,7 @@ export class AuthenticationUserService {
         (u: User) => {
           sessionStorage.setItem('userId', String(u.id));
           this.router.navigate(['/users/overview']);
+          this.headerInfoService.setUser(u);
         },
         error => {
           this.defaultServiceErrorHandling(error);

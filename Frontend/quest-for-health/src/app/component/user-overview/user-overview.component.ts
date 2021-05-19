@@ -11,6 +11,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {UserQuests} from "../../dto/userQuests";
 import {MatInputModule} from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import {HeaderInfoService} from '../../service/header-info.service';
 
 @Component({
   selector: 'app-user-overview',
@@ -37,7 +38,8 @@ export class UserOverviewComponent implements OnInit {
     this.oneTimeSort = ms;
     this.oneTimeDatSource.sort = this.oneTimeSort;
   }
-  constructor(private questService:QuestService, private userService:UserService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
+  constructor(private questService:QuestService, private userService:UserService, private snackBar: MatSnackBar, private dialog: MatDialog,
+              private headerInfoService: HeaderInfoService) { }
 
 
   ngOnInit(): void {
@@ -84,6 +86,7 @@ export class UserOverviewComponent implements OnInit {
           this.user = u;
           this.loadRepetitiveQuests();
           this.loadOneTimeQuests();
+          this.headerInfoService.setUser(this.user);
         }
       )
 
@@ -153,6 +156,7 @@ export class UserOverviewComponent implements OnInit {
         this.repDataSource.data = this.repDataSource.data.filter(item => item !== this.selectedQuest);
         this.oneTimeDatSource.data = this.oneTimeDatSource.data.filter(item => item !== this.selectedQuest);
         this.selectedQuest=null;
+        this.headerInfoService.setUser(this.user);
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
@@ -169,6 +173,7 @@ export class UserOverviewComponent implements OnInit {
         if (up) {
           this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
         }
+        this.headerInfoService.setUser(this.user);
       }, error => {
         this.defaultServiceErrorHandling(error);
       }

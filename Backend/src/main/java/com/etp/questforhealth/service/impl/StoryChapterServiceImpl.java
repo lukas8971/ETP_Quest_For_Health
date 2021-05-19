@@ -6,7 +6,9 @@ import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.StoryChapterDao;
+import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.StoryChapterService;
+import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +25,13 @@ public class StoryChapterServiceImpl implements StoryChapterService {
 
     private final Validator validator;
     private final StoryChapterDao storyChapterDao;
+    private final UserDao userDao;
 
     @Autowired
-    public StoryChapterServiceImpl(Validator validator, StoryChapterDao storyChapterDao) {
+    public StoryChapterServiceImpl(Validator validator, StoryChapterDao storyChapterDao, UserDao userDao) {
         this.validator = validator;
         this.storyChapterDao = storyChapterDao;
+        this.userDao = userDao;
     }
 
     @Override
@@ -47,6 +51,18 @@ public class StoryChapterServiceImpl implements StoryChapterService {
         try {
             validator.validateNextStoryChapter(user);
             return storyChapterDao.getNextChapter(storyChapterDao.getOneById(user.getStoryChapter()));
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public StoryChapter getNextChapterInfo(User user) {
+        LOGGER.trace("getNextChapterInfo({})", user);
+        User u = userDao.getOneById(user.getId());
+        try {
+            validator.validateNextStoryInfo(u);
+            return storyChapterDao.getNextChapter(storyChapterDao.getOneById(u.getStoryChapter()));
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
