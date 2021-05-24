@@ -24,6 +24,13 @@ public interface UserService {
     List<User> getAllUsersFromDoctor(int doctor);
 
     /**
+     * Gets all users that are not in treatment at a specific doctor
+     * @param doctor where the users are not in treatment
+     * @return a list of all users not in treatment of doctor
+     */
+    List<User> getAllNotUsersFromDoctor(int doctor);
+
+    /**
      * Gets the user of the specific id
      * @return the user with the specific id
      * @throws RuntimeException if something went wrong

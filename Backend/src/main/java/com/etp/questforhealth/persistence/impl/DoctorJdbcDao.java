@@ -155,4 +155,20 @@ public class DoctorJdbcDao implements DoctorDao {
             throw new PersistenceException(e.getMessage(), e);
         }
     }
+
+    @Override
+    public boolean removePatient(int doctorId, int userId) {
+        LOGGER.trace("removePatient({}, {})", doctorId, userId);
+        makeJDBCConnection();
+        try{//DELETE FROM user_accepted_quest WHERE quest=? AND user=?;
+            String sql = "DELETE FROM doctor_has_patients WHERE doctor=? AND user=? ";
+            PreparedStatement stmt = questForHealthConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, doctorId);
+            stmt.setInt(2, userId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
 }

@@ -1,3 +1,4 @@
+<br>
 <div style="display: flex; position: relative">
 
 <div style="width: 45%; margin-left: 2vw; margin-right: 0; padding: 0;">
@@ -37,16 +38,21 @@
           <div class="value"> {{user.characterName}}</div>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" class="even">
-          <div class="info" style="font-size: 16px">Level</div>
+          <div class="info" style="font-size: 16px"><fa-icon style="color: lightskyblue;" [icon]="faExp"></fa-icon>&nbsp;Level</div>
           <div class="value"> {{currentLevel.level}} ({{currentLevel.rank}})</div>
           <div style="position: absolute; left: 18vw">Next Level-Up in {{neededExp}} exp</div>
         </mat-grid-tile>
+        <mat-grid-tile colspan="1" class="even">
+          <div class="info" style="font-size: 16px"><fa-icon style="color: black;" [icon]="faStory"></fa-icon>&nbsp;Chapter</div>
+          <div class="value"> {{user.storyChapter}}</div>
+          <div style="position: absolute; left: 18vw">Next chapter in {{neededSt}} st</div>
+        </mat-grid-tile>
         <mat-grid-tile colspan="1" class="odd">
-          <div class="info" style="font-size: 16px">Strength</div>
+          <div class="info" style="font-size: 16px"><fa-icon style="color: black;" [icon]="faStrength"></fa-icon>&nbsp;Strength</div>
           <div class="value"> {{strength}} <!--{{user.characterStrength}}--> </div>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" class="even">
-          <div class="info" style="font-size: 16px">Gold</div>
+          <div class="info" style="font-size: 16px"><fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon>&nbsp;Gold</div>
           <div class="value"> {{user.characterGold}}</div>
         </mat-grid-tile>
       </mat-grid-list>

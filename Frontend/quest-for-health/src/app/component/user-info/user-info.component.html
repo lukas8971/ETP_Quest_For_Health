@@ -1,17 +1,16 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div *ngIf="user != undefined" fxLayout="row" fxLayoutAlign="center center">
+<div *ngIf="user != undefined" fxLayout="row" fxLayoutAlign="center center" style="background-color: transparent">
   <mat-card class="my-transparent" style="min-width: 800px">
     <div fxLayout="row" fxLayoutGap="10" fxFlex="150%">
       <div fxFlex="20%" fxLayoutAlign="center">
         <span>
-          Gold: {{user.characterGold}}
-          <fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon>
+          <fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon>&nbsp;Gold: {{user.characterGold}}
         </span>
       </div>
       <div fxFlex="40%" fxLayoutAlign="center">
         <span style="width: 90%">
-          <label fxLayoutAlign="center center">Story chapter: {{user.storyChapter}}</label>
+          <label fxLayoutAlign="center center"><fa-icon style="color: black;" [icon]="faStory"></fa-icon>&nbsp;Chapter: {{user.storyChapter}}</label>
           <div id="progress-bar-st" class="all-rounded">
             <div id="progress-bar-st-percentage" class="all-rounded" style="width: 68%"><span><span id="strength"></span></span></div>
           </div>
@@ -19,7 +18,7 @@
       </div>
       <div fxFlex="40%" fxLayoutAlign="center">
         <span style="width: 90%;">
-          <label fxLayoutAlign="center center">Level: {{user.characterLevel}}</label>
+          <label fxLayoutAlign="center center"><fa-icon style="color: lightskyblue;" [icon]="faExp"></fa-icon>&nbsp;Level: {{user.characterLevel}}</label>
           <div id="progress-bar-lv" class="all-rounded">
             <div id="progress-bar-lv-percentage" class="all-rounded" style="width: 68%"><span><span id="level"></span></span></div>
           </div>

@@ -2,10 +2,12 @@ package com.etp.questforhealth.endpoint;
 
 import com.etp.questforhealth.endpoint.dto.CredentialsDto;
 import com.etp.questforhealth.endpoint.dto.DoctorDto;
+import com.etp.questforhealth.endpoint.dto.DoctorUserRelationDto;
 import com.etp.questforhealth.endpoint.mapper.CredentialsMapper;
 import com.etp.questforhealth.endpoint.mapper.DoctorMapper;
 import com.etp.questforhealth.exception.InvalidLoginException;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.DoctorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +79,45 @@ public class DoctorEndpoint {
         } catch (NotFoundException e){
             LOGGER.error("Could not find doctor with id {} " + e, id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find doctor",e);
+        }
+    }
+
+    /**
+     * Creates a new doctor user relationship
+     * @param doctorUserRelationDto to create to
+     * @return the created relationship
+     */
+    @PostMapping(value="/relation")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DoctorUserRelationDto checkLogin(@RequestBody DoctorUserRelationDto doctorUserRelationDto){
+        LOGGER.info("POST " + BASE_URL + "/relation " + doctorUserRelationDto);
+        try{
+            if (doctorService.assignNewPatient(doctorUserRelationDto.getDocId(), doctorUserRelationDto.getUserId())) {
+                return doctorUserRelationDto;
+            } else {
+                return null;
+            }
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Removes a doctor user relationship
+     * @param doc to remove from
+     * @param user that should be removed
+     * @return true if worked
+     */
+    @DeleteMapping(value="/relation/{doc}/{user}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean checkLogin(@PathVariable("doc") int doc, @PathVariable("user") int user){
+        LOGGER.info("DELETE " + BASE_URL + "/relation/{}/{} ", doc, user);
+        try{
+            return doctorService.removePatient(doc, user);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 }

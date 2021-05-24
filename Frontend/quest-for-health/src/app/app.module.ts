@@ -43,6 +43,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatSelectModule} from '@angular/material/select';
 import { UserInfoComponent } from './component/user-info/user-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DoctorManageComponent } from './component/doctor-manage/doctor-manage.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ShopComponent,
     StoryComponent,
     UserInfoComponent,
+    DoctorManageComponent,
   ],
   imports: [
     BrowserModule,

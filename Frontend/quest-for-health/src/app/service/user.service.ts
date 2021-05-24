@@ -28,6 +28,11 @@ export class UserService {
     return this.httpClient.get<User[]>(baseUri + '/doctor/' + doctorId);
   }
 
+  getAllNotUsersFroMDoctor(doctorId: number): Observable<User[]> {
+    console.log('getAllNotUsersFroMDoctor');
+    return this.httpClient.get<User[]>(baseUri + '/doctorNot/' + doctorId);
+  }
+
   /**
    * Gets the strength of a user including the equipment
    * @param id of the user

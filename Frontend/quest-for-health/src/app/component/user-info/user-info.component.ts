@@ -5,7 +5,7 @@ import {CharacterLevelService} from '../../service/character-level.service';
 import {UserService} from '../../service/user.service';
 import {StoryChapter} from '../../dto/story-chapter';
 import {CharacterLevel} from '../../dto/character-level';
-import { faCoins } from '@fortawesome/free-solid-svg-icons';
+import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-user-info',
@@ -19,7 +19,11 @@ export class UserInfoComponent implements OnInit {
 
   stDone = false;
   lvDone = false;
+  strength = -1;
   faCoins = faCoins;
+  faStrength = faFistRaised;
+  faExp = faDiceD20;
+  faStory = faScroll;
 
   constructor(private storyService: StoryService, private levelService: CharacterLevelService, private userService: UserService) { }
 
@@ -43,10 +47,11 @@ export class UserInfoComponent implements OnInit {
             this.storyService.getNextChapterInfoOfUser(this.user.id).subscribe(
               (sto: StoryChapter) => {
                 const p = (stren / sto.strengthRequirement) * 100;
+                this.strength = stren;
                 const st = document.getElementById('progress-bar-st-percentage');
                 const htmlStren = document.getElementById('strength');
                 if (htmlStren !== null) {
-                  htmlStren.textContent = String(stren) + ' st / ' + String(sto.strengthRequirement) + ' st';
+                  htmlStren.textContent = String(stren) + ' / ' + String(sto.strengthRequirement) + ' st';
                 }
                 if (st !== null) {
                   st.style.width = p + '%';
@@ -73,7 +78,7 @@ export class UserInfoComponent implements OnInit {
             const lv = document.getElementById('progress-bar-lv-percentage');
             const htmlLevel = document.getElementById('level');
             if (htmlLevel !== null) {
-              htmlLevel.textContent = String(this.user.characterExp) + ' xp / ' + String(level.neededExp) + ' xp';
+              htmlLevel.textContent = String(this.user.characterExp) + ' / ' + String(level.neededExp) + ' xp';
             }
             if (lv !== null) {
               lv.style.width = p + '%';

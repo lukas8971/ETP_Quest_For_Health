@@ -26,6 +26,14 @@ public interface UserDao {
     List<User> getAllUsersFromDoctor(int doctor);
 
     /**
+     * Gets all users that are not in treatment at a doctor from the persistent data store.
+     * @param doctor that does not treat the patients.
+     * @return a list of all users not in treatment at doctor.
+     * @throws PersistenceException if something went wrong in the persistent data store.
+     */
+    List<User> getAllNotUsersFromDoctor(int doctor);
+
+    /**
      * Gets a user with a specific id from the persistent data store.
      * @param id of the user to return.
      * @return the user with the specific id.

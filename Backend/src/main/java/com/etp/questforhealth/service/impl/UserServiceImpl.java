@@ -61,6 +61,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllNotUsersFromDoctor(int doctor){
+        LOGGER.trace("getAllNotUsersFromDoctor({})", doctor);
+        return userDao.getAllNotUsersFromDoctor(doctor);
+    }
+
+    @Override
     public User getOneById(int id){
         LOGGER.trace("getOneById({})", id);
         try {
