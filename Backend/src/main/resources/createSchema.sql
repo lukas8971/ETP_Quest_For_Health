@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `story_chapter` (
                                                `strength_requirement` INT NOT NULL,
                                                `prev_chapter` INT NULL,
                                                `next_chapter` INT NULL,
+                                               `picture` LONGTEXT NULL,
                                                PRIMARY KEY (`id`),
                                                INDEX `fk_story_chapter_story_chapter2_idx` (`prev_chapter` ASC),
                                                INDEX `fk_story_chapter_story_chapter1_idx` (`next_chapter` ASC),

@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {StoryChapter} from '../dto/story-chapter';
+import {Picture} from "../dto/picture";
 
 const baseUri = environment.backendUrl + '/stories';
 
@@ -58,5 +59,14 @@ export class StoryService {
   getPreviousChapterOfUser(userId: number): Observable<StoryChapter>{
     console.log('getPreviousChapterOfUser(' + userId + ')');
     return this.httpClient.get<StoryChapter>(baseUri + '/prev/' + userId);
+  }
+
+  /**
+   * Gets the picture for the chapter in base64
+   * @param id of the chapter
+   */
+  getPicture(id: number): Observable<Picture>{
+    console.log('getPicture(' + id + ')');
+    return this.httpClient.get<Picture>(baseUri + '/pic/' + id);
   }
 }
