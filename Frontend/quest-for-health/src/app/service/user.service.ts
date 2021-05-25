@@ -3,11 +3,10 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../dto/user';
 import {environment} from '../../environments/environment';
-import {Credentials} from "../dto/credentials";
-import {Doctor} from "../dto/doctor";
-import {UserQuest} from "../dto/userQuest";
-import {UserQuests} from "../dto/userQuests";
-import {StoryChapter} from '../dto/story-chapter';
+import {Credentials} from '../dto/credentials';
+import {Doctor} from '../dto/doctor';
+import {UserQuest} from '../dto/userQuest';
+import {UserQuests} from '../dto/userQuests';
 
 const baseUri = environment.backendUrl + '/users';
 
@@ -27,6 +26,11 @@ export class UserService {
   getAllUsersFromDoctor(doctorId: number): Observable<User[]> {
     console.log('getAllUsersFromDoctor');
     return this.httpClient.get<User[]>(baseUri + '/doctor/' + doctorId);
+  }
+
+  getAllNotUsersFroMDoctor(doctorId: number): Observable<User[]> {
+    console.log('getAllNotUsersFroMDoctor');
+    return this.httpClient.get<User[]>(baseUri + '/doctorNot/' + doctorId);
   }
 
   /**
@@ -53,12 +57,12 @@ export class UserService {
   }
 
   completeQuest(userQuest: UserQuest): Observable<User>{
-    console.log('completeQuest('+ userQuest + ')');
+    console.log('completeQuest(' + userQuest + ')');
     return this.httpClient.post<User>(baseUri + '/completeQuest', userQuest);
   }
 
   dismissMissedQuests(userQuests: UserQuests): Observable<User>{
-    console.log('dismissMissedQuest('+userQuests+')');
+    console.log('dismissMissedQuest(' + userQuests + ')');
     return this.httpClient.post<User>(baseUri + '/dismissQuests', userQuests);
   }
 

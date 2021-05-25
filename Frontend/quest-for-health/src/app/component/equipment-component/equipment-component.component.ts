@@ -7,6 +7,8 @@ import {EquipmentService} from '../../service/equipment.service';
 import {UserEquipment} from '../../dto/user-equipment';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '../../service/user.service';
+import {HeaderInfoService} from '../../service/header-info.service';
+import {User} from '../../dto/user';
 
 @Component({
   selector: 'app-equipment-component',
@@ -28,7 +30,7 @@ export class EquipmentComponentComponent implements OnInit {
   dataSource = new MatTableDataSource(this.equipment);
 
   constructor(private dialog: MatDialog, private equipmentService: EquipmentService, private snackBar: MatSnackBar,
-              private userService: UserService) {
+              private userService: UserService, private headerInfoService: HeaderInfoService) {
     this.userId = Number(sessionStorage.getItem('userId'));
   }
 
@@ -105,6 +107,21 @@ export class EquipmentComponentComponent implements OnInit {
         if (up) {
           this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
         }
+        this.getUserForHeader();
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+
+  /**
+   * Gets the current user for the header info component
+   */
+  private getUserForHeader(): void {
+    console.log('getUserForHeader');
+    this.userService.getUserById(this.userId).subscribe(
+      (user: User) => {
+        this.headerInfoService.setUser(user);
       }, error => {
         this.defaultServiceErrorHandling(error);
       }

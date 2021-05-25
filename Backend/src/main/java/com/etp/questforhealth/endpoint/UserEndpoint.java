@@ -55,10 +55,26 @@ public class UserEndpoint {
         return userDtos;
     }
 
+    /**
+     * Gets all the patients that are in treatment at a doctor
+     * @param doctor the doctor that has these patients in treatment
+     * @return a list of all patients of a doctor
+     */
     @GetMapping(value="/doctor/{id}")
     public List<UserDto> getAllUsersFromDoctor(@PathVariable("id") int doctor){
         LOGGER.info("GET " + BASE_URL + "/doctor/{}", doctor);
         return userMapper.entityToDto(userService.getAllUsersFromDoctor(doctor));
+    }
+
+    /**
+     * Get all users that are not in treatment at a doctor
+     * @param doctor that does not have these patients
+     * @return list of users that are not in treatment
+     */
+    @GetMapping(value="/doctorNot/{id}")
+    public List<UserDto> getAllNotUsersFromDoctor(@PathVariable("id") int doctor){
+        LOGGER.info("GET " + BASE_URL + "/doctorNot/{}", doctor);
+        return userMapper.entityToDto(userService.getAllNotUsersFromDoctor(doctor));
     }
 
     /**

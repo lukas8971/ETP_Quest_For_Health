@@ -50,4 +50,15 @@ public class CharacterLevelEndpoint {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find character level",e);
         }
     }
+
+    @GetMapping(value="/next/{level}")
+    public CharacterLevelDto getCharacterNextLevel(@PathVariable("level") int level){
+        LOGGER.info("GET " + BASE_URL + "/next/{}",level);
+        try{
+            return characterLevelMapper.entityToDto(characterLevelService.getCharacterNextLevel(level));
+        } catch (NotFoundException e){
+            LOGGER.error("Could not find character level {] " + e, level);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find character level",e);
+        }
+    }
 }
