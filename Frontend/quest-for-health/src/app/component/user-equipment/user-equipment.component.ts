@@ -6,6 +6,9 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Equipment} from '../../dto/equipment';
 import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
 import {Router} from '@angular/router';
+import {User} from '../../dto/user';
+import {HeaderInfoService} from '../../service/header-info.service';
+import {UserService} from '../../service/user.service';
 
 @Component({
   selector: 'app-user-equipment',
@@ -35,7 +38,7 @@ export class UserEquipmentComponent implements OnInit {
   dataSource = new MatTableDataSource(this.equipment);
 
   constructor(private dialog: MatDialog, private equipmentService: EquipmentService, private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router, private headerInfoService: HeaderInfoService, private userService: UserService) {
     this.userId = Number(sessionStorage.getItem('userId'));
   }
 
@@ -135,8 +138,23 @@ export class UserEquipmentComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.equipment);
           this.available = true;
         }
+        this.getUserForHeader();
       },
       error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+
+  /**
+   * Gets the current user for the header info component
+   */
+  private getUserForHeader(): void {
+    console.log('getUserForHeader');
+    this.userService.getUserById(this.userId).subscribe(
+      (user: User) => {
+        this.headerInfoService.setUser(user);
+      }, error => {
         this.defaultServiceErrorHandling(error);
       }
     );

@@ -1,5 +1,6 @@
 package com.etp.questforhealth.persistence;
 
+import com.etp.questforhealth.entity.Picture;
 import com.etp.questforhealth.entity.StoryChapter;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
@@ -66,4 +67,12 @@ public interface StoryChapterDao {
      * @throws PersistenceException if something went wrong
      */
     List<StoryChapter> getAllNextChapters(User user);
+
+    /**
+     * Gets the picture of the chapter
+     *
+     * @param id the id of the chapter
+     * @return the picture
+     */
+    Picture getPicture(int id);
 }

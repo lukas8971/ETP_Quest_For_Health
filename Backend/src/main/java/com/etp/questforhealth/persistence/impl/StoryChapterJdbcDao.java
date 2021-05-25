@@ -1,5 +1,6 @@
 package com.etp.questforhealth.persistence.impl;
 
+import com.etp.questforhealth.entity.Picture;
 import com.etp.questforhealth.entity.StoryChapter;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
@@ -188,6 +189,25 @@ public class StoryChapterJdbcDao implements StoryChapterDao {
                 list.add(mapRow(rs));
             }
             return list;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Picture getPicture(int id) {
+        LOGGER.trace("getPicture({})", id);
+        makeJDBCConnection();
+        try {
+            final String sql = "select picture from " + TABLE_NAME + " where id = ?;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql);
+            pstmnt.setInt(1, id);
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs != null && rs.next()) {
+                return new Picture(rs.getString("picture"));
+            } else {
+                throw new PersistenceException("Error while retrieving picture");
+            }
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }

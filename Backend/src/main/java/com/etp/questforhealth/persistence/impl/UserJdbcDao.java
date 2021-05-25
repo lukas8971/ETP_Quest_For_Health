@@ -104,6 +104,26 @@ public class UserJdbcDao implements UserDao {
         }
     }
 
+    @Override
+    public List<User> getAllNotUsersFromDoctor(int doctor){
+        LOGGER.trace("getAllNotUsersFromDoctor({})", doctor);
+        makeJDBCConnection();
+        try {
+            String query = "SELECT * FROM user WHERE id NOT IN (SELECT dhp.user AS id FROM doctor_has_patients dhp WHERE dhp.doctor=?);";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(query);
+            pstmnt.setInt(1, doctor);
+            ResultSet rs = pstmnt.executeQuery();
+            if (rs == null) return null;
+            List<User> users = new ArrayList<>();
+            while(rs.next()){
+                users.add(mapRow(rs));
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
+
     private User mapUsersInTreatment(ResultSet rs) throws SQLException {
         LOGGER.trace("mapUsersInTreatment({})", rs);
         final User user = new User();

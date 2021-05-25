@@ -6,6 +6,8 @@ import {StoryService} from '../../service/story.service';
 import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
 import {UserService} from '../../service/user.service';
 import {User} from '../../dto/user';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-story',
@@ -24,9 +26,10 @@ export class StoryComponent implements OnInit {
   showRequired = true;
   required = 0;
   i = 0;
+  picture: SafeResourceUrl = [];
 
   constructor(private dialog: MatDialog, private storyService: StoryService, private snackBar: MatSnackBar,
-              private userService: UserService) { }
+              private userService: UserService, private sanatizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.userId = Number(sessionStorage.getItem('userId'));
@@ -43,6 +46,7 @@ export class StoryComponent implements OnInit {
     } else {
       this.displayChapter = this.previousChapters.find(x => x.id === this.displayChapter.prevChapter);
       this.getPrevChapters();
+      this.loadPicture();
     }
   }
 
@@ -56,6 +60,7 @@ export class StoryComponent implements OnInit {
     } else {
       this.displayChapter = this.previousChapters.find(x => x.id === this.displayChapter.nextChapter);
       this.getPrevChapters();
+      this.loadPicture();
     }
   }
 
@@ -137,6 +142,7 @@ export class StoryComponent implements OnInit {
         this.currentChapter = sc;
         this.displayChapter = this.currentChapter;
         this.getPrevChapters();
+        this.loadPicture();
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
@@ -160,6 +166,17 @@ export class StoryComponent implements OnInit {
   }
 
   /**
+   * Loads the picture
+   */
+  private loadPicture() {
+    this.storyService.getPicture(this.displayChapter.id).subscribe(p => {
+      this.picture = this.sanatizer.bypassSecurityTrustResourceUrl("data:Image/*;base64,"+ p.base64);
+    }, error => {
+      this.defaultServiceErrorHandling(error);
+    })
+  }
+
+  /**
    * Shows an error message if an error occurs
    * @param error that should be displayed
    */
@@ -169,4 +186,5 @@ export class StoryComponent implements OnInit {
       data: { err: error, message: '' }
     });
   }
+
 }
