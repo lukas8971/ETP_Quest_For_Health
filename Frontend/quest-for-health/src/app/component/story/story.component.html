@@ -1,15 +1,15 @@
 <br><br>
 
 <div *ngIf="loaded">
-  <div>
-    <mat-card >
+  <div [style.margin-left]="'10%'" [style.margin-right]="'10%'">
+    <mat-card class="my-transparent"style="position: absolute" fxFlex="80%">
       <div fxLayout="row" fxLayoutGap="10">
-        <div fxFlex="12%" fxLayoutAlign="left">
+        <div style="padding-left: 1vw" fxLayoutAlign="left">
           <label><br>
             <button [disabled]="displayChapter.prevChapter <= 0" mat-stroked-button (click)="prev()" style="width: 100%"><mat-icon>arrow_back</mat-icon></button>
           </label>
         </div>
-        <div fxFlex="76%" fxLayoutAlign="center">
+        <div style="padding-left: 28.5vw" fxLayoutAlign="center">
           <mat-form-field appearance="fill">
             <mat-label>Choose chapter</mat-label>
             <mat-select [(value)]="displayChapter.name" (valueChange)="changed($event)">
@@ -19,7 +19,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div fxFlex="12%" fxLayoutAlign="right">
+        <div style="padding-left: 28.5vw" fxLayoutAlign="right">
           <label><label *ngIf="showRequired"> Missing: {{required}} st</label><br>
             <button [disabled]="showRequired" mat-stroked-button (click)="next()" style="width: 100%"><mat-icon>arrow_forward</mat-icon></button>
           </label>
@@ -27,8 +27,9 @@
       </div>
       <br><br>
       <div fxLayout="row" [style.margin-left]="'80px'" [style.margin-right]="'80px'">
-        {{displayChapter.description}}
+        {{displayChapter.description}}<br>
       </div>
     </mat-card>
+    <img [src]="picture" alt="Story-Chapter Picture" style="width: 1216px; height: 684px; padding-top: 10.5vh; padding-left: 7.5vw">
   </div>
 </div>

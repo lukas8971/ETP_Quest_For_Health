@@ -1,5 +1,6 @@
 package com.etp.questforhealth.service;
 
+import com.etp.questforhealth.entity.Picture;
 import com.etp.questforhealth.entity.StoryChapter;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.ValidationException;
@@ -79,4 +80,12 @@ public interface StoryChapterService {
      * @throws ValidationException if the data is wrong
      */
     List<StoryChapter> getAllNextChapters(User user);
+
+    /**
+     * Gets the picture of the chapter
+     *
+     * @param id the id of the chapter
+     * @return the picture
+     */
+    Picture getPicture(int id);
 }
