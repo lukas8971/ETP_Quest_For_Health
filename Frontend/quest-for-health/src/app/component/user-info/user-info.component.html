@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div *ngIf="user != undefined" fxLayout="row" fxLayoutAlign="center center" style="background-color: transparent">
-  <mat-card class="my-transparent" style="min-width: 800px">
-    <div fxLayout="row" fxLayoutGap="10" fxFlex="150%">
-      <div fxFlex="20%" fxLayoutAlign="center">
+<div *ngIf="user != undefined" fxLayout="row" [style.padding-left]="'8vw'" fxLayoutAlign="left" style="background-color: #6739b7">
+  <mat-card class="my-transparent" style="min-width: 34vw" fxLayoutAlign="left">
+    <div fxLayout="row left" fxLayoutGap="10" fxFlex="150%">
+      <div fxFlex="20%" fxLayoutAlign="left">
         <span>
           <fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon>&nbsp;Gold: {{user.characterGold}}
         </span>
@@ -16,7 +16,7 @@
           </div>
         </span>
       </div>
-      <div fxFlex="40%" fxLayoutAlign="center">
+      <div fxFlex="40%" fxLayoutAlign="right">
         <span style="width: 90%;">
           <label fxLayoutAlign="center center"><fa-icon style="color: lightskyblue;" [icon]="faExp"></fa-icon>&nbsp;Level: {{user.characterLevel}}</label>
           <div id="progress-bar-lv" class="all-rounded">
