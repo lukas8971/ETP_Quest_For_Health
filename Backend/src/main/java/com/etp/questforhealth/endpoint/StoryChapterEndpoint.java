@@ -107,8 +107,13 @@ public class StoryChapterEndpoint {
      * @return the picture base64 encoded
      */
     @GetMapping(value = "/pic/{id}")
-    public PictureDto getPicture(@PathVariable("id") int id){
-        LOGGER.info("GET " + BASE_URL + "/pic/{}",id);
-        return pictureMapper.entityToDto(storyChapterService.getPicture(id));
+    public PictureDto getPicture(@PathVariable("id") int id) {
+        LOGGER.info("GET " + BASE_URL + "/pic/{}", id);
+        try {
+            return pictureMapper.entityToDto(storyChapterService.getPicture(id));
+        } catch (NotFoundException e) {
+            LOGGER.error("Chapter not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found", e);
+        }
     }
 }
