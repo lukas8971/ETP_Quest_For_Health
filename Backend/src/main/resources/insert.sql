@@ -44,7 +44,7 @@ values (1, 'Chapter 1: The Beginning',
        (2, 'Chapter 2: Start of the Journey', 'You loaf around the inn, sipping on your ale before calling it a day, when suddenly a bunch of worn out, clearly shocked men storm in. Their looks are anything but pleasant, and so is their smell. Hastily, one of them shouts: "Make room, clear the table and get some alcohol!". Quite perplexed, the people of the nearest table got up and cleared the table while the barkeeper hastily grabbed the next-best bottle of rum. Just what was going on here?', 25, 1, 3),
        (3, 'Chapter 3: What happened?', 'Intriqued by all the ruckus', 54, 2, null);
 
-insert into character_level (total_strength, needed_exp, level, rank) values
+insert into character_level (total_strength, needed_exp, level, character_level.rank) values
 (0,0,1,'Beginner'),
 (2, 10, 2, 'Beginner'),
 (4, 40, 3, 'Beginner'),

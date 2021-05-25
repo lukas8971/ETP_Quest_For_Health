@@ -20,14 +20,17 @@ import {HeaderInfoService} from '../../service/header-info.service';
 })
 export class UserOverviewComponent implements OnInit {
   repetitiveQuests: Quest[] = [];
+  questsThisWeek: Quest[] = [];
   oneTimeQuests: Quest[] = [];
-  questColumns: string[] = ['name', 'exp_reward','gold_reward','dueDate'];
+  questColumns: string[] = ['name','dueDate'];
   oneTimeQuestColumns: string[] = ['name', 'exp_reward','gold_reward'];
   repDataSource = new MatTableDataSource(this.repetitiveQuests);
+  weeklyRepDataSource = new MatTableDataSource(this.questsThisWeek);
   oneTimeDatSource = new MatTableDataSource(this.oneTimeQuests);
   selectedQuest: any;
   radioButtonQuests: string='Repetitive';
   repSort:MatSort = new MatSort();
+  weekSort:MatSort = new MatSort();
   oneTimeSort: MatSort = new MatSort();
   currentDate: Date = new Date();
   user: any;
@@ -37,6 +40,8 @@ export class UserOverviewComponent implements OnInit {
     this.repDataSource.sort=this.repSort;
     this.oneTimeSort = ms;
     this.oneTimeDatSource.sort = this.oneTimeSort;
+    this.weekSort = ms;
+    this.weeklyRepDataSource.sort = this.weekSort;
   }
   constructor(private questService:QuestService, private userService:UserService, private snackBar: MatSnackBar, private dialog: MatDialog,
               private headerInfoService: HeaderInfoService) { }
@@ -51,8 +56,18 @@ export class UserOverviewComponent implements OnInit {
   loadRepetitiveQuests(){
     this.questService.getAllQuestsDueForUser(Number(sessionStorage.getItem('userId'))).subscribe(
       (q: Quest[]) => {
-        this.repetitiveQuests = q;
-        this.repDataSource = new MatTableDataSource<Quest>(q);
+        const nextWeekDate = new Date();
+        nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+        this.repetitiveQuests = q.filter(x => new Date(x.dueDate).getTime() >= nextWeekDate.getTime()).sort((a:Quest, b:Quest) =>{
+          return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+        });
+        this.questsThisWeek = q.filter(x => new Date(x.dueDate).getTime() <= nextWeekDate.getTime()).sort((a:Quest, b: Quest) =>{
+          return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+        });
+        this.repDataSource = new MatTableDataSource<Quest>(this.repetitiveQuests);
+        this.weeklyRepDataSource = new MatTableDataSource<Quest>(this.questsThisWeek);
+
+
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
@@ -123,8 +138,6 @@ export class UserOverviewComponent implements OnInit {
 
   getDifference(date: string): number {
     let d1 = new Date(date);
-    console.log(d1);
-    console.log(this.currentDate)
     return this.millisecondsToDays(d1.getTime()-this.currentDate.getTime());
   }
 
@@ -153,6 +166,7 @@ export class UserOverviewComponent implements OnInit {
           this.snackBar.open('You leveled up!', 'Great!');
           this.checkUserForNextStoryAndUpdate();
         }this.user = u;
+        this.weeklyRepDataSource.data = this.weeklyRepDataSource.data.filter(item => item !== this.selectedQuest);
         this.repDataSource.data = this.repDataSource.data.filter(item => item !== this.selectedQuest);
         this.oneTimeDatSource.data = this.oneTimeDatSource.data.filter(item => item !== this.selectedQuest);
         this.selectedQuest=null;
