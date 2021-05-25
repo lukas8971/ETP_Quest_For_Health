@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div *ngIf="user != undefined" fxLayout="row" [style.padding-left]="'8vw'" fxLayoutAlign="left" style="background-color: #6739b7">
+  <mat-card class="my-transparent" style="min-width: 34vw" fxLayoutAlign="left">
+    <div fxLayout="row left" fxLayoutGap="10" fxFlex="150%">
+      <div fxFlex="20%" fxLayoutAlign="left">
+        <span>
+          <fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon>&nbsp;Gold: {{user.characterGold}}
+        </span>
+      </div>
+      <div fxFlex="40%" fxLayoutAlign="center">
+        <span style="width: 90%">
+          <label fxLayoutAlign="center center"><fa-icon style="color: black;" [icon]="faStory"></fa-icon>&nbsp;Chapter: {{user.storyChapter}}</label>
+          <div id="progress-bar-st" class="all-rounded">
+            <div id="progress-bar-st-percentage" class="all-rounded" style="width: 68%"><span><span id="strength"></span></span></div>
+          </div>
+        </span>
+      </div>
+      <div fxFlex="40%" fxLayoutAlign="right">
+        <span style="width: 90%;">
+          <label fxLayoutAlign="center center"><fa-icon style="color: lightskyblue;" [icon]="faExp"></fa-icon>&nbsp;Level: {{user.characterLevel}}</label>
+          <div id="progress-bar-lv" class="all-rounded">
+            <div id="progress-bar-lv-percentage" class="all-rounded" style="width: 68%"><span><span id="level"></span></span></div>
+          </div>
+        </span>
+      </div>
+    </div>
+  </mat-card>
+</div>

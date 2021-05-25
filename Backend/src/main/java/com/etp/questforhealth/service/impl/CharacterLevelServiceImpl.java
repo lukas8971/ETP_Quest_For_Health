@@ -39,4 +39,14 @@ public class CharacterLevelServiceImpl implements CharacterLevelService {
             throw new ServiceException(e.getMessage(),e);
         }
     }
+
+    @Override
+    public CharacterLevel getCharacterNextLevel(int id) {
+        LOGGER.trace("getCharacterNextLevel({})", id);
+        try {
+            return characterLevelDao.getCharacterLevelByLevel(id + 1);
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
 }

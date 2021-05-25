@@ -51,4 +51,13 @@ public interface DoctorDao {
      * @throws PersistenceException if something went wrong
      */
     boolean assignNewPatient(int doctorId, int userId);
+
+    /**
+     * Removes a doctor user relationship
+     * @param doctorId id of the doctor
+     * @param userId id of the user
+     * @return true if worked
+     * @throws PersistenceException if something went wrong
+     */
+    boolean removePatient(int doctorId, int userId);
 }

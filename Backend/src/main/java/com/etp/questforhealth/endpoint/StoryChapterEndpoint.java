@@ -90,6 +90,18 @@ public class StoryChapterEndpoint {
     }
 
     /**
+     * Gets the next chapter information of a user
+     * @param id of the user
+     * @return the next story chapters
+     */
+    @GetMapping(value = "/nextInfo/{id}")
+    public StoryChapterDto getNextChapterInfo(@PathVariable("id") int id){
+        LOGGER.info("GET " + BASE_URL + "/nextInfo/{}",id);
+        User u = new User(id);
+        return storyMapper.entityToDto(storyChapterService.getNextChapterInfo(u));
+    }
+
+    /**
      * Gets the previous chapter of a user
      * @param id of the user
      * @return the previous story chapters

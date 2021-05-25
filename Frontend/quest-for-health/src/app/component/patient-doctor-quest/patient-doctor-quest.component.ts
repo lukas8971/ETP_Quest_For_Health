@@ -28,7 +28,7 @@ export class PatientDoctorQuestComponent implements OnInit {
   assignedQuests: any[] = [];
   availableQuests: any[] = [];
   history: HistoryQuest[] = [];
-  accepted: HistoryQuest[] = []
+  accepted: HistoryQuest[] = [];
 
   showAvailable = false;
   showAssigned = false;
