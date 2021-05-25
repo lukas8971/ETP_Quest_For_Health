@@ -1,5 +1,6 @@
 package com.etp.questforhealth.service.impl;
 
+import com.etp.questforhealth.entity.Picture;
 import com.etp.questforhealth.entity.StoryChapter;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.PersistenceException;
@@ -130,5 +131,13 @@ public class StoryChapterServiceImpl implements StoryChapterService {
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public Picture getPicture(int id) {
+        LOGGER.trace("getPicture({})",id);
+        //check if chapter exists
+        getOneById(id);
+        return storyChapterDao.getPicture(id);
     }
 }

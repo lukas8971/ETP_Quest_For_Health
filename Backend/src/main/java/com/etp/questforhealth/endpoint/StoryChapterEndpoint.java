@@ -1,8 +1,9 @@
 package com.etp.questforhealth.endpoint;
 
+import com.etp.questforhealth.endpoint.dto.PictureDto;
 import com.etp.questforhealth.endpoint.dto.StoryChapterDto;
+import com.etp.questforhealth.endpoint.mapper.PictureMapper;
 import com.etp.questforhealth.endpoint.mapper.StoryChapterMapper;
-import com.etp.questforhealth.entity.StoryChapter;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
 import com.etp.questforhealth.service.StoryChapterService;
@@ -27,11 +28,13 @@ public class StoryChapterEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final StoryChapterService storyChapterService;
     private final StoryChapterMapper storyMapper;
+    private final PictureMapper pictureMapper;
 
     @Autowired
-    public StoryChapterEndpoint(StoryChapterService storyChapterService, StoryChapterMapper storyMapper) {
+    public StoryChapterEndpoint(StoryChapterService storyChapterService, StoryChapterMapper storyMapper, PictureMapper pictureMapper) {
         this.storyChapterService = storyChapterService;
         this.storyMapper = storyMapper;
+        this.pictureMapper = pictureMapper;
     }
 
     /**
@@ -108,5 +111,21 @@ public class StoryChapterEndpoint {
         LOGGER.info("GET " + BASE_URL + "/prev/{}",id);
         User u = new User(id);
         return storyMapper.entityToDto(storyChapterService.getPrevStoryOfUser(u));
+    }
+
+    /**
+     * Gets the picture of the cahapter
+     * @param id of the chapter
+     * @return the picture base64 encoded
+     */
+    @GetMapping(value = "/pic/{id}")
+    public PictureDto getPicture(@PathVariable("id") int id) {
+        LOGGER.info("GET " + BASE_URL + "/pic/{}", id);
+        try {
+            return pictureMapper.entityToDto(storyChapterService.getPicture(id));
+        } catch (NotFoundException e) {
+            LOGGER.error("Chapter not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found", e);
+        }
     }
 }
