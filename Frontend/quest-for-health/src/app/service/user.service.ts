@@ -84,4 +84,13 @@ export class UserService {
     console.log('getPreviousChapterOfUser(' + userId + ')');
     return this.httpClient.get<boolean>(baseUri + '/checkStory/' + userId);
   }
+
+  /**
+   * Gets the leaderboard of the current user
+   * @param userId of the current user
+   */
+  getLeaderboard(userId: number): Observable<User[]> {
+    console.log('getLeaderboard(' + userId + ')');
+    return this.httpClient.get<User[]>(baseUri + '/leaderboard/' + userId);
+  }
 }

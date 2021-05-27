@@ -27,6 +27,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -231,6 +233,24 @@ public class UserServiceImpl implements UserService {
             StoryChapter sc = storyService.getNextChapter(u);
             u.setStoryChapter(sc.getId());
             return userDao.updateUser(u);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<User> getLeaderboardForUser(User user) {
+        LOGGER.trace("getLeaderboardForUser({})", user);
+        try{
+            validator.validateExistingUser(user.getId());
+            List<User> users = userDao.getLeaderboardForUser(user);
+            for (User u: users) {
+                u.setCharacterStrength(getUserStrength(u.getId()));
+            }
+            users.sort(Comparator.comparing(User::getCharacterStrength)
+                    .thenComparing(User::getCharacterExp)
+                    .thenComparing(User::getIdForSort).reversed());
+            return users;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

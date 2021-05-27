@@ -240,4 +240,15 @@ public class UserServiceTest {
         User _u = userService.getOneById(u.getId());
         assertEquals(TestData.getDbUser5().getStoryChapter() + 1 ,_u.getStoryChapter());
     }
+
+    @Test
+    @DisplayName("Getting the leaderboard for a user should only get users with the same level")
+    public void leaderboardForUser_allShouldHaveSameLevel() {
+        User get = userService.getOneById(3);
+        List<User> leaderboard = userService.getLeaderboardForUser(get);
+        assertNotNull(leaderboard);
+        for (User u: leaderboard) {
+            assertEquals(get.getCharacterLevel(), u.getCharacterLevel());
+        }
+    }
 }

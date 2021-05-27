@@ -44,6 +44,8 @@ import {MatSelectModule} from '@angular/material/select';
 import { UserInfoComponent } from './component/user-info/user-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DoctorManageComponent } from './component/doctor-manage/doctor-manage.component';
+import { LeaderboardComponent } from './component/leaderboard/leaderboard.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { DoctorManageComponent } from './component/doctor-manage/doctor-manage.c
     StoryComponent,
     UserInfoComponent,
     DoctorManageComponent,
+    LeaderboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,6 +99,7 @@ import { DoctorManageComponent } from './component/doctor-manage/doctor-manage.c
     FlexLayoutModule,
     MatSelectModule,
     FontAwesomeModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

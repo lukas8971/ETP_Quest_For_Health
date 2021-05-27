@@ -39,12 +39,24 @@ public class User {
         this.lastname = lastname;
     }
 
+    public User (int id, String characterName, int characterStrength, int characterExp, int characterLevel) {
+        this.id = id;
+        this.characterName = characterName;
+        this.characterStrength = characterStrength;
+        this.characterExp = characterExp;
+        this.characterLevel = characterLevel;
+    }
+
     public User(int id) {
         this.id = id;
     }
 
     public int getId() {
         return id;
+    }
+
+    public int getIdForSort() {
+        return -id;
     }
 
     public void setId(int id) {
@@ -142,7 +154,6 @@ public class User {
                 characterExp == user.characterExp &&
                 characterGold == user.characterGold &&
                 storyChapter == user.storyChapter &&
-                characterGold == user.characterGold &&
                 Objects.equals(firstname, user.firstname) &&
                 Objects.equals(lastname, user.lastname) &&
                 Objects.equals(characterName, user.characterName) &&

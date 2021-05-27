@@ -25,6 +25,9 @@
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/users/browseQuests" class="button">Find new Quests</button>
   </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/leaderboard" class="button"><fa-icon style="color: goldenrod;" [icon]="faTrophy"></fa-icon>&nbsp;Ranking</button>
+  </span>
   <div style="width: 5px"></div>
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/doctors" class="button">Doctor Login</button>
