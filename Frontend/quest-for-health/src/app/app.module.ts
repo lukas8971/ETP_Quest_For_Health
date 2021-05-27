@@ -46,6 +46,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DoctorManageComponent } from './component/doctor-manage/doctor-manage.component';
 import { LeaderboardComponent } from './component/leaderboard/leaderboard.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { WelcomeComponent } from './component/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     UserInfoComponent,
     DoctorManageComponent,
     LeaderboardComponent,
+    WelcomeComponent,
   ],
   imports: [
     BrowserModule,

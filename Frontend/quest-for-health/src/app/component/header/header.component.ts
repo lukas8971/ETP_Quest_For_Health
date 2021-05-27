@@ -3,7 +3,7 @@ import {AuthenticationDoctorService} from '../../service/authentication-doctor.s
 import {AuthenticationUserService} from '../../service/authentication-user.service';
 import {User} from '../../dto/user';
 import {HeaderInfoService} from '../../service/header-info.service';
-import {faTrophy} from '@fortawesome/free-solid-svg-icons';
+import {faHeartbeat, faScroll, faTrophy} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +16,8 @@ export class HeaderComponent implements OnInit {
               private headerInfoService: HeaderInfoService) { }
 
   faTrophy = faTrophy;
+  faStory = faScroll;
+  faHeart = faHeartbeat;
 
  user: User = {id: -1, firstname: '', lastname: '', characterName: '',
    characterStrength: -1, characterLevel: -1, password: '', email: '', storyChapter: -1, characterExp: -1, characterGold: -1};
