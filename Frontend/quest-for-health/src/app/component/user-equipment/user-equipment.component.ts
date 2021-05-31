@@ -9,6 +9,8 @@ import {Router} from '@angular/router';
 import {User} from '../../dto/user';
 import {HeaderInfoService} from '../../service/header-info.service';
 import {UserService} from '../../service/user.service';
+import {MessagesService} from '../../service/message-service';
+import {faFistRaised} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-user-equipment',
@@ -37,8 +39,11 @@ export class UserEquipmentComponent implements OnInit {
   equipmentColumns = ['name', 'strength', 'strength-diff'];
   dataSource = new MatTableDataSource(this.equipment);
 
+  faStrength = faFistRaised;
+
   constructor(private dialog: MatDialog, private equipmentService: EquipmentService, private snackBar: MatSnackBar,
-              private router: Router, private headerInfoService: HeaderInfoService, private userService: UserService) {
+              private router: Router, private headerInfoService: HeaderInfoService, private userService: UserService,
+              private messageService: MessagesService) {
     this.userId = Number(sessionStorage.getItem('userId'));
   }
 
@@ -99,6 +104,8 @@ export class UserEquipmentComponent implements OnInit {
           this.equippedEquipment = eq;
           this.equipped = true;
           this.changedEvent.emit('Changed!');
+          this.messageService.sendMessage({ message: 'equipment_changed', receiver: 'all'});
+          console.log('Changed Message sent!')
         }
         this.getAvailableEquipment();
       }, error => {
@@ -137,8 +144,9 @@ export class UserEquipmentComponent implements OnInit {
           console.log(eq);
           this.dataSource = new MatTableDataSource(this.equipment);
           this.available = true;
+          this.selectedEquipment = eq[0];
         }
-        this.getUserForHeader();
+        //this.getUserForHeader();
       },
       error => {
         this.defaultServiceErrorHandling(error);
@@ -149,6 +157,7 @@ export class UserEquipmentComponent implements OnInit {
   /**
    * Gets the current user for the header info component
    */
+  /*
   private getUserForHeader(): void {
     console.log('getUserForHeader');
     this.userService.getUserById(this.userId).subscribe(
@@ -158,7 +167,7 @@ export class UserEquipmentComponent implements OnInit {
         this.defaultServiceErrorHandling(error);
       }
     );
-  }
+  }*/
 
   /**
    * Resets the data
