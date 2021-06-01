@@ -85,6 +85,7 @@ export class StoryComponent implements OnInit {
     console.log(event);
     this.displayChapter = this.previousChapters.find(x => x.name === event);
     this.getPrevChapters();
+    this.loadPicture();
   }
 
   /**
