@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 import {User} from '../../dto/user';
 import {UserService} from '../../service/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -57,7 +57,6 @@ export class UserProfileComponent implements OnInit {
         console.log('Received message from messageservice: ' + message.message);
         if (message.receiver === 'all' || message.receiver === 'UserProfile') {
           if (message.message === 'equipment_changed') {
-            this.loadUserEquipment();
             this.loadUser();
           }
         }
@@ -74,11 +73,15 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  public change(event: any) {
+    console.log('Child changed!');
+    //this.loadUser();
+  }
+
   loadUser(): void{
     this.userService.getUserById(Number(sessionStorage.getItem('userId'))).subscribe(
       (u: User) => {
         this.user =  u;
-        this.loadNextLevel();
         this.loadUserEquipment();
       }, error => {
         this.defaultServiceErrorHandling(error);
@@ -91,6 +94,7 @@ export class UserProfileComponent implements OnInit {
     this.storyService.getNextChapterInfoOfUser(this.user.id).subscribe(
       (sto: StoryChapter) => {
         this.neededSt = sto.strengthRequirement - this.strength;
+        this.loadNextLevel();
       }, error => {
         // this.defaultServiceErrorHandling(error);
       }
@@ -162,7 +166,7 @@ export class UserProfileComponent implements OnInit {
       (s: number) => {
         this.strength = s;
         this.checkUserForNextStoryAndUpdate();
-        this.loadNextStory();
+
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
@@ -180,6 +184,7 @@ export class UserProfileComponent implements OnInit {
         if (up) {
           this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
         }
+        this.loadNextStory();
         //this.getUserForHeader();
       }, error => {
         this.defaultServiceErrorHandling(error);

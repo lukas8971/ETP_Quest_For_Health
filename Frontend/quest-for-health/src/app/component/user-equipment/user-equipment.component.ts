@@ -104,7 +104,6 @@ export class UserEquipmentComponent implements OnInit {
           this.equippedEquipment = eq;
           this.equipped = true;
           this.changedEvent.emit('Changed!');
-          this.messageService.sendMessage({ message: 'equipment_changed', receiver: 'all'});
           console.log('Changed Message sent!')
         }
         this.getAvailableEquipment();
@@ -145,6 +144,7 @@ export class UserEquipmentComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.equipment);
           this.available = true;
           this.selectedEquipment = eq[0];
+          this.messageService.sendMessage({ message: 'equipment_changed', receiver: 'all'});
         }
         //this.getUserForHeader();
       },

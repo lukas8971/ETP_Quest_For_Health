@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy, Pipe, PipeTransform} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy, Pipe, PipeTransform, OnChanges} from '@angular/core';
 import {User} from '../../dto/user';
 import {StoryService} from '../../service/story.service';
 import {CharacterLevelService} from '../../service/character-level.service';
@@ -63,11 +63,13 @@ export class UserInfoComponent implements OnInit {
                 }
                 this.stDone = true;
               }, error => {
+                console.log(error);
                 // this.defaultServiceErrorHandling(error);
               }
             );
           }
         }, error => {
+          console.log(error);
           // this.defaultServiceErrorHandling(error);
         }
       );
@@ -91,6 +93,7 @@ export class UserInfoComponent implements OnInit {
             this.lvDone = true;
           }
         }, error => {
+          console.log(error);
           // this.defaultServiceErrorHandling(error);
         }
       );
