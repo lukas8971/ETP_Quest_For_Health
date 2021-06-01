@@ -9,6 +9,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '../../service/user.service';
 import {HeaderInfoService} from '../../service/header-info.service';
 import {User} from '../../dto/user';
+import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-solid-svg-icons';
+import {MessagesService} from "../../service/message-service";
 
 @Component({
   selector: 'app-equipment-component',
@@ -29,8 +31,13 @@ export class EquipmentComponentComponent implements OnInit {
   equipmentColumns = ['name', 'price', 'strength'];
   dataSource = new MatTableDataSource(this.equipment);
 
+  faCoins = faCoins;
+  faStrength = faFistRaised;
+  faExp = faDiceD20;
+  faStory = faScroll;
+
   constructor(private dialog: MatDialog, private equipmentService: EquipmentService, private snackBar: MatSnackBar,
-              private userService: UserService, private headerInfoService: HeaderInfoService) {
+              private userService: UserService, private headerInfoService: HeaderInfoService, private messageService: MessagesService) {
     this.userId = Number(sessionStorage.getItem('userId'));
   }
 
@@ -91,6 +98,7 @@ export class EquipmentComponentComponent implements OnInit {
         if (equip){
           this.equipNewEquipment(eq);
         }
+        this.messageService.sendMessage({ message: 'gold_changed', receiver: 'all'});
       }, error => {
         this.defaultServiceErrorHandling(error);
       }

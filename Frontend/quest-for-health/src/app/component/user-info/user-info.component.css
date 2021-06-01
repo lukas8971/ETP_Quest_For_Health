@@ -6,10 +6,9 @@
 
 #progress-bar-st-percentage {
   background: #3063A5;
-  padding: 5px 0px;
   color: #FFF;
   text-align: center;
-  height: 20px;
+  height: 30px;
 }
 
 #progress-bar-st-percentage span {
@@ -27,10 +26,9 @@
 
 #progress-bar-lv-percentage {
   background: #3063A5;
-  padding: 5px 0px;
   color: #FFF;
   text-align: center;
-  height: 20px;
+  height: 30px;
 }
 
 #progress-bar-lv-percentage span {
@@ -42,4 +40,9 @@
 
 .my-transparent{
   background: rgba(255,255,255,0.8);
+}
+
+
+.complete-transparent{
+  background: rgba(255,255,255,0);
 }
