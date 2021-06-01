@@ -18,7 +18,7 @@ export class WelcomeComponent implements OnInit {
       this.router.navigate(['doctors/overview']);
     }
     if (this.userLoginService.isUserLoggedIn()) {
-      this.router.navigate(['users/profile']);
+      this.router.navigate(['users/overview']);
     }
   }
 }
