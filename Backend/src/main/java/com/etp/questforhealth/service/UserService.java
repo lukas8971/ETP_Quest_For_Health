@@ -93,4 +93,11 @@ public interface UserService {
      * @return true if next chapter is reached
      */
     boolean checkUserForNextStoryAndUpdate(User user);
+
+    /**
+     * Gets the leaderboard entries for a specific user
+     * @param user that wants to view the leaderboard
+     * @return a list of all users
+     */
+    List<User> getLeaderboardForUser(User user);
 }

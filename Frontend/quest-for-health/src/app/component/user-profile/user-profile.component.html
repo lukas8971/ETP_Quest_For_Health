@@ -102,22 +102,22 @@
       <mat-card-title style="font-size: 18px">Bought Items - Items you own and can equip</mat-card-title>
       <mat-tab-group mat-align-tabs="center">
         <mat-tab label="Head">
-          <app-user-equipment type="head"></app-user-equipment>
+          <app-user-equipment type="head" (changedEvent)="change($event)"></app-user-equipment>
         </mat-tab>
         <mat-tab label="Torso">
-          <app-user-equipment type="torso"></app-user-equipment>
+          <app-user-equipment type="torso" (changedEvent)="change($event)"></app-user-equipment>
         </mat-tab>
         <mat-tab label="Arms">
-          <app-user-equipment type="arms"></app-user-equipment>
+          <app-user-equipment type="arms" (changedEvent)="change($event)"></app-user-equipment>
         </mat-tab>
         <mat-tab label="Legs">
-          <app-user-equipment type="legs"></app-user-equipment>
+          <app-user-equipment type="legs" (changedEvent)="change($event)"></app-user-equipment>
         </mat-tab>
         <mat-tab label="Right Hand">
-          <app-user-equipment type="right hand"></app-user-equipment>
+          <app-user-equipment type="right hand" (changedEvent)="change($event)"></app-user-equipment>
         </mat-tab>
         <mat-tab label="Left Hand">
-          <app-user-equipment type="left hand"></app-user-equipment>
+          <app-user-equipment type="left hand" (changedEvent)="change($event)"></app-user-equipment>
         </mat-tab>
       </mat-tab-group>
     </mat-card>

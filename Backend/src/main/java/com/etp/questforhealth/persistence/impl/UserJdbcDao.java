@@ -264,6 +264,16 @@ public class UserJdbcDao implements UserDao {
         );
     }
 
+    private User mapRowLeaderboard(ResultSet rs) throws SQLException {
+        LOGGER.trace("mapRowLeaderboard({})", rs);
+        return new User(rs.getInt("id"),
+                rs.getString("character_name"),
+                rs.getInt("character_strength"),
+                rs.getInt("character_exp"),
+                rs.getInt("character_level")
+        );
+    }
+
     @Override
     public boolean changeUserGold(int id, int changeValue){
         LOGGER.trace("changeUserGold({}, {})", id, changeValue);
@@ -278,6 +288,27 @@ public class UserJdbcDao implements UserDao {
             pstmnt.setInt(2, id);
             int rowsAffected = pstmnt.executeUpdate();
             return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<User> getLeaderboardForUser(User user) {
+        LOGGER.trace("getLeaderboardForUser({})", user);
+        makeJDBCConnection();
+        try{
+            User u = getOneById(user.getId());
+            final String sql = "SELECT id, character_name, character_strength, character_exp, character_level FROM " + TABLE_NAME + " WHERE character_level = ? ORDER BY character_strength AND character_exp;";
+            PreparedStatement pstmnt = questForHealthConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmnt.setInt(1, u.getCharacterLevel());
+            ResultSet rs = pstmnt.executeQuery();
+            List<User> users = new ArrayList<>();
+            while (rs.next()){
+                users.add(mapRowLeaderboard(rs));
+            }
+            if (users.size() == 0) return null;
+            return users;
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage(), e);
         }

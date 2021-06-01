@@ -36,7 +36,14 @@ public class UserDto {
         this.password = password;
         this.email = email;
         this.storyChapter = storyChapter;
-        this.characterGold = characterGold;
+    }
+
+    public UserDto (int id, String characterName, int characterStrength, int characterExp, int characterLevel) {
+        this.id = id;
+        this.characterName = characterName;
+        this.characterStrength = characterStrength;
+        this.characterExp = characterExp;
+        this.characterLevel = characterLevel;
     }
 
     public int getId() {

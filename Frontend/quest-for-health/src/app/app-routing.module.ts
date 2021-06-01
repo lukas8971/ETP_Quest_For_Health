@@ -15,6 +15,8 @@ import {CreateDoctorQuestDialog} from './component/create-doctor-quest/create-do
 import {ShopComponent} from './component/shop/shop.component';
 import {StoryComponent} from './component/story/story.component';
 import {DoctorManageComponent} from './component/doctor-manage/doctor-manage.component';
+import {LeaderboardComponent} from './component/leaderboard/leaderboard.component';
+import {WelcomeComponent} from './component/welcome/welcome.component';
 
 const routes: Routes = [
   {path: 'doctors/overview', component: DoctorOverviewComponent, canActivate: [AuthGuardDoctorService]},
@@ -30,6 +32,8 @@ const routes: Routes = [
   {path: 'doctors/createquest', component: CreateDoctorQuestDialog, canActivate: [AuthGuardDoctorService]},
   {path: 'story', component: StoryComponent, canActivate: [AuthGuardUserService]},
   {path: 'doctors/manage', component: DoctorManageComponent, canActivate: [AuthGuardDoctorService]},
+  {path: 'users/leaderboard', component: LeaderboardComponent, canActivate: [AuthGuardUserService]},
+  {path: '', component: WelcomeComponent},
 ];
 
 @NgModule({

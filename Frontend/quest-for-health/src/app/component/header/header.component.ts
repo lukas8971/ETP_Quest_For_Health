@@ -3,6 +3,7 @@ import {AuthenticationDoctorService} from '../../service/authentication-doctor.s
 import {AuthenticationUserService} from '../../service/authentication-user.service';
 import {User} from '../../dto/user';
 import {HeaderInfoService} from '../../service/header-info.service';
+import {faHeartbeat, faScroll, faTrophy} from '@fortawesome/free-solid-svg-icons';
 import {UserService} from "../../service/user.service";
 
 @Component({
@@ -14,6 +15,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(public doctorLoginService: AuthenticationDoctorService, public userLoginService: AuthenticationUserService,
               private headerInfoService: HeaderInfoService, private userService: UserService) { }
+
+  faTrophy = faTrophy;
+  faStory = faScroll;
+  faHeart = faHeartbeat;
 
  user: User = {id: -1, firstname: '', lastname: '', characterName: '',
    characterStrength: -1, characterLevel: -1, password: '', email: '', storyChapter: -1, characterExp: -1, characterGold: -1};
