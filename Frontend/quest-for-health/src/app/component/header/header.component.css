@@ -8,3 +8,15 @@
 .my-transparent{
   background: rgb(37, 150, 190);
 }
+
+.small {
+  font-size: 18px;
+}
+
+.smaller {
+  font-size: 14px;
+}
+
+.qfh:hover{
+  cursor: pointer;
+}

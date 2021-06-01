@@ -34,4 +34,14 @@ public class UserMapper {
         }
         return usersDto;
     }
+
+    public List<UserDto> leaderboardEntityToDto (List<User> users){
+        LOGGER.trace("leaderboardEntityToDto({})", users);
+        if(users == null) return null;
+        List<UserDto> usersDto = new ArrayList<>();
+        for (User us: users) {
+            usersDto.add(new UserDto(us.getId(), us.getCharacterName(), us.getCharacterStrength(), us.getCharacterExp(), us.getCharacterLevel()));
+        }
+        return usersDto;
+    }
 }

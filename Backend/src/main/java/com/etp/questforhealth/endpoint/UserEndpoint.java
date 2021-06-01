@@ -170,4 +170,15 @@ public class UserEndpoint {
         User u = new User(id);
         return userService.checkUserForNextStoryAndUpdate(u);
     }
+
+    /**
+     * Gets a leaderboard for the user
+     * @param id of the user
+     * @return a list of all users in the leaderboard - sorted by strength and exp
+     */
+    @GetMapping(value = "/leaderboard/{id}")
+    public List<UserDto> getLeaderboardForUser(@PathVariable("id") int id) {
+        LOGGER.info("GET " + BASE_URL + "/leaderboard/{}",id);
+        return userMapper.leaderboardEntityToDto(userService.getLeaderboardForUser(new User(id)));
+    }
 }

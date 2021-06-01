@@ -94,4 +94,11 @@ public interface UserDao {
      * @throws PersistenceException if something went wrong
      */
     boolean changeUserGold(int id, int changeValue);
+
+    /**
+     * Gets the leaderboard entries for a specific user
+     * @param user that wants to view the leaderboard
+     * @return a list of all users
+     */
+    List<User> getLeaderboardForUser(User user);
 }

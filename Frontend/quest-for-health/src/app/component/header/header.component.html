@@ -2,7 +2,13 @@
   <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
    <mat-icon style="font-size: 30px">menu</mat-icon>
   </button> -->
-  <span style="font-size: 30px; margin-left: 30px">Quest For Health</span>
+  <span style="font-size: 30px; margin-left: 30px" class="qfh" routerLink="/">
+    <fa-stack class="fa-2x fa-stack small">
+      <fa-icon class="fa-stack-2x" stackItemSize="1x" style="color: white;" [icon]="faStory"></fa-icon>
+      <fa-icon class="fa-stack-1x smaller" stackItemSize="1x" style="color: tomato;" [style.padding-left]="'13px'" [icon]="faHeart"></fa-icon>
+    </fa-stack>
+    &nbsp;Quest For Health
+  </span>
   <div style="width: 20px"></div>
   <span *ngIf="doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/doctors/overview" class="button">Patient Overview</button>
@@ -24,6 +30,9 @@
   </span>
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/story" class="button">Story</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/leaderboard" class="button"><fa-icon [icon]="faTrophy"></fa-icon>&nbsp;Ranking</button>
   </span>
   <div style="width: 5px"></div>
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
