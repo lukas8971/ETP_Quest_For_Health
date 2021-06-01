@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy, Pipe, PipeTransform} from '@angular/core';
 import {User} from '../../dto/user';
 import {StoryService} from '../../service/story.service';
 import {CharacterLevelService} from '../../service/character-level.service';
@@ -6,6 +6,7 @@ import {UserService} from '../../service/user.service';
 import {StoryChapter} from '../../dto/story-chapter';
 import {CharacterLevel} from '../../dto/character-level';
 import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-solid-svg-icons';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser'
 
 @Component({
   selector: 'app-user-info',
@@ -13,6 +14,8 @@ import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-soli
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css']
 })
+
+
 export class UserInfoComponent implements OnInit {
 
   @Input() user: User | undefined;
@@ -25,7 +28,9 @@ export class UserInfoComponent implements OnInit {
   faExp = faDiceD20;
   faStory = faScroll;
 
-  constructor(private storyService: StoryService, private levelService: CharacterLevelService, private userService: UserService) { }
+  constructor(private storyService: StoryService, private levelService: CharacterLevelService, private userService: UserService) {
+
+  }
 
   // tslint:disable-next-line:use-lifecycle-interface
   ngOnChanges(...args: any[]): void {
@@ -78,7 +83,7 @@ export class UserInfoComponent implements OnInit {
             const lv = document.getElementById('progress-bar-lv-percentage');
             const htmlLevel = document.getElementById('level');
             if (htmlLevel !== null) {
-              htmlLevel.textContent = String(this.user.characterExp) + ' / ' + String(level.neededExp) + ' xp';
+              htmlLevel.innerHTML = String(this.user.characterExp) + ' / ' + String(level.neededExp) + ' xp';
             }
             if (lv !== null) {
               lv.style.width = p + '%';

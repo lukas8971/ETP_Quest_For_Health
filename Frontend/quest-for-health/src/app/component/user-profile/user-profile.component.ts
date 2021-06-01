@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {User} from '../../dto/user';
 import {UserService} from '../../service/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -10,13 +10,18 @@ import {HeaderInfoService} from '../../service/header-info.service';
 import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-solid-svg-icons';
 import {StoryChapter} from '../../dto/story-chapter';
 import {StoryService} from '../../service/story.service';
+import {MessagesService} from "../../service/message-service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-user-profile',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
+  private messagesServiceSubscription: Subscription;
+
   user: any;
   nextLevel: any;
   neededExp = 0;
@@ -46,7 +51,27 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private equipmentService: EquipmentService, private chararacterLevelService: CharacterLevelService,
               private userService: UserService, private snackBar: MatSnackBar, private headerInfoService: HeaderInfoService,
-              private storyService: StoryService) {
+              private storyService: StoryService, private messagesService: MessagesService) {
+    this.messagesServiceSubscription = this.messagesService.subscribeToMessagesChannel().subscribe(
+      message => {
+        console.log('Received message from messageservice: ' + message.message);
+        if (message.receiver === 'all' || message.receiver === 'UserProfile') {
+          if (message.message === 'equipment_changed') {
+            this.loadUserEquipment();
+            this.loadUser();
+          }
+        }
+      }
+    );
+
+  }
+
+  // tslint:disable-next-line:use-lifecycle-interface
+  public ngOnChanges(...args: any[]): void {
+    console.log('Change equipment');
+    if (this.user !== undefined && this.user.id > 0) {
+      this.loadUserEquipment();
+    }
   }
 
   loadUser(): void{
@@ -144,6 +169,7 @@ export class UserProfileComponent implements OnInit {
     );
   }
 
+
   /**
    * Checks the chapter of a user and updates it if the strength is high enough
    */
@@ -154,7 +180,7 @@ export class UserProfileComponent implements OnInit {
         if (up) {
           this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
         }
-        this.getUserForHeader();
+        //this.getUserForHeader();
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
@@ -164,6 +190,7 @@ export class UserProfileComponent implements OnInit {
   /**
    * Gets the user for the header info component
    */
+  /*
   private getUserForHeader(): void {
     console.log('getUserForHeader');
     this.userService.getUserById(this.user.id).subscribe(
@@ -174,6 +201,7 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
+  */
 
   private getEquipmentOfType(type: string): Equipment{
     return this.userEquipment.find((item: { type: string; }) => item.type === type);

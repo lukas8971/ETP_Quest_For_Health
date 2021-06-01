@@ -16,11 +16,11 @@
             </ng-container>
             <ng-container matColumnDef="price">
               <th mat-header-cell *matHeaderCellDef> Price </th>
-              <td mat-cell *matCellDef="let equip"> {{equip.price}} gold </td>
+              <td mat-cell *matCellDef="let equip"> {{equip.price}} <fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon></td>
             </ng-container>
             <ng-container matColumnDef="strength">
               <th mat-header-cell *matHeaderCellDef> Strength </th>
-              <td mat-cell *matCellDef="let equip"> {{equip.strength}} st </td>
+              <td mat-cell *matCellDef="let equip"> {{equip.strength}} <fa-icon style="color: black;" [icon]="faStrength"></fa-icon> </td>
             </ng-container>
             <tr  mat-header-row *matHeaderRowDef="equipmentColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: equipmentColumns" class="equipTable" (click)="selectEquipment(row)"></tr>
@@ -53,8 +53,8 @@
                 </th>
               </tr>
               <tr>
-                <td>{{selectedEquipment.strength}} st</td>
-                <td>{{selectedEquipment.price}} Gold </td>
+                <td>{{selectedEquipment.strength}} <fa-icon style="color: black;" [icon]="faStrength"></fa-icon></td>
+                <td>{{selectedEquipment.price}} <fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon></td>
               </tr>
             </table>
 

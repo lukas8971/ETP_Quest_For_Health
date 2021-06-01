@@ -12,6 +12,7 @@ import {UserQuests} from "../../dto/userQuests";
 import {MatInputModule} from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {HeaderInfoService} from '../../service/header-info.service';
+import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-user-overview',
@@ -34,6 +35,11 @@ export class UserOverviewComponent implements OnInit {
   oneTimeSort: MatSort = new MatSort();
   currentDate: Date = new Date();
   user: any;
+
+  faCoins = faCoins;
+  faStrength = faFistRaised;
+  faExp = faDiceD20;
+  faStory = faScroll;
 
   @ViewChild(MatSort)  set matSort(ms: MatSort){
     this.repSort=ms;
@@ -83,6 +89,7 @@ export class UserOverviewComponent implements OnInit {
           this.openDialog(q);
         }
       }
+      // open first quest
     )
   }
 

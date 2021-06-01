@@ -4,6 +4,7 @@ import {AuthenticationUserService} from '../../service/authentication-user.servi
 import {User} from '../../dto/user';
 import {HeaderInfoService} from '../../service/header-info.service';
 import {faHeartbeat, faScroll, faTrophy} from '@fortawesome/free-solid-svg-icons';
+import {UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,7 @@ import {faHeartbeat, faScroll, faTrophy} from '@fortawesome/free-solid-svg-icons
 export class HeaderComponent implements OnInit {
 
   constructor(public doctorLoginService: AuthenticationDoctorService, public userLoginService: AuthenticationUserService,
-              private headerInfoService: HeaderInfoService) { }
+              private headerInfoService: HeaderInfoService, private userService: UserService) { }
 
   faTrophy = faTrophy;
   faStory = faScroll;
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit {
    characterStrength: -1, characterLevel: -1, password: '', email: '', storyChapter: -1, characterExp: -1, characterGold: -1};
 
   ngOnInit(): void {
+    this.loadUser();
     this.headerInfoService.user.subscribe(updatedUser => {
       this.user = updatedUser;
     });
@@ -31,6 +33,14 @@ export class HeaderComponent implements OnInit {
   logOut(): void{
     this.doctorLoginService.logOut();
     this.userLoginService.logOut();
+  }
+
+  private loadUser() {
+    this.userService.getUserById(Number(sessionStorage.getItem('userId'))).subscribe(
+      (u: User) => {
+        this.user = u;
+      }, error => {}
+    );
   }
 
 }
