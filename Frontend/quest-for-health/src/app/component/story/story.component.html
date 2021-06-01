@@ -2,7 +2,7 @@
 
 <div *ngIf="loaded">
   <span style="margin: auto;" fxFlex="78%">
-    <mat-card class="my-transparent" style="position: absolute; width: 1600px">
+    <mat-card class="my-transparent" style="position: absolute; width: 75%">
       <div fxLayout="row">
         <div style="padding-left: 0%">
           <label><br>
@@ -26,11 +26,11 @@
         </div>
       </div>
       <br><br>
-      <div fxLayout="row">
+      <div>
         {{displayChapter.description}}<br>
       </div>
     </mat-card>
-    <img [src]="picture" alt="Story-Chapter Picture" style="width: 1632px; height: 918px">
+    <img [src]="picture" alt="Story-Chapter Picture" style="width: 98.4%; max-height: 97.5vh; object-fit: contain">
   </span>
 </div>
 

@@ -2,14 +2,14 @@
 
 <div *ngIf="user != undefined" fxLayout="row" [style.padding-left]="'2vw'" fxLayoutAlign="left"
      style="background-color: #6739b7">
-  <div class="complete-transparent" style="min-width: 45vw" fxLayoutAlign="left">
+  <div class="complete-transparent" style="min-width: 33vw" fxLayoutAlign="left">
     <fa-icon style="color: darkgoldenrod; padding-right: 0.5vw"
-             [icon]="faCoins"></fa-icon>&nbsp;Gold: {{user.characterGold}}
+             [icon]="faCoins"></fa-icon>&nbsp;: {{user.characterGold}}
     <div style="margin-left: 2vw"></div>
 
     <label fxLayoutAlign="center center">
       <fa-icon style="color: black; padding-right: 0.5vw"
-               [icon]="faStory"></fa-icon>&nbsp;Chapter: {{user.storyChapter}}</label>
+               [icon]="faStory"></fa-icon>&nbsp;: {{user.storyChapter}}</label>
     <div fxFlex="40%" fxLayoutAlign="center" style="padding-left: 1vw; padding-right: 2vw">
       <div style="width: 100%">
         <div id="progress-bar-st" class="all-rounded">
