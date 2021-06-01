@@ -1,35 +1,39 @@
 <br>
 
 <div *ngIf="loaded">
-  <div [style.margin-left]="'10%'" [style.margin-right]="'10%'">
-    <mat-card class="my-transparent"style="position: absolute" fxFlex="80%">
-      <div fxLayout="row" fxLayoutGap="10">
-        <div style="padding-left: 1%" fxLayoutAlign="left">
+  <span style="margin: auto;" fxFlex="78%">
+    <mat-card class="my-transparent" style="position: absolute; width: 1600px">
+      <div fxLayout="row">
+        <div style="padding-left: 0%">
           <label><br>
-            <button [disabled]="displayChapter.prevChapter <= 0" mat-stroked-button (click)="prev()" style="width: 100%"><mat-icon>arrow_back</mat-icon></button>
+            <button [disabled]="displayChapter.prevChapter <= 0" mat-stroked-button (click)="prev()" style="width: 100%; background: rgba(255, 255, 255, 0.3)"><mat-icon>arrow_back</mat-icon></button>
           </label>
         </div>
-        <div style="padding-left: 38%" fxLayoutAlign="center">
-          <mat-form-field appearance="fill">
+        <div style="padding-left: 38%">
+          <mat-form-field appearance="fill" >
             <mat-label>Choose chapter</mat-label>
-            <mat-select [(value)]="displayChapter.name" (valueChange)="changed($event)">
+            <mat-select [(value)]="displayChapter.name" (valueChange)="changed($event)" >
               <mat-option *ngFor="let chap of previousChapters" [value]="chap.name">
                 {{chap.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <div style="padding-left: 38%" fxLayoutAlign="right">
+        <div  style="padding-left: 37%">
           <label><label *ngIf="showRequired"> Missing: {{required}} st</label><br>
-            <button [disabled]="showRequired" mat-stroked-button (click)="next()" style="width: 100%"><mat-icon>arrow_forward</mat-icon></button>
+            <button [disabled]="showRequired" mat-stroked-button (click)="next()" style="width: 100%; background: rgba(255, 255, 255, 0.3)"><mat-icon>arrow_forward</mat-icon></button>
           </label>
         </div>
       </div>
       <br><br>
-      <div fxLayout="row" [style.margin-left]="'80px'" [style.margin-right]="'80px'">
+      <div fxLayout="row">
         {{displayChapter.description}}<br>
       </div>
     </mat-card>
-    <img [src]="picture" alt="Story-Chapter Picture" style="width: 1216px; height: 684px; padding-top: 10.5vh; padding-left: 7.5%">
-  </div>
+    <img [src]="picture" alt="Story-Chapter Picture" style="width: 1632px; height: 918px">
+  </span>
 </div>
+
+<!--
+<img [src]="picture" alt="Story-Chapter Picture" style="width: 1216px; height: 684px; margin: auto">
+-->

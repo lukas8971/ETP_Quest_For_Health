@@ -3,6 +3,7 @@ import {Quest} from "../../dto/quest";
 import {QuestService} from "../../service/quest.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatTableDataSource} from "@angular/material/table";
+import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-solid-svg-icons';
 import * as moment from "moment";
 import {Duration} from "moment";
 
@@ -18,6 +19,11 @@ export class UserBrowseQuestsComponent implements OnInit {
   dataSource = new MatTableDataSource(this.quests);
   questColumns: string[] = ['name', 'exp_reward','gold_reward','repetition_cycle'];
   myMoment: any;
+
+  faCoins = faCoins;
+  faStrength = faFistRaised;
+  faExp = faDiceD20;
+  faStory = faScroll;
 
   constructor(private questService: QuestService, private snackBar: MatSnackBar) {
   }
