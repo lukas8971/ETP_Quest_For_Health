@@ -44,9 +44,15 @@ public class EquipmentEndpoint {
             for(Equipment e: equipmentList){
                 equipmentDtoList.add(equipmentMapper.entityToDto(e));
             }
-        } catch (ServiceException e){
-            LOGGER.error("Something went wrong  " + e, id);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong in the backend",e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
         return equipmentDtoList;
     }
@@ -70,6 +76,9 @@ public class EquipmentEndpoint {
         } catch (IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -96,6 +105,9 @@ public class EquipmentEndpoint {
         } catch (IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -115,6 +127,9 @@ public class EquipmentEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -138,6 +153,12 @@ public class EquipmentEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -158,7 +179,7 @@ public class EquipmentEndpoint {
         } catch (NotFoundException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (NotEnoughGoldException e) {
+        } catch (NotEnoughGoldException | IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
@@ -182,6 +203,9 @@ public class EquipmentEndpoint {
         } catch (NotFoundException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -203,6 +227,9 @@ public class EquipmentEndpoint {
         } catch (NotFoundException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.etp.questforhealth.endpoint;
 import com.etp.questforhealth.endpoint.dto.CharacterLevelDto;
 import com.etp.questforhealth.endpoint.mapper.CharacterLevelMapper;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.CharacterLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +37,14 @@ public class CharacterLevelEndpoint {
         try{
             return characterLevelMapper.entityToDto(characterLevelService.getCharacterLevelById(id));
         } catch (NotFoundException e){
-            LOGGER.error("Could not find character level {] " + e, id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find character level",e);
+            LOGGER.error("Could not find character level {} " + e, id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
     @GetMapping(value="/level/{level}")
@@ -46,8 +53,14 @@ public class CharacterLevelEndpoint {
         try{
             return characterLevelMapper.entityToDto(characterLevelService.getCharacterLevelByLevel(level));
         } catch (NotFoundException e){
-            LOGGER.error("Could not find character level {] " + e, level);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find character level",e);
+            LOGGER.error("Could not find character level {} " + e, level);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -57,8 +70,14 @@ public class CharacterLevelEndpoint {
         try{
             return characterLevelMapper.entityToDto(characterLevelService.getCharacterNextLevel(level));
         } catch (NotFoundException e){
-            LOGGER.error("Could not find character level {] " + e, level);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find character level",e);
+            LOGGER.error("Could not find character level {} " + e, level);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 }

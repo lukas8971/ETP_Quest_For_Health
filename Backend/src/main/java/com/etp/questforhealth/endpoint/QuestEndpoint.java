@@ -59,8 +59,14 @@ public class QuestEndpoint {
         try{
             return questMapper.entityToDto(questService.getOneById(id));
         } catch (NotFoundException e1){
-            LOGGER.error("Could not find quest with id {} " + e1 + "\n", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quest not found",e1);
+            LOGGER.error(e1.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e1.getMessage(), e1);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -72,15 +78,21 @@ public class QuestEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public QuestDto createQuest(@RequestBody CreateDoctorQuestDto createDoctorQuestDto){
-        LOGGER.info("POST "+BASE_URL, createDoctorQuestDto);
+        LOGGER.info("POST " + BASE_URL + "/{}", createDoctorQuestDto);
         try{
             return questMapper.entityToDto(questService.createQuest(createDoctorQuestMapper.dtoToEntity(createDoctorQuestDto)));
         } catch(ValidationException e1){
-            LOGGER.error("Validation exception while creating new Quest {} " + e1 + "\n",createDoctorQuestDto);
+            LOGGER.error(e1.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage(), e1);
         } catch(InvalidLoginException e2){
-            LOGGER.error("InvalidLoginException while creating new Quest {} " + e2 + "\n", createDoctorQuestDto);
+            LOGGER.error(e2.getMessage());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password!", e2);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -100,6 +112,12 @@ public class QuestEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -115,9 +133,15 @@ public class QuestEndpoint {
         LOGGER.info("PUT " + BASE_URL + "accept/?user={}&quest={}", user,quest);
         try{
              return questService.acceptQuest(user,quest);
-        } catch (ServiceException e){
+        } catch (NotFoundException e) {
             LOGGER.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept quest", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -129,8 +153,19 @@ public class QuestEndpoint {
     @GetMapping(value="/newQuests")
     @ResponseBody
     public List<QuestDto> getNewQuestsForUserId(@RequestParam int user){
-        LOGGER.info("GET " + BASE_URL + "/newQuests?user={}", user);
-        return questMapper.entityToDto(questService.getNewQuestsForUserId(user));
+        try {
+            LOGGER.info("GET " + BASE_URL + "/newQuests?user={}", user);
+            return questMapper.entityToDto(questService.getNewQuestsForUserId(user));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -141,8 +176,19 @@ public class QuestEndpoint {
     @GetMapping(value="/dueQuests/{id}")
     @ResponseBody
     public List<QuestDto> getAllQuestsDueForUser(@PathVariable("id") int id){
-        LOGGER.info("GET " + BASE_URL + "/dueQuests/{}", id);
-        return questMapper.entityToDto(questService.getAllQuestsDueForUser(id));
+        try {
+            LOGGER.info("GET " + BASE_URL + "/dueQuests/{}", id);
+            return questMapper.entityToDto(questService.getAllQuestsDueForUser(id));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -153,8 +199,19 @@ public class QuestEndpoint {
     @GetMapping(value="/missedQuests/{id}")
     @ResponseBody
     public List<QuestDto> getAllMissedQuestsForUser(@PathVariable("id") int id){
-        LOGGER.info("GET " + BASE_URL + "/missedQuests/{}", id);
-        return questMapper.entityToDto(questService.getAllMissedQuestsForUser(id));
+        try {
+            LOGGER.info("GET " + BASE_URL + "/missedQuests/{}", id);
+            return questMapper.entityToDto(questService.getAllMissedQuestsForUser(id));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -165,8 +222,19 @@ public class QuestEndpoint {
     @GetMapping(value="/openOneTimeQuests/{id}")
     @ResponseBody
     public List<QuestDto> getAllOpenOneTimeQuestsForUser(@PathVariable("id") int id){
-        LOGGER.info("GET " + BASE_URL + "/");
-        return questMapper.entityToDto(questService.getAllOpenOneTimeQuestsForUser(id));
+        try {
+            LOGGER.info("GET " + BASE_URL + "/");
+            return questMapper.entityToDto(questService.getAllOpenOneTimeQuestsForUser(id));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -184,6 +252,12 @@ public class QuestEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -197,7 +271,18 @@ public class QuestEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public boolean deleteAssignedDoctorQuestForUser(@PathVariable("quest") int quest, @PathVariable("user") int user) {
         LOGGER.info("DELETE " + BASE_URL + "/assigned/{}/{}", quest, user);
-        return questService.deleteAssignedDoctorQuestForUser(quest, user);
+        try {
+            return questService.deleteAssignedDoctorQuestForUser(quest, user);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -214,6 +299,12 @@ public class QuestEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -226,6 +317,12 @@ public class QuestEndpoint {
         } catch (NotFoundException e){
             LOGGER.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -238,6 +335,12 @@ public class QuestEndpoint {
         } catch (NotFoundException e){
             LOGGER.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 }

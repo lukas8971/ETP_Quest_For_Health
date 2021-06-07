@@ -47,6 +47,9 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public Doctor getOneById(int id){
         LOGGER.trace("getOneById({})", id);
+        if (id < 0) {
+            throw new ValidationException("ID has to be greater than 0");
+        }
         try {
             return doctorDao.getOneById(id);
         } catch (PersistenceException e) {
