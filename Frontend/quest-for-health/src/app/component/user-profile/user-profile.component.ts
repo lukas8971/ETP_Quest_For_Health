@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnChanges } from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, OnChanges, ChangeDetectorRef} from '@angular/core';
 import {User} from '../../dto/user';
 import {UserService} from '../../service/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -51,7 +51,7 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private equipmentService: EquipmentService, private chararacterLevelService: CharacterLevelService,
               private userService: UserService, private snackBar: MatSnackBar, private headerInfoService: HeaderInfoService,
-              private storyService: StoryService, private messagesService: MessagesService) {
+              private storyService: StoryService, private messagesService: MessagesService, private cdRef:ChangeDetectorRef) {
     this.messagesServiceSubscription = this.messagesService.subscribeToMessagesChannel().subscribe(
       message => {
         console.log('Received message from messageservice: ' + message.message);
@@ -109,7 +109,7 @@ export class UserProfileComponent implements OnInit {
             this.nextLevel = d;
             this.neededExp = d.neededExp - this.user.characterExp;
             this.currentLevel = c;
-
+            this.cdRef.detectChanges();
           }
         );
       }, error => {
