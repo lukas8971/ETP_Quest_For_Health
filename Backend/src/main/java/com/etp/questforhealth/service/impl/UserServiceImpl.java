@@ -10,7 +10,6 @@ import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
 import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.CharacterLevelDao;
-import com.etp.questforhealth.persistence.EquipmentDao;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.EquipmentService;
 import com.etp.questforhealth.service.StoryChapterService;
@@ -27,7 +26,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -59,18 +57,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsersFromDoctor(int doctor){
         LOGGER.trace("getAllUsersFromDoctor({})", doctor);
+        if (doctor < 0) {
+            throw new ValidationException("Id has to be greater than 0");
+        }
         return userDao.getAllUsersFromDoctor(doctor);
     }
 
     @Override
     public List<User> getAllNotUsersFromDoctor(int doctor){
         LOGGER.trace("getAllNotUsersFromDoctor({})", doctor);
+        if (doctor < 0) {
+            throw new ValidationException("Id has to be greater than 0");
+        }
         return userDao.getAllNotUsersFromDoctor(doctor);
     }
 
     @Override
     public User getOneById(int id){
         LOGGER.trace("getOneById({})", id);
+        if (id < 0) {
+            throw new ValidationException("Id has to be greater than 0");
+        }
         try {
             return userDao.getOneById(id);
         } catch (PersistenceException e) {
@@ -81,6 +88,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getUserStrength(int id){
         LOGGER.trace("getUserStrength({})", id);
+        if (id < 0) {
+            throw new ValidationException("Id has to be greater than 0");
+        }
         try{
             User u = userDao.getOneById(id);
             List<Equipment> equipments = equipmentService.getWornEquipmentFromUserId(id);
@@ -108,6 +118,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User completeQuest(User user, Quest quest) {
         LOGGER.trace("completeQuest({},{})", user.toString(), quest.toString());
+        validator.validateExistingUser(user.getId());
+        validator.validateExistingQuest(quest.getId());
         try{
             userDao.completeQuest(user.getId(), quest.getId(), true, quest.getDueDate() != null ? quest.getDueDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(): LocalDate.now());
             CharacterLevel currentLevel = characterLevelDao.getCharacterLevelById(user.getCharacterLevel());
@@ -127,6 +139,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User dismissMissedQuests(User user, List<Quest> missedQuests) {
         LOGGER.trace("dismissMissedQuests({},{})", user.toString(), missedQuests.toString());
+        validator.validateExistingUser(user.getId());
         try{
             int goldPenalty = 0;
             int expPenalty = 0;
@@ -222,7 +235,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkUserForNextStoryAndUpdate(User user){
-        LOGGER.trace("checkUserForNextStory({})", user);
+        LOGGER.trace("checkUserForNextStoryAndUpdate({})", user);
         try{
             User u = userDao.getOneById(user.getId());
             try {

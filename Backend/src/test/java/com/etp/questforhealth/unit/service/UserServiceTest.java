@@ -88,14 +88,14 @@ public class UserServiceTest {
     public void completeQuest_invalidUser_shouldThrowServiceException(){
         User user = TestData.getNewWorkingUser();
         user.setId(-1);
-        assertThrows(ServiceException.class, () -> userService.completeQuest(user, TestData.getNewStandardQuest(1)));
+        assertThrows(IllegalArgumentException.class, () -> userService.completeQuest(user, TestData.getNewStandardQuest(1)));
     }
 
     @Test
     @DisplayName ("Completing an invalid Quest should throw a ServiceException")
     public void completeQuest_invalidQuest_shouldThrowServiceException(){
         User user = userService.getOneById(1);
-        assertThrows(ServiceException.class, () -> userService.completeQuest(user, TestData.getNewStandardQuest(-1)));
+        assertThrows(IllegalArgumentException.class, () -> userService.completeQuest(user, TestData.getNewStandardQuest(-1)));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class UserServiceTest {
         Quest quest2 = TestData.getNewStandardQuest(2);
         missedQuests.add(quest1);
         missedQuests.add(quest2);
-        assertThrows(ServiceException.class, () -> userService.dismissMissedQuests(user, missedQuests));
+        assertThrows(IllegalArgumentException.class, () -> userService.dismissMissedQuests(user, missedQuests));
     }
 
     @Test
@@ -173,7 +173,7 @@ public class UserServiceTest {
         Quest quest2 = TestData.getNewStandardQuest(-2);
         missedQuests.add(quest1);
         missedQuests.add(quest2);
-        assertThrows(ServiceException.class, () -> userService.dismissMissedQuests(user, missedQuests));
+        assertThrows(IllegalArgumentException.class, () -> userService.dismissMissedQuests(user, missedQuests));
     }
 
     @Test

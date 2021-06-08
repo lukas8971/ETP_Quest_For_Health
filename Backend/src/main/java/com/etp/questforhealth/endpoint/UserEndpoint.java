@@ -46,13 +46,24 @@ public class UserEndpoint {
     @GetMapping
     public List<UserDto> getAll(){
         LOGGER.info("GET " + BASE_URL);
-        List<User> users = userService.getAll();
-        List<UserDto> userDtos = new ArrayList<>();
-        if (users.size() == 0) return null;
-        for (User u: users){
-            userDtos.add(userMapper.entityToDto(u));
+        try {
+            List<User> users = userService.getAll();
+            List<UserDto> userDtos = new ArrayList<>();
+            if (users.size() == 0) return null;
+            for (User u : users) {
+                userDtos.add(userMapper.entityToDto(u));
+            }
+            return userDtos;
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
-        return userDtos;
     }
 
     /**
@@ -63,7 +74,18 @@ public class UserEndpoint {
     @GetMapping(value="/doctor/{id}")
     public List<UserDto> getAllUsersFromDoctor(@PathVariable("id") int doctor){
         LOGGER.info("GET " + BASE_URL + "/doctor/{}", doctor);
-        return userMapper.entityToDto(userService.getAllUsersFromDoctor(doctor));
+        try {
+            return userMapper.entityToDto(userService.getAllUsersFromDoctor(doctor));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -74,7 +96,18 @@ public class UserEndpoint {
     @GetMapping(value="/doctorNot/{id}")
     public List<UserDto> getAllNotUsersFromDoctor(@PathVariable("id") int doctor){
         LOGGER.info("GET " + BASE_URL + "/doctorNot/{}", doctor);
-        return userMapper.entityToDto(userService.getAllNotUsersFromDoctor(doctor));
+        try {
+            return userMapper.entityToDto(userService.getAllNotUsersFromDoctor(doctor));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -88,8 +121,14 @@ public class UserEndpoint {
         try{
             return userMapper.entityToDto(userService.getOneById(id));
         } catch (NotFoundException e){
-            LOGGER.error("Could not find user with id {} " + e, id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find user",e);
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -104,8 +143,14 @@ public class UserEndpoint {
         try{
             return userService.getUserStrength(id);
         } catch (NotFoundException e){
-            LOGGER.error("Could not find user with id {} " + e, id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find user",e);
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -115,9 +160,15 @@ public class UserEndpoint {
         LOGGER.info("POST" + BASE_URL + "/completeQuest");
         try{
             return userMapper.entityToDto(userService.completeQuest(userQuest.getUser(), userQuest.getQuest()));
-        } catch (ServiceException e){
+        } catch (NotFoundException e) {
             LOGGER.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
     @PostMapping(value="/dismissQuests")
@@ -126,9 +177,15 @@ public class UserEndpoint {
         LOGGER.info("POST" + BASE_URL + "/dismissQuests");
         try{
             return userMapper.entityToDto(userService.dismissMissedQuests(userQuests.getUser(), userQuests.getQuests()));
-        } catch (ServiceException e){
+        } catch (NotFoundException e) {
             LOGGER.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -141,9 +198,12 @@ public class UserEndpoint {
         } catch(ValidationException e){
             LOGGER.warn(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(),e);
-        } catch (ServiceException e){
+        } catch (NotFoundException e) {
             LOGGER.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -167,8 +227,19 @@ public class UserEndpoint {
     @GetMapping(value = "/checkStory/{id}")
     public boolean checkUserForNextStoryAndUpdate(@PathVariable("id") int id) {
         LOGGER.info("GET " + BASE_URL + "/checkStory/{}",id);
-        User u = new User(id);
-        return userService.checkUserForNextStoryAndUpdate(u);
+        try {
+            User u = new User(id);
+            return userService.checkUserForNextStoryAndUpdate(u);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -179,6 +250,17 @@ public class UserEndpoint {
     @GetMapping(value = "/leaderboard/{id}")
     public List<UserDto> getLeaderboardForUser(@PathVariable("id") int id) {
         LOGGER.info("GET " + BASE_URL + "/leaderboard/{}",id);
-        return userMapper.leaderboardEntityToDto(userService.getLeaderboardForUser(new User(id)));
+        try {
+            return userMapper.leaderboardEntityToDto(userService.getLeaderboardForUser(new User(id)));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 }
