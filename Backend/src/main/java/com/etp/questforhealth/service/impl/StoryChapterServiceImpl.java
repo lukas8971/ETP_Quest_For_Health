@@ -9,7 +9,6 @@ import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.StoryChapterDao;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.StoryChapterService;
-import com.etp.questforhealth.service.UserService;
 import com.etp.questforhealth.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +115,7 @@ public class StoryChapterServiceImpl implements StoryChapterService {
     @Override
     public List<StoryChapter> getAllPrevChapters(User user) {
         LOGGER.trace("getAllPrevChapters({})", user);
+        validator.validateExistingUser(user.getId());
         try {
             return storyChapterDao.getAllPrevChapters(user);
         } catch (PersistenceException e) {
@@ -126,6 +126,7 @@ public class StoryChapterServiceImpl implements StoryChapterService {
     @Override
     public List<StoryChapter> getAllNextChapters(User user) {
         LOGGER.trace("getAllNextChapters({})", user);
+        validator.validateExistingQuest(user.getId());
         try {
             return storyChapterDao.getAllNextChapters(user);
         } catch (PersistenceException e) {

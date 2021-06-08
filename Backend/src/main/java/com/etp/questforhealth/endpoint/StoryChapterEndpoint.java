@@ -6,6 +6,7 @@ import com.etp.questforhealth.endpoint.mapper.PictureMapper;
 import com.etp.questforhealth.endpoint.mapper.StoryChapterMapper;
 import com.etp.questforhealth.entity.User;
 import com.etp.questforhealth.exception.NotFoundException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.service.StoryChapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +49,14 @@ public class StoryChapterEndpoint {
         try{
             return storyMapper.entityToDto(storyChapterService.getOneById(id));
         } catch (NotFoundException e){
-            LOGGER.error("Could not find chapter with id {}", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found",e);
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -61,8 +68,19 @@ public class StoryChapterEndpoint {
     @GetMapping(value = "/allPrev/{id}")
     public List<StoryChapterDto> getAllPreviousChaptersOfUser(@PathVariable("id") int id){
         LOGGER.info("GET " + BASE_URL + "/allPrev/{}",id);
-        User u = new User(id);
-        return storyMapper.entityToDto(storyChapterService.getAllPrevChapters(u));
+        try {
+            User u = new User(id);
+            return storyMapper.entityToDto(storyChapterService.getAllPrevChapters(u));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -73,8 +91,19 @@ public class StoryChapterEndpoint {
     @GetMapping(value = "/allNext/{id}")
     public List<StoryChapterDto> getAllNextChaptersOfUser(@PathVariable("id") int id){
         LOGGER.info("GET " + BASE_URL + "/allNext/{}",id);
-        User u = new User(id);
-        return storyMapper.entityToDto(storyChapterService.getAllNextChapters(u));
+        try {
+            User u = new User(id);
+            return storyMapper.entityToDto(storyChapterService.getAllNextChapters(u));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -85,8 +114,19 @@ public class StoryChapterEndpoint {
     @GetMapping(value = "/next/{id}")
     public StoryChapterDto getNextChapterOfUser(@PathVariable("id") int id){
         LOGGER.info("GET " + BASE_URL + "/next/{}",id);
-        User u = new User(id);
-        return storyMapper.entityToDto(storyChapterService.getNextChapter(u));
+        try {
+            User u = new User(id);
+            return storyMapper.entityToDto(storyChapterService.getNextChapter(u));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -97,8 +137,19 @@ public class StoryChapterEndpoint {
     @GetMapping(value = "/nextInfo/{id}")
     public StoryChapterDto getNextChapterInfo(@PathVariable("id") int id){
         LOGGER.info("GET " + BASE_URL + "/nextInfo/{}",id);
-        User u = new User(id);
-        return storyMapper.entityToDto(storyChapterService.getNextChapterInfo(u));
+        try {
+            User u = new User(id);
+            return storyMapper.entityToDto(storyChapterService.getNextChapterInfo(u));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**
@@ -109,8 +160,19 @@ public class StoryChapterEndpoint {
     @GetMapping(value = "/prev/{id}")
     public StoryChapterDto getPreviousChapterOfUser(@PathVariable("id") int id){
         LOGGER.info("GET " + BASE_URL + "/prev/{}",id);
-        User u = new User(id);
-        return storyMapper.entityToDto(storyChapterService.getPrevStoryOfUser(u));
+        try {
+            User u = new User(id);
+            return storyMapper.entityToDto(storyChapterService.getPrevStoryOfUser(u));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     /**

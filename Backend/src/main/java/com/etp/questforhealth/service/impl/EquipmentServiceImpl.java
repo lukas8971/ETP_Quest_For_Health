@@ -5,6 +5,7 @@ import com.etp.questforhealth.entity.UserEquipment;
 import com.etp.questforhealth.entity.enums.EquipmentType;
 import com.etp.questforhealth.exception.PersistenceException;
 import com.etp.questforhealth.exception.ServiceException;
+import com.etp.questforhealth.exception.ValidationException;
 import com.etp.questforhealth.persistence.EquipmentDao;
 import com.etp.questforhealth.persistence.UserDao;
 import com.etp.questforhealth.service.EquipmentService;
@@ -34,6 +35,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public List<Equipment> getWornEquipmentFromUserId(int userId) {
         LOGGER.trace("getWornEquipmentFromUserId({})", userId);
+        validator.validateExistingUser(userId);
         try{
             return equipmentDao.getWornEquipmentFromUserId(userId);
         } catch (PersistenceException e){

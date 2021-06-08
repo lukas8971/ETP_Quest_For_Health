@@ -58,11 +58,17 @@ public class DoctorEndpoint {
     @GetMapping()
     public List<DoctorDto> getAllDoctors(){
         LOGGER.info("GET " + BASE_URL);
-        try{
+        try {
             return doctorMapper.entityToDto(doctorService.getAllDoctors());
-        } catch (InvalidLoginException e){
-            LOGGER.error("Wrong email or password!");
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password!", e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -76,9 +82,15 @@ public class DoctorEndpoint {
         LOGGER.info("GET " + BASE_URL + "/{}",id);
         try{
             return doctorMapper.entityToDto(doctorService.getOneById(id));
-        } catch (NotFoundException e){
-            LOGGER.error("Could not find doctor with id {} " + e, id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find doctor",e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ValidationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -89,7 +101,7 @@ public class DoctorEndpoint {
      */
     @PostMapping(value="/relation")
     @ResponseStatus(HttpStatus.CREATED)
-    public DoctorUserRelationDto checkLogin(@RequestBody DoctorUserRelationDto doctorUserRelationDto){
+    public DoctorUserRelationDto addDoctorUserRelation(@RequestBody DoctorUserRelationDto doctorUserRelationDto){
         LOGGER.info("POST " + BASE_URL + "/relation " + doctorUserRelationDto);
         try{
             if (doctorService.assignNewPatient(doctorUserRelationDto.getDocId(), doctorUserRelationDto.getUserId())) {
@@ -100,6 +112,12 @@ public class DoctorEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -111,7 +129,7 @@ public class DoctorEndpoint {
      */
     @DeleteMapping(value="/relation/{doc}/{user}")
     @ResponseStatus(HttpStatus.OK)
-    public boolean checkLogin(@PathVariable("doc") int doc, @PathVariable("user") int user){
+    public boolean removeDoctorUserRelation(@PathVariable("doc") int doc, @PathVariable("user") int user){
         LOGGER.info("DELETE " + BASE_URL + "/relation/{}/{} ", doc, user);
         try{
             return doctorService.removePatient(doc, user);
