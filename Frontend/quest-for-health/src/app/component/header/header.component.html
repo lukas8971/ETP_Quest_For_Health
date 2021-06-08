@@ -1,7 +1,4 @@
 <mat-toolbar color="primary">
-  <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-   <mat-icon style="font-size: 30px">menu</mat-icon>
-  </button> -->
   <span style="font-size: 30px; margin-left: 30px" class="qfh" routerLink="/">
     <fa-stack class="fa-2x fa-stack small">
       <fa-icon class="fa-stack-2x" stackItemSize="1x" style="color: white;" [icon]="faStory"></fa-icon>
@@ -16,6 +13,7 @@
   <span *ngIf="doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/doctors/manage" class="button">Manage Patients</button>
   </span>
+  <!--
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/users/overview" class="button">Quest Overview</button>
   </span>
@@ -34,6 +32,7 @@
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/users/leaderboard" class="button"><fa-icon [icon]="faTrophy"></fa-icon>&nbsp;Ranking</button>
   </span>
+  -->
   <div style="width: 5px"></div>
   <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/doctors" class="button">Doctor Login</button>
@@ -47,8 +46,8 @@
   <app-user-info [user]="user" *ngIf="userLoginService.isUserLoggedIn()" style="background-color: #6739b7;"></app-user-info>
   <span class="flexExpand"></span>
   <div style="width: 5px; "></div>
-  <span *ngIf="doctorLoginService.isUserLoggedIn() || userLoginService.isUserLoggedIn()">
-    <button mat-button (click)="logOut()" routerLink="/" style="margin-right: 50px"><mat-icon style="font-size: 30px">logout</mat-icon></button>
+  <span *ngIf="doctorLoginService.isUserLoggedIn() || userLoginService.isUserLoggedIn()" style="position: absolute; right: 0">
+    <button mat-button (click)="logOut()" routerLink="/" style="margin-right: 50px;"><mat-icon style="font-size: 30px">logout</mat-icon></button>
   </span>
 </mat-toolbar>
 

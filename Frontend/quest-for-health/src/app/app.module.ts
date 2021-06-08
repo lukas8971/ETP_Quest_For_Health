@@ -47,6 +47,7 @@ import { DoctorManageComponent } from './component/doctor-manage/doctor-manage.c
 import { LeaderboardComponent } from './component/leaderboard/leaderboard.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { WelcomeComponent } from './component/welcome/welcome.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { WelcomeComponent } from './component/welcome/welcome.component';
     MatSelectModule,
     FontAwesomeModule,
     MatPaginatorModule,
+    MatSidenavModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
