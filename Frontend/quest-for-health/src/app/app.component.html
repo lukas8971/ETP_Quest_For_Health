@@ -1,5 +1,58 @@
-<app-header></app-header>
+<mat-drawer-container class="background">
+  <mat-drawer #drawer mode="over" class="background">
+    <div style="padding-left: 30px; padding-right: 30px">
+      <dl>
+        <dt>
+    <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/overview" class="button" (click)="drawer.toggle()">Quest Overview</button>
+  </span>
+        </dt>
+        <dt>
+    <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/browseQuests" class="button"
+            (click)="drawer.toggle()">Find new Quests</button>
+  </span>
+        </dt>
+        <dt>
+    <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/profile" class="button" (click)="drawer.toggle()">Profile</button>
+  </span>
+        </dt>
+        <dt>
+    <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/shop" class="button" (click)="drawer.toggle()">Shop</button>
+  </span>
+        </dt>
+        <dt>
+    <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/story" class="button" (click)="drawer.toggle()">Story</button>
+  </span>
+        </dt>
+        <dt>
+    <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/leaderboard" class="button" (click)="drawer.toggle()"><fa-icon
+      [icon]="faTrophy"></fa-icon>&nbsp;Ranking</button>
+  </span>
+        </dt>
+      </dl>
+    </div>
+  </mat-drawer>
+  <table>
+    <tr>
+      <td style="max-width: 20px" *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+        <div>
+          <button type="button" mat-button (click)="drawer.toggle()">
+            <mat-icon class="white-icon"> menu</mat-icon>
+          </button>
+        </div>
+      </td>
+      <td>
+        <app-header></app-header>
 
-<div class="container background">
-  <router-outlet></router-outlet>
-</div>
+      </td>
+    </tr>
+  </table>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>
