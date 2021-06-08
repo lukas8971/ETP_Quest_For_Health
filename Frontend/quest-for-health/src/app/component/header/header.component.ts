@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
       message => {
         console.log('Received message from messageservice: ' + message.message);
         if (message.receiver === 'all' || message.receiver === 'Header') {
-          if (message.message === 'gold_changed') {
+          if (message.message === 'gold_changed' || message.message === 'equipment_changed') {
             this.loadUser();
           }
         }

@@ -72,9 +72,20 @@
             <p style="font-size: 16px"><b>Strength </b>{{selectedEquipment.strength}} <fa-icon style="color: black;" [icon]="faStrength"></fa-icon></p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-stroked-button style="font-size: 16px; margin-left: 14vw; background-color: #cccccc" (click)="equip(selectedEquipment)">
+            <ng-container *ngIf="!equipped">
+              <button button mat-stroked-button style="font-size: 16px; margin-left: 14vw; background-color: #cccccc" (click)="equip(selectedEquipment)">
               Wear this
-            </button>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="equipped">
+              <button mat-stroked-button *ngIf="equippedEquipment.id !== selectedEquipment.id" style="font-size: 16px; margin-left: 14vw; background-color: #cccccc" (click)="equip(selectedEquipment)">
+                Wear this
+              </button>
+              <button mat-stroked-button *ngIf="equippedEquipment.id == selectedEquipment.id" style="font-size: 16px; margin-left: 13vw; background-color: #cccccc" (click)="unequip(equippedEquipment)">
+                Unequip this
+              </button>
+            </ng-container>
+
           </mat-card-actions>
         </mat-card>
       </td>

@@ -91,7 +91,7 @@ export class UserEquipmentComponent implements OnInit {
    * Equips the selected item
    * @param e that should be worn
    */
-  public equip(e: Equipment): void{
+  public equip(e: Equipment): void {
     console.log('equip');
     this.equippedEquipment = null;
     this.equipped = false;
@@ -104,13 +104,34 @@ export class UserEquipmentComponent implements OnInit {
           this.equippedEquipment = eq;
           this.equipped = true;
           this.changedEvent.emit('Changed!');
-          console.log('Changed Message sent!')
+          this.messageService.sendMessage({ message: 'equipment_changed', receiver: 'all'});
+          console.log('Changed Message sent!');
         }
         this.getAvailableEquipment();
       }, error => {
         this.defaultServiceErrorHandling(error);
       }
     );
+  }
+
+  public unequip(equippedEquipment: Equipment) {
+    console.log('unequip');
+    this.equipmentService.unequip(this.userId, equippedEquipment).subscribe(  success => {
+      if(success) {
+        this.selectedEquipment = null;
+        this.equipped = false;
+        this.available = true;
+        this.equippedEquipment = null;
+        this.changedEvent.emit('Changed!');
+        this.messageService.sendMessage({ message: 'equipment_changed', receiver: 'all'});
+        this.getAvailableEquipment();
+      } else {
+        const error = 'Could not unequip ' + equippedEquipment.name;
+        this.defaultServiceErrorHandling(error);
+      }
+    }, error => {
+      this.defaultServiceErrorHandling(error)
+    })
   }
 
   /**
@@ -138,6 +159,7 @@ export class UserEquipmentComponent implements OnInit {
     console.log('Get available character equipment');
     this.equipmentService.getAvailableEquipmentToEquip(String(this.type), this.userId).subscribe(
       (eq: Equipment[]) => {
+
         if (eq !== null && eq !== undefined) {
           this.equipment = eq;
           console.log(eq);
@@ -145,6 +167,16 @@ export class UserEquipmentComponent implements OnInit {
           this.available = true;
           this.selectedEquipment = eq[0];
           this.messageService.sendMessage({ message: 'equipment_changed', receiver: 'all'});
+        }
+        if(this.equippedEquipment !== null && this.equippedEquipment !== undefined) {
+          if(this.available) {
+            this.dataSource.data.push(this.equippedEquipment);
+          } else {
+            this.dataSource = new MatTableDataSource();
+            this.dataSource.data.push(this.equippedEquipment);
+            this.available = true;
+          }
+
         }
         //this.getUserForHeader();
       },
