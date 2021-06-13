@@ -4,28 +4,43 @@
       <dl>
         <dt>
     <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
-    <button mat-button routerLink="/users/overview" class="button" (click)="drawer.toggle()">Quest Overview</button>
+    <button mat-button routerLink="/users/overview" class="button" (click)="drawer.toggle()">
+      <fa-stack class="fa-xs fa-stack small" style="margin-left: -10px">
+      <fa-icon class="fa-stack-2x" stackItemSize="1x" style="color: white;" [icon]="faStory"></fa-icon>
+      <fa-icon class="fa-stack-1x smaller" stackItemSize="1x" style="color: tomato;" [style.padding-left]="'13px'" [icon]="faHeart"></fa-icon>
+    </fa-stack>  Quest Overview
+    </button>
   </span>
         </dt>
         <dt>
     <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
     <button mat-button routerLink="/users/browseQuests" class="button"
-            (click)="drawer.toggle()">Find new Quests</button>
+            (click)="drawer.toggle()"> <fa-icon
+      [icon]="faLocationArrow"></fa-icon> Find new Quests</button>
   </span>
         </dt>
         <dt>
     <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
-    <button mat-button routerLink="/users/profile" class="button" (click)="drawer.toggle()">Profile</button>
+    <button mat-button routerLink="/users/profile" class="button" (click)="drawer.toggle()">
+      <fa-icon
+        [icon]="faUser"></fa-icon> Profile
+    </button>
   </span>
         </dt>
         <dt>
     <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
-    <button mat-button routerLink="/shop" class="button" (click)="drawer.toggle()">Shop</button>
+    <button mat-button routerLink="/shop" class="button" (click)="drawer.toggle()">
+      <fa-icon
+      [icon]="faStore"></fa-icon> Shop
+    </button>
   </span>
         </dt>
         <dt>
     <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
-    <button mat-button routerLink="/story" class="button" (click)="drawer.toggle()">Story</button>
+    <button mat-button routerLink="/story" class="button" (click)="drawer.toggle()">
+      <fa-icon
+        [icon]="faBook"></fa-icon> Story
+    </button>
   </span>
         </dt>
         <dt>
