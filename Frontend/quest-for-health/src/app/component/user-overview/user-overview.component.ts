@@ -192,7 +192,7 @@ export class UserOverviewComponent implements OnInit {
     this.userService.checkUserForNextStoryAndUpdate(this.user.id).subscribe(
       (up: boolean) => {
         if (up) {
-          this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
+          this.snackBar.open('Great. You got to the next chapter!', 'Great!');
         }
         this.headerInfoService.setUser(this.user);
       }, error => {

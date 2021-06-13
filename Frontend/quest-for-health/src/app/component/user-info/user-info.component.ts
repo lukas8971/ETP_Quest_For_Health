@@ -7,6 +7,8 @@ import {StoryChapter} from '../../dto/story-chapter';
 import {CharacterLevel} from '../../dto/character-level';
 import {faCoins, faDiceD20, faFistRaised, faScroll} from '@fortawesome/free-solid-svg-icons';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser'
+import {MessagesService} from "../../service/message-service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-user-info',
@@ -28,8 +30,21 @@ export class UserInfoComponent implements OnInit {
   faExp = faDiceD20;
   faStory = faScroll;
 
-  constructor(private storyService: StoryService, private levelService: CharacterLevelService, private userService: UserService) {
+  private messagesServiceSubscription: Subscription;
 
+  constructor(private storyService: StoryService, private levelService: CharacterLevelService, private userService: UserService,
+              private messagesService: MessagesService) {
+    this.messagesServiceSubscription = this.messagesService.subscribeToMessagesChannel().subscribe(
+      message => {
+        console.log('Received message from messageservice: ' + message.message);
+        if (message.receiver === 'all' || message.receiver === 'Header') {
+          if (message.message === 'gold_changed' || message.message === 'equipment_changed') {
+            this.setStrength();
+            this.setLv();
+          }
+        }
+      }
+    );
   }
 
   // tslint:disable-next-line:use-lifecycle-interface
