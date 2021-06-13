@@ -113,7 +113,7 @@ export class EquipmentComponentComponent implements OnInit {
     this.userService.checkUserForNextStoryAndUpdate(this.userId).subscribe(
       (up: boolean) => {
         if (up) {
-          this.snackBar.open('Great. You got to the next chapter!', 'Yasss');
+          this.snackBar.open('Great. You got to the next chapter!', 'Great!');
         }
         this.getUserForHeader();
       }, error => {
