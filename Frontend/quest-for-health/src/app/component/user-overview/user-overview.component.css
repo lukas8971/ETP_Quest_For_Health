@@ -1,0 +1,27 @@
+.side-margin{
+  margin-left: 20%;
+  margin-right: 20%;
+  padding-top:20px;
+}
+tr.questTable:hover {
+  background: whitesmoke;
+}
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+.my-transparent{
+  background: rgba(255,255,255,0.8);
+}
+
+.table-container{
+  max-height: 300px;
+  overflow: auto;
+}
+.mat-accordion {
+  position: absolute;
+  top: 20px;
+}
+
+.mat-expansion-panel {
+  background-color: transparent;
+}

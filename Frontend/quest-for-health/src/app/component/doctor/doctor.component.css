@@ -1,0 +1,20 @@
+.login-form {
+  min-width: 300px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-container{
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-transparent{
+  background: rgba(255,255,255,0.7);
+}

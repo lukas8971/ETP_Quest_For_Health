@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from "./dto/user";
-import {UserService} from "./service/user.service";
+import {AuthenticationDoctorService} from "./service/authentication-doctor.service";
+import {AuthenticationUserService} from "./service/authentication-user.service";
+import {faHeartbeat, faScroll, faTrophy, faLocationArrow, faUserAlt, faStore, faBook} from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-root',
@@ -9,22 +11,17 @@ import {UserService} from "./service/user.service";
 })
 export class AppComponent implements  OnInit{
   title = 'quest-for-health';
-  users: User[] | undefined;
+  faTrophy = faTrophy;
+  faStory = faScroll;
+  faHeart = faHeartbeat;
+  faLocationArrow = faLocationArrow;
+  faUser = faUserAlt;
+  faStore = faStore;
+  faBook = faBook;
 
-  constructor(private userService:UserService) {
+  constructor(public doctorLoginService: AuthenticationDoctorService, public userLoginService: AuthenticationUserService) {
   }
 
   ngOnInit(): void {
-    this.loadUsers();
-  }
-
-  private loadUsers(){
-    this.userService.getAllUsers().subscribe(
-      (users: User[]) =>{
-        this.users = users;
-      }, error =>{
-        return;
-      }
-    );
   }
 }

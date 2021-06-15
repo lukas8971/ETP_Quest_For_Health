@@ -1,0 +1,53 @@
+<mat-toolbar color="primary">
+  <span style="font-size: 30px; margin-left: 30px" class="qfh" routerLink="/">
+    <fa-stack class="fa-2x fa-stack small">
+      <fa-icon class="fa-stack-2x" stackItemSize="1x" style="color: white;" [icon]="faStory"></fa-icon>
+      <fa-icon class="fa-stack-1x smaller" stackItemSize="1x" style="color: tomato;" [style.padding-left]="'13px'" [icon]="faHeart"></fa-icon>
+    </fa-stack>
+    &nbsp;Quest For Health
+  </span>
+  <div style="width: 20px"></div>
+  <span *ngIf="doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors/overview" class="button">Patient Overview</button>
+  </span>
+  <span *ngIf="doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors/manage" class="button">Manage Patients</button>
+  </span>
+  <!--
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/overview" class="button">Quest Overview</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/browseQuests" class="button">Find new Quests</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/profile" class="button">Profile</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/shop" class="button">Shop</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/story" class="button">Story</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/users/leaderboard" class="button"><fa-icon [icon]="faTrophy"></fa-icon>&nbsp;Ranking</button>
+  </span>
+  -->
+  <div style="width: 5px"></div>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/doctors" class="button">Doctor Login</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/userLogin" class="button">User Login</button>
+  </span>
+  <span *ngIf="!doctorLoginService.isUserLoggedIn() && !userLoginService.isUserLoggedIn()">
+    <button mat-button routerLink="/createCharacter" class="button">Create new character</button>
+  </span>
+  <app-user-info [user]="user" *ngIf="userLoginService.isUserLoggedIn()" style="background-color: #6739b7;"></app-user-info>
+  <span class="flexExpand"></span>
+  <div style="width: 5px; "></div>
+  <span *ngIf="doctorLoginService.isUserLoggedIn() || userLoginService.isUserLoggedIn()" style="position: absolute; right: 0">
+    <button mat-button (click)="logOut()" routerLink="/" style="margin-right: 50px;"><mat-icon style="font-size: 30px">logout</mat-icon></button>
+  </span>
+</mat-toolbar>
+

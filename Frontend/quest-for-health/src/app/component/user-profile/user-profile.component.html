@@ -1,0 +1,125 @@
+<br>
+<div style="display: flex; position: relative">
+  <mat-card class="my-transparent" style="width: 30vw; margin-left: 2vw; height: 63vh">
+    <mat-card-title-group>
+      <mat-card-title style="font-size: 20px">Profile-Info</mat-card-title>
+    </mat-card-title-group>
+    <mat-grid-list style="margin-left: 1vw" cols="1" rowHeight="20:1">
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Firstname</div>
+        <div class="value" style="font-size: 16px"> {{user.firstname}}</div>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" class="odd">
+        <div class="info" style="font-size: 18px">Lastname</div>
+        <div class="value" style="font-size: 16px"> {{user.lastname}}</div>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Email</div>
+        <div class="value" style="font-size: 16px"> {{user.email}}</div>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-card-title-group>
+      <mat-card-title style="font-size: 20px; margin-top: 2vh">Character-Info</mat-card-title>
+    </mat-card-title-group>
+
+    <mat-grid-list style="margin-left: 1vw;" cols="1" rowHeight="20:1">
+      <mat-grid-tile colspan="1" class="odd">
+        <div class="info" style="font-size: 18px">Name</div>
+        <div class="value" style="font-size: 16px"> {{user.characterName}}</div>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Level</div>
+        <div class="value" style="font-size: 16px"> {{currentLevel.level}} ({{currentLevel.rank}})</div>
+        <div style="position: absolute; left: 18vw; font-size: 16px">Next Level-Up in {{neededExp}} <fa-icon style="color: black; padding-right: 0.5vw" [icon]="faExp"></fa-icon></div>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan="1" class="odd">
+        <div class="info" style="font-size: 18px">Chapter</div>
+        <div class="value" style="font-size: 16px"> {{user.storyChapter}} <fa-icon style="color: black;" [icon]="faStory"></fa-icon></div>
+        <div style="position: absolute; left: 18vw; font-size: 16px">Next chapter in {{neededSt}} <fa-icon style="color: black;" [icon]="faStrength"></fa-icon></div>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Experience Points</div>
+        <div class="value" style="font-size: 16px"> {{user.characterExp}} <fa-icon style="color: black; padding-right: 0.5vw" [icon]="faExp"></fa-icon></div>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan="1" class="odd">
+        <div class="info" style="font-size: 18px">Strength</div>
+        <div class="value" style="font-size: 16px"> {{strength}} <fa-icon style="color: black;" [icon]="faStrength"></fa-icon><!--{{user.characterStrength}}--> </div>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Gold</div>
+        <div class="value" style="font-size: 16px"> {{user.characterGold}} <fa-icon style="color: darkgoldenrod;" [icon]="faCoins"></fa-icon></div>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-card-title-group>
+      <mat-card-title style="font-size: 20px; margin-top: 2vh">Equipment</mat-card-title>
+    </mat-card-title-group>
+
+    <mat-grid-list style="margin-left: 1vw" cols="1" rowHeight="20:1">
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Head</div>
+        <div class="info" style="font-size: 18px">Head</div>
+        <div *ngIf="headEquipment" class="value" style="font-size: 16px"> {{headEquipment.name}} </div>
+        <div *ngIf="!headEquipment" class="value" style="font-size: 16px"> Nothing</div>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" class="odd">
+        <div class="info" style="font-size: 18px">Torso</div>
+        <div *ngIf="torsoEquipment" class="value" style="font-size: 16px"> {{torsoEquipment.name}} </div>
+        <div *ngIf="!torsoEquipment" class="value" style="font-size: 16px"> Nothing</div>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Arms</div>
+        <div *ngIf="armsEquipment" class="value" style="font-size: 16px"> {{armsEquipment.name}} </div>
+        <div *ngIf="!armsEquipment" class="value" style="font-size: 16px"> Nothing</div>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" class="odd">
+        <div class="info" style="font-size: 18px">Legs</div>
+        <div *ngIf="legsEquipment" class="value" style="font-size: 16px"> {{legsEquipment.name}} </div>
+        <div *ngIf="!legsEquipment" class="value" style="font-size: 16px"> Nothing</div>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" class="even">
+        <div class="info" style="font-size: 18px">Right Hand</div>
+        <div *ngIf="rightHandEquipment" class="value" style="font-size: 16px"> {{rightHandEquipment.name}} </div>
+        <div *ngIf="!rightHandEquipment" class="value" style="font-size: 16px"> Nothing</div>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" class="odd">
+        <div class="info" style="font-size: 18px">Left Hand</div>
+        <div *ngIf="leftHandEquipment" class="value" style="font-size: 16px"> {{leftHandEquipment.name}} </div>
+        <div *ngIf="!leftHandEquipment" class="value" style="font-size: 16px"> Nothing</div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card>
+
+
+  <div style="display: flex; position: relative; margin-left: 2vw">
+    <mat-card class="mat-elevation-z2 my-transparent" style="width: 60vw; height: 63vh">
+      <mat-card-title style="font-size: 18px">Bought Items - Items you own and can equip</mat-card-title>
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Head">
+          <app-user-equipment type="head" (changedEvent)="change($event)"></app-user-equipment>
+        </mat-tab>
+        <mat-tab label="Torso">
+          <app-user-equipment type="torso" (changedEvent)="change($event)"></app-user-equipment>
+        </mat-tab>
+        <mat-tab label="Arms">
+          <app-user-equipment type="arms" (changedEvent)="change($event)"></app-user-equipment>
+        </mat-tab>
+        <mat-tab label="Legs">
+          <app-user-equipment type="legs" (changedEvent)="change($event)"></app-user-equipment>
+        </mat-tab>
+        <mat-tab label="Right Hand">
+          <app-user-equipment type="right hand" (changedEvent)="change($event)"></app-user-equipment>
+        </mat-tab>
+        <mat-tab label="Left Hand">
+          <app-user-equipment type="left hand" (changedEvent)="change($event)"></app-user-equipment>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>

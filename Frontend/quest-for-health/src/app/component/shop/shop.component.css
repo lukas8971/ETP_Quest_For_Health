@@ -1,0 +1,12 @@
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.mat-tab-group {
+  margin-bottom: 48px;
+}
+
+.my-transparent{
+  background: rgba(255,255,255,0.8);
+}

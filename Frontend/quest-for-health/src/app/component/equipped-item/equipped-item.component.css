@@ -1,0 +1,12 @@
+
+tr.equipTable:hover {
+  background: whitesmoke;
+}
+
+.even{
+  background-color: rgba(200,170,252,0.8);
+}
+
+.odd{
+  background-color: rgba(143,112,198,0.7);
+}

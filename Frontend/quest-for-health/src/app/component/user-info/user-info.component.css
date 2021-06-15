@@ -1,0 +1,48 @@
+#progress-bar-st {
+  width: 100%;
+  background: #cccccc;
+  position: relative;
+}
+
+#progress-bar-st-percentage {
+  background: #3063A5;
+  color: #FFF;
+  text-align: center;
+  height: 30px;
+}
+
+#progress-bar-st-percentage span {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+
+#progress-bar-lv {
+  width: 100%;
+  background: #cccccc;
+  position: relative;
+}
+
+#progress-bar-lv-percentage {
+  background: #3063A5;
+  color: #FFF;
+  text-align: center;
+  height: 30px;
+}
+
+#progress-bar-lv-percentage span {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+
+.my-transparent{
+  background: rgba(255,255,255,0.8);
+}
+
+
+.complete-transparent{
+  background: rgba(255,255,255,0);
+}

@@ -1,0 +1,40 @@
+<div *ngIf="doctorLoaded" class="center" style="color: whitesmoke; font-size: 20px">
+  <br>
+  <p>Welcome back {{doctor.firstname}} {{doctor.lastname}}!</p>
+  <br>
+</div>
+
+
+
+<div class="center">
+  <div *ngIf="success">
+    <mat-card class="mat-elevation-z2 my-transparent">
+      <mat-card-title>Your Patients</mat-card-title>
+      <mat-form-field style="width: 100%">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+      </mat-form-field>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="min-width: 400px; width: 100%">
+        <ng-container matColumnDef="firstname">
+          <th mat-header-cell *matHeaderCellDef> Firstname </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.firstname}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastname">
+          <th mat-header-cell *matHeaderCellDef> Lastname </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.lastname}} </td>
+        </ng-container>
+        <ng-container matColumnDef="quests">
+          <th mat-header-cell *matHeaderCellDef> Quests </th>
+          <td mat-cell *matCellDef="let pat"><button style="background-color: #cccccc" mat-stroked-button (click)="showPatientQuests(pat.id)">Quests</button></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="patientColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: patientColumns"></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td *ngIf="input.value === ''" class="mat-cell" colspan="4">No quests</td>
+          <td *ngIf="input.value !== ''" class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+    </mat-card>
+  </div>
+</div>

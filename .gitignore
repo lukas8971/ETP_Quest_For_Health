@@ -15,3 +15,17 @@ Frontend/quest-for-health/e2e/
 
 Backend/target/
 
+### macOS ###
+.DS_Store
+.AppleDouble
+
+### IntelliJ IDEA ###
+*.iws
+*.iml
+*.ipr
+
+Frontend/quest-for-health/dist/
+
+Frontend/quest-for-health/package-lock.json
+
+Backend/log/

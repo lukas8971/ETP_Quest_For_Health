@@ -1,0 +1,10 @@
+.side-margin{
+  margin-left: 10%;
+  margin-right: 10%;
+}
+tr.questTable:hover {
+  background: whitesmoke;
+}
+.my-transparent{
+  background: rgba(255,255,255,0.8);
+}
